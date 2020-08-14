@@ -10,6 +10,7 @@
                 <v-btn
                   color="warning"
                   class="mt-3 mr-2 white--text"
+                  @click="go_update"
                 >
                   Update Form
                   <v-icon right dark>mdi-file-document</v-icon>
@@ -111,6 +112,8 @@
                   readonly
                 >
                 </v-text-field>
+
+
               </v-card-text>
             </v-card>
           </v-col>
@@ -151,6 +154,7 @@
                   Resume
                   <v-icon right dark>mdi-file-document</v-icon>
                 </v-btn>
+                
               </v-card-text>
             </v-card>
           </v-col>
@@ -221,6 +225,9 @@ export default {
       let level_position =
         this.profile_data.job_level + " : " + this.profile_data.job_position;
       return level_position;
+    },
+     go_update() {
+      this.$router.push('/profile_update');
     },
   },
 };

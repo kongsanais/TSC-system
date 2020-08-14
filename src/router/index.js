@@ -8,6 +8,8 @@ import Test from "@/views/Test_view.vue"
 import About from "@/views/About.vue"
 import Login from "@/views/Login.vue"
 import Profile from "@/views/Profile.vue"
+import Profile_update from "@/views/Profile_update.vue"
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -46,6 +48,11 @@ const routes = [
     path: "/profile",
     name: "profile",
     component : Profile
+  },
+  {
+    path: "/profile_update",
+    name: "profile_update",
+    component : Profile_update
   },
   {
     path: "/test",

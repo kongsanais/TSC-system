@@ -46,7 +46,7 @@ uploadResume = async (files, doc) => {
 
 
 
-router.post('/users', (req, res) => {
+router.post('/users', async (req, res) => {
     try{
       const form = new formaidable.IncomingForm()
       form.parse(req, async (error,fields,files) =>
@@ -54,19 +54,16 @@ router.post('/users', (req, res) => {
           const user  = new User(fields)
           const user_file  = files ; 
 
-          User.find({email : user.email}, async function (err, docs) 
+          await User.find({email : user.email}, async function (err, docs) 
           {
-
             if (docs.length == 1) {
-                 res.json({ result: false, message: JSON.stringify(error) });
-            }else{                
+                 res.json({ result: false, message: JSON.stringify(error) }); 
+            }else{               
                   let result =  await user.save();
                   await  uploadImage(user_file,result)
                   await  uploadResume(user_file,result)
-                  //const token = await user.generateAuthToken()
                   res.json({result: true , message: JSON.stringify(result)})
             }
-
           });
       }
     )
@@ -75,6 +72,32 @@ router.post('/users', (req, res) => {
     }
 })
 
+
+router.put("/users/update", (req, res)=>{
+  try {
+    const form = new formaidable.IncomingForm()
+    form.parse(req, async (error, fields, files) => {
+        const user  = new User(fields)
+        const user_file  = files ;
+        let result = await User.findOneAndUpdate({_id:user._id},{user});
+        console.log(result)
+        // let result = await User.findOneAndUpdate(user._id, fields);
+        // console.log(result)
+      // let result = await product.update(fields, {where : {id: fields.id}});
+      // result = await uploadImage(files, fields);
+      // res.json({
+      //   result: constants.kResultOk,
+      //   message: JSON.stringify(result)
+      // });
+    });
+
+  } catch (error) 
+  {
+    console.log(error)
+    // res.status(401).send(error)
+    // res.json({ result: constants.kResultNok, message: JSON.stringify(error) });
+  }
+})
 
 
 
@@ -127,6 +150,8 @@ router.post('/users/logoutAll', auth, async (req, res) => {
         res.status(500).send()
     }
 })
+
+
 
 
 

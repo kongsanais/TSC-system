@@ -16,10 +16,29 @@ export const server = {
   REGISTER_URL: `users`,
   USER_PROFILE: `users/profile`,
   LOGOUT_URL: `users/logout`,
+  UPDATE_PROFILE: `users/update`, 
   TRANSACTION_URL: `transaction`,
   REPORT_URL: `report`,
   TOKEN_KEY: `token`,
   USERNAME: `username`
 };
 
+
+// location /images {
+//   proxy_pass http://172.31.39.222:3000;
+//   proxy_http_version 1.1;
+//   proxy_set_header Upgrade $http_upgrade;
+//   proxy_set_header Connection 'upgrade';
+//   proxy_set_header Host $host;
+//   proxy_cache_bypass $http_upgrade;
+// }
+
+// location /resume {
+//   proxy_pass http://172.31.39.222:3000;
+//   proxy_http_version 1.1;
+//   proxy_set_header Upgrade $http_upgrade;
+//   proxy_set_header Connection 'upgrade';
+//   proxy_set_header Host $host;
+//   proxy_cache_bypass $http_upgrade;
+// }
 

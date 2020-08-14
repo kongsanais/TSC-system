@@ -35,6 +35,10 @@ const register = async values => {
   return result.data.result;
 };
 
+const updateProfile = async values => {
+  let result = await httpClient.put(server.UPDATE_PROFILE, values);
+  return result.data.result;
+};
 
 const readProfile = async () => {
   let result =  await httpClient.get(server.USER_PROFILE);
@@ -48,5 +52,6 @@ export default {
   login,
   isLoggedIn,
   logoff,
-  readProfile
+  readProfile,
+  updateProfile
 };

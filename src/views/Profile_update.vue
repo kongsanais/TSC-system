@@ -3,9 +3,8 @@
     <v-form @submit.prevent="submit" ref="form" v-model="valid" lazy-validation>
       <v-card>
         <v-toolbar flat color="primary" dark>
-          <v-toolbar-title>Form Register</v-toolbar-title>
+          <v-toolbar-title>Update Form Register</v-toolbar-title>
         </v-toolbar>
-
         <v-tabs v-model="tab" vertical>
           <v-tab
             class="mr-2 d-none d-sm-flex disabledTab"
@@ -17,70 +16,12 @@
             <v-icon left>{{ tab.icon }}</v-icon>
             {{ tab.name }}
           </v-tab>
-
+           
           <v-tab-item value="tab-1">
             <v-card flat>
               <v-card-text>
-                <!-- {{ applicant }} -->
+                {{applicant}}
                 <v-row>
-                  <!-- E-mail -->
-                  <v-col class="d-flex" xl="4" lg="3" md="3" sm="12" cols="12">
-                    <v-text-field
-                      v-model="applicant.email"
-                      type="email"
-                      label="Email"
-                      :rules="[
-                        (v1) => !!v1 || 'Email is required',
-                        (v2) =>
-                          !!/^(([^<>()[\]\\.,;:\s@\&quot;]+(\.[^<>()[\]\\.,;:\s@\&quot;]+)*)|(\&quot;.+\&quot;))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
-                            v2
-                          ) || 'Please Enter Email',
-                      ]"
-                    >
-                    </v-text-field>
-                  </v-col>
-
-                  <!-- Password -->
-                  <v-col class="d-flex" xl="4" lg="3" md="3" sm="12" cols="12">
-                    <v-text-field
-                      v-model="applicant.password"
-                      label="Password"
-                      min="8"
-                      :append-icon="
-                        show_password ? 'visibility' : 'visibility_off'
-                      "
-                      @click:append="show_password = !show_password"
-                      :type="show_password ? 'password' : 'text'"
-                      :rules="[
-                        (v1) => !!v1 || 'Password is required',
-                        (v2) =>
-                          !!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(v2) ||
-                          'Minimum eight characters, at least one letter and one number',
-                      ]"
-                      required
-                    />
-                  </v-col>
-
-                  <!-- Confirm Password -->
-                  <v-col class="d-flex" xl="4" lg="3" md="3" sm="12" cols="12">
-                    <v-text-field
-                      v-model="checkpassword"
-                      label="Confirm Password"
-                      min="8"
-                      :append-icon="
-                        show_password_con ? 'visibility' : 'visibility_off'
-                      "
-                      @click:append="show_password_con = !show_password_con"
-                      :type="show_password_con ? 'password' : 'text'"
-                      :rules="[
-                        applicant.password === checkpassword ||
-                          'Password must match',
-                        (checkpassword) =>
-                          !!checkpassword || 'Pleace Enter your Password',
-                      ]"
-                      required
-                    />
-                  </v-col>
 
                   <!-- TH prefix  -->
                   <v-col class="d-flex" xl="2" lg="3" md="3" sm="12" cols="12">
@@ -242,16 +183,6 @@
                     </v-menu>
                   </v-col>
 
-                  <!-- Age -->
-                  <!-- <v-col class="d-flex" xl="1" lg="1" md="1" sm="1" cols="12">
-                    <v-text-field
-                      v-model="applicant.age"
-                      label="Age"
-                      readonly
-                      sm
-                    >
-                    </v-text-field>
-                  </v-col> -->
                 </v-row>
 
                 <v-row>
@@ -271,8 +202,7 @@
                   <!-- Review imgage -->
                   <v-col class="d-flex" xl="2" lg="4" md="4" sm="12" cols="12">
                     <img
-                      v-if="imageURL"
-                      :src="imageURL"
+                      :src="getProfileImage()"
                       style="width=height:150px;width:220px;border-style: groove;"
                     />
                   </v-col>
@@ -283,7 +213,7 @@
                       <v-list-item>
                         <v-list-item-content>
                           <v-list-item-title class="headline mb-6"
-                            >Upload Document</v-list-item-title
+                            >Update  Document</v-list-item-title
                           >
                           <v-list-item-subtitle>
                             <!--btn upload profile picture-->
@@ -356,6 +286,18 @@
                                 (v1) => !!v1 || 'Please Upload Resume / CV',
                               ]"
                             />
+
+                              <br>
+
+                              <v-btn
+                              color="primary"
+                              class="mt-2 white--text"
+                              :href="getProfileResume()"
+                              target="_blank"
+                              >
+                              Resume
+                              <v-icon right dark>mdi-file-document</v-icon>
+                            </v-btn>
                           </v-list-item-subtitle>
                         </v-list-item-content>
                       </v-list-item>
@@ -408,70 +350,18 @@
                     Back
                   </v-btn>
 
-                  <v-btn @click="changeTab(3)" class="primary">
-                    Next
-                  </v-btn>
-                </v-row>
-              </v-card-text>
-            </v-card>
-          </v-tab-item>
-
-          <v-tab-item value="tab-3">
-            <v-card flat>
-              <v-card-text>
-                <h2 class="mt-2 mb-3">
-                  Privacy policy/นโยบายความเป็นส่วนตัว
-                </h2>
-
-                <p class="mb-0">
-                  นโยบายความเป็นส่วนตัวฉบับนี้มีผลบังคับใช้กับอุปกรณ์และบริการทั้งหมดของ
-                  Samsung ตั้งแต่โทรศัพท์มือถือและแท็บเล็ต ไปจนถึงโทรทัศน์
-                  เครื่องใช้ในบ้าน บริการออนไลน์ เว็บไซต์ แอปพลิเคชัน บริการ
-                  การประกวดแข่งขัน การสำรวจ การแลกรับสิทธิ์ การทำการตลาด
-                  การส่งเสริมการขาย การลงทะเบียนรับประกันสินค้า
-                  บริการหลังการขายหรือบริการซ่อม และบริการอื่นของ Samsung
-                  ที่อ้างถึงหรือเชื่อมโยงถึงนโยบายนี้ (เรียกรวมกันว่า “บริการ”
-                  ของเรา) นอกจากนั้น
-                  คุณจะต้องหมั่นตรวจสอบการปรับปรุงนโยบายความเป็นส่วนตัวฉบับนี้อย่างสม่ำเสมอ
-                  นโยบายความเป็นส่วนตัวฉบับนี้อาจถูกปรับปรุงเป็นระยะๆเพื่อให้สอดคล้องกับการเปลี่ยนแปลงของแนวปฏิบัติด้านข้อมูลส่วนบุคคลซึ่งเกี่ยวกับบริการ
-                  หรือการเปลี่ยนแปลงของกฎหมายที่เกี่ยวข้อง
-                  เราจะประกาศในเว็บไซต์ของเราหรือในอุปกรณ์ของคุณเพื่อแจ้งล่วงหน้าเกี่ยวกับการเปลี่ยนแปลงที่สำคัญในนโยบายความเป็นส่วนตัว
-                  และจะระบุวันที่อัปเดตครั้งล่าสุดไว้ที่ด้านบน
-                  คุณจะสามารถดูเวอร์ชันที่เป็นปัจจุบันที่สุดของนโยบายความเป็นส่วนตัวได้ที่นี่เสมอ:
-                  https://account.samsung.com/membership/pp
-                </p>
-
-                <!-- accept -->
-                <v-row>
-                  <v-checkbox
-                    v-model="checked_ac"
-                    class="ml-2"
-                    label="Accept"
-                    type="checkbox"
-                    small
-                    :rules="[(v1) => !!v1 || 'Pleace Accept Privacy Policy']"
-                  >
-                  </v-checkbox>
-                </v-row>
-
-                <!-- submit -->
-                <v-row>
-                  <v-spacer></v-spacer>
-
-                  <v-btn @click="changeTab(2)" class="mr-3">
-                    Back
-                  </v-btn>
-
                   <v-btn
                     class="success mr-3"
                     type="submit"
                   >
                     Submit
                   </v-btn>
+
                 </v-row>
               </v-card-text>
             </v-card>
           </v-tab-item>
+
         </v-tabs>
       </v-card>
     </v-form>
@@ -495,13 +385,6 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <!-- <v-btn
-            color="green darken-1"
-            text
-            @click="dialog_messenger.status = false"
-          >
-            Disagree
-          </v-btn> -->
 
           <v-btn
             class="primary"
@@ -542,8 +425,12 @@
 
 <script>
 import api from "@/services/api";
+import { imageUrl } from "@/services/constants";
+import { resumeUrl } from "@/services/constants";
+import moment from "moment";
 export default {
   data: () => ({
+
     applicant: {
       email: "",
       password: "",
@@ -583,10 +470,10 @@ export default {
     valid: true,
     checkpassword: "",
     date_menu: false, //for date
-    imageURL: "https://image.flaticon.com/icons/svg/882/882849.svg",
+    imageURL: null,
     CountryList: ["Thailand"],
-    message_filename_pic: "Upload Profile Picture",
-    message_filename_resume: " Upload Resume / CV",
+    message_filename_pic: "Upload New Profile Picture",
+    message_filename_resume: " Upload New Resume / CV",
     tab: "tab-1",
     tabs: [
       {
@@ -600,12 +487,6 @@ export default {
         icon: "mdi-clipboard-file-outline",
         name: "FORM 2",
         href_tab: "#tab-2",
-      },
-      {
-        id: 3,
-        icon: "mdi-clipboard-check-outline",
-        name: "FORM 3",
-        href_tab: "#tab-3",
       },
     ],
     dialog_messenger: {
@@ -623,8 +504,17 @@ export default {
       router: "",
     },
   }),
+    async mounted() 
+  {
+    if (!api.isLoggedIn()) {
+      this.$router.push("/login");
+    }
+    let result = await api.readProfile();
+    this.applicant = result;
+  },
   methods: {
     DateToAge: function(bdate) {
+
       var today = new Date();
       var birthDate = new Date(bdate);
       var person_age = today.getFullYear() - birthDate.getFullYear();
@@ -637,6 +527,7 @@ export default {
         person_age = 0;
       }
       this.applicant.age = person_age;
+
     },
     onFile_img(event) {
       const reader = new FileReader();
@@ -658,10 +549,8 @@ export default {
       //console.log("FILE SIZE = ", exactSize);
       //check file type and type file //
       //10mb
-      if (
-        _size < 10485760 &&
-        (_file_type == "png" || _file_type == "jpg" || _file_type == "jpeg")
-      ) {
+      if (_size < 10485760 && (_file_type == "png" || _file_type == "jpg" || _file_type == "jpeg")) 
+      {
         reader.readAsDataURL(event.target.files[0]);
         // for upload
         this.applicant.imageURL = event.target.files[0];
@@ -690,13 +579,8 @@ export default {
       var exactSize = Math.round(_size * 100) / 100 + " " + fSExt[i];
       //console.log("FILE SIZE = ", exactSize);
       //check file type and type file //
-      if (
-        _size < 10485760 &&
-        (_file_type == "pdf" ||
-          _file_type == "docx" ||
-          _file_type == "doc" ||
-          _file_type == "png")
-      ) {
+      if (_size < 10485760 &&  (_file_type == "pdf" || _file_type == "docx" || _file_type == "doc" || _file_type == "png")) 
+      {
         reader.readAsDataURL(event.target.files[0]);
         // for upload
         this.applicant.resumeURL = event.target.files[0];
@@ -713,48 +597,62 @@ export default {
       this.tab = "tab-" + tabString;
     },
     onClickMenu(link) {
+
       this.dialog_messenger.status = false;
       if (link == "/login") {
         this.$router.push(link).catch((err) => {});
       }
+
+    },
+    getProfileImage() {
+      if (this.imageURL!= null) {
+        return this.imageURL;
+      } else {
+        return `${imageUrl}/${this.applicant.imageURL}`;
+      }
+    },  
+    getProfileResume() {
+      return `${resumeUrl}/${this.applicant.resumeURL}`;
     },
     async submit() {
       var check;
 
-      if (this.applicant.imageURL == null || this.applicant.resumeURL == null) {
+      if (this.applicant.imageURL == null || this.applicant.resumeURL == null) 
+      {
         check = false;
-      } else {
+      } else 
+      {
         check = true;
       }
 
       check = this.$refs.form.validate();
-
       if (check) {
-
         let formData = new FormData();
-        
+
         Object.keys(this.applicant).forEach((key) =>
            formData.append(key, this.applicant[key])
         );
 
+
           this.dialog_load.status = true;
-        if (await api.register(formData)) {
+        if (await api.updateProfile(formData)) 
+        {
           this.dialog_load.status = false;
-          this.dialog_messenger.text = "Complete GO Login";
+          this.dialog_messenger.text = "Your Profile Update";
           this.dialog_messenger.sub_text = "";
           this.dialog_messenger.status = true;
-          this.dialog_messenger.router = "/login";
-        } else {
-          this.dialog_messenger.text = "Please Check Your E-mail is Used";
+          this.dialog_messenger.router = "/profile";
+        } else 
+        {
+          this.dialog_load.status = false;
+          this.dialog_messenger.text = "Someting error";
           this.dialog_messenger.sub_text = "";
           this.dialog_messenger.status = true;
         }
-
-
       } else {
-        this.dialog_messenger.text = "Please Check Your Information";
-        this.dialog_messenger.sub_text = "";
-        this.dialog_messenger.status = true;
+          this.dialog_messenger.text = "Please Check Your Information";
+          this.dialog_messenger.sub_text = "";
+          this.dialog_messenger.status = true;
       }
     },
   },
