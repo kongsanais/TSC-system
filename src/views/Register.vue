@@ -147,14 +147,12 @@
 
                   <!-- Nationality -->
                   <v-col class="d-flex" xl="3" lg="3" md="3" sm="3" cols="12">
-                    <v-select
+                      <v-text-field
                       v-model="applicant.nationality"
-                      :items="CountryList"
-                      label="Nationality"
-                      :rules="[
-                        (v1) => !!v1 || 'Please Select Your Nationality',
-                      ]"
-                    ></v-select>
+                      label="Nationality "
+                      :rules="[(v1) => !!v1 || 'Please Select Your Nationality']"
+                    >
+                    </v-text-field>
                   </v-col>
 
                   <!-- Phone number -->
@@ -215,6 +213,7 @@
                       transition="scale-transition"
                       min-width="290px"
                     >
+                    
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
                           v-model="applicant.date_birthday"
@@ -269,12 +268,15 @@
               <v-card-text>
                 <v-row>
                   <!-- Review imgage -->
+
                   <v-col class="d-flex" xl="2" lg="4" md="4" sm="12" cols="12">
+                  <v-card class="mx-auto" width="230px" height="250px">
                     <img
                       v-if="imageURL"
                       :src="imageURL"
-                      style="width=height:150px;width:220px;border-style: groove;"
+                      style="height: 250px; width: 230px;"
                     />
+                  </v-card>
                   </v-col>
 
                   <!-- upload img file input and resume -->
@@ -363,6 +365,34 @@
                   </v-col>
                 </v-row>
 
+
+                 <v-row>
+
+                  <!-- Education -->
+                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
+                    <v-text-field
+                      v-model="applicant.education"
+                      label="Education"
+                      :rules="[(v1) => !!v1 || 'Please Enter Education']"
+                    >
+                    </v-text-field>
+                  </v-col>
+
+                  <!-- Gpa -->
+                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
+                    <v-text-field
+                      v-model="applicant.gpa"
+                      label="GPA"
+                      type="number"
+                      min="0"
+                      :rules="[(v1) => !!v1 || 'Please Enter GPA']"
+                    >
+                    </v-text-field>
+                  </v-col>
+
+                </v-row>
+
+              
                 <v-row>
                   <!-- Level -->
                   <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
@@ -374,9 +404,7 @@
                     >
                     </v-select>
                   </v-col>
-                </v-row>
-
-                <v-row>
+                  
                   <!-- Position -->
                   <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
                     <v-select
@@ -386,10 +414,9 @@
                       :rules="[(v1) => !!v1 || 'Please Select Position']"
                     >
                     </v-select>
-                  </v-col>
-                </v-row>
 
-                <v-row>
+                  </v-col>
+
                   <!-- Salary -->
                   <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
                     <v-text-field
@@ -401,7 +428,9 @@
                     >
                     </v-text-field>
                   </v-col>
+
                 </v-row>
+
                 <v-row>
                   <v-spacer></v-spacer>
                   <v-btn @click="changeTab(1)" class="mr-3">
@@ -564,7 +593,9 @@ export default {
       resumeURL: null,
       job_level: null,
       job_position: "",
-      job_salary: "",
+      job_salary: "", 
+      education:"",
+      gpa:""
     },
     checked_ac: false,
     data_th_prefix: ["นาย", "นาง", "นางสาว"],

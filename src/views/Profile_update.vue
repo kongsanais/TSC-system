@@ -16,13 +16,11 @@
             <v-icon left>{{ tab.icon }}</v-icon>
             {{ tab.name }}
           </v-tab>
-           
+
           <v-tab-item value="tab-1">
             <v-card flat>
               <v-card-text>
-                {{applicant}}
                 <v-row>
-
                   <!-- TH prefix  -->
                   <v-col class="d-flex" xl="2" lg="3" md="3" sm="12" cols="12">
                     <v-select
@@ -172,7 +170,7 @@
                       </template>
 
                       <v-date-picker
-                        v-model="applicant.date_birthday"
+                        v-model="date_temp"
                         @input="date_menu = false"
                         ref="picker"
                         v-on:change="DateToAge(applicant.date_birthday)"
@@ -182,7 +180,6 @@
                       </v-date-picker>
                     </v-menu>
                   </v-col>
-
                 </v-row>
 
                 <v-row>
@@ -201,10 +198,12 @@
                 <v-row>
                   <!-- Review imgage -->
                   <v-col class="d-flex" xl="2" lg="4" md="4" sm="12" cols="12">
-                    <img
-                      :src="getProfileImage()"
-                      style="width=height:150px;width:220px;border-style: groove;"
-                    />
+                    <v-card class="mx-auto" width="230px" height="250px">
+                      <img
+                        :src="getProfileImage()"
+                        style="height: 250px; width: 230px;"
+                      />
+                    </v-card>
                   </v-col>
 
                   <!-- upload img file input and resume -->
@@ -213,7 +212,7 @@
                       <v-list-item>
                         <v-list-item-content>
                           <v-list-item-title class="headline mb-6"
-                            >Update  Document</v-list-item-title
+                            >Update Document</v-list-item-title
                           >
                           <v-list-item-subtitle>
                             <!--btn upload profile picture-->
@@ -287,14 +286,14 @@
                               ]"
                             />
 
-                              <br>
+                            <br />
 
-                              <v-btn
+                            <v-btn
                               color="primary"
                               class="mt-2 white--text"
                               :href="getProfileResume()"
                               target="_blank"
-                              >
+                            >
                               Resume
                               <v-icon right dark>mdi-file-document</v-icon>
                             </v-btn>
@@ -304,6 +303,35 @@
                     </v-card>
                   </v-col>
                 </v-row>
+
+
+                <v-row>
+
+                  <!-- Education -->
+                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
+                    <v-text-field
+                      v-model="applicant.education"
+                      label="Education"
+                      :rules="[(v1) => !!v1 || 'Please Enter Education']"
+                    >
+                    </v-text-field>
+                  </v-col>
+
+                  <!-- Gpa -->
+                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
+                    <v-text-field
+                      v-model="applicant.gpa"
+                      label="GPA"
+                      type="number"
+                      min="0"
+                      :rules="[(v1) => !!v1 || 'Please Enter GPA']"
+                    >
+                    </v-text-field>
+                  </v-col>
+
+                </v-row>
+
+
 
                 <v-row>
                   <!-- Level -->
@@ -316,10 +344,8 @@
                     >
                     </v-select>
                   </v-col>
-                </v-row>
 
-                <v-row>
-                  <!-- Position -->
+                    <!-- Position -->
                   <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
                     <v-select
                       v-model="applicant.job_position"
@@ -329,11 +355,9 @@
                     >
                     </v-select>
                   </v-col>
-                </v-row>
 
-                <v-row>
-                  <!-- Salary -->
-                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
+                   <!-- Salary -->
+                   <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.job_salary"
                       label="Salary (Bath)"
@@ -343,25 +367,25 @@
                     >
                     </v-text-field>
                   </v-col>
+
+
                 </v-row>
+
+
+
                 <v-row>
                   <v-spacer></v-spacer>
                   <v-btn @click="changeTab(1)" class="mr-3">
                     Back
                   </v-btn>
 
-                  <v-btn
-                    class="success mr-3"
-                    type="submit"
-                  >
-                    Submit
+                  <v-btn class="warning mr-3" type="submit">
+                    Update Form
                   </v-btn>
-
                 </v-row>
               </v-card-text>
             </v-card>
           </v-tab-item>
-
         </v-tabs>
       </v-card>
     </v-form>
@@ -385,7 +409,6 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-
           <v-btn
             class="primary"
             light
@@ -398,16 +421,8 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog
-      v-model="dialog_load.status"
-      hide-overlay
-      persistent
-      width="300"
-    >
-      <v-card
-        color="primary"
-        dark
-      >
+    <v-dialog v-model="dialog_load.status" hide-overlay persistent width="300">
+      <v-card color="primary" dark>
         <v-card-text>
           Please stand by
           <v-progress-linear
@@ -418,8 +433,6 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-
-
   </v-container>
 </template>
 
@@ -430,29 +443,8 @@ import { resumeUrl } from "@/services/constants";
 import moment from "moment";
 export default {
   data: () => ({
-
-    applicant: {
-      email: "",
-      password: "",
-      th_prefix: "",
-      th_firstname: "",
-      th_lastname: "",
-      eng_prefix: "",
-      eng_firstname: "",
-      eng_lastname: "",
-      nationality: "",
-      phone_number: "",
-      phone_number_famaily: "",
-      person_relationship: "",
-      eng_address: "",
-      date_birthday: null,
-      age: "",
-      imageURL: null,
-      resumeURL: null,
-      job_level: null,
-      job_position: "",
-      job_salary: "",
-    },
+    date_temp: null,
+    applicant: { imageURL: "samsung-icon.png" },
     checked_ac: false,
     data_th_prefix: ["นาย", "นาง", "นางสาว"],
     data_eng_prefix: ["Mr", "Mrs", "Miss"],
@@ -504,17 +496,19 @@ export default {
       router: "",
     },
   }),
-    async mounted() 
-  {
+  async mounted() {
     if (!api.isLoggedIn()) {
       this.$router.push("/login");
     }
     let result = await api.readProfile();
     this.applicant = result;
+
+    //set date
+    var date = new Date(this.applicant.date_birthday);
+    this.applicant.date_birthday = date.toISOString().substring(0, 10);
   },
   methods: {
     DateToAge: function(bdate) {
-
       var today = new Date();
       var birthDate = new Date(bdate);
       var person_age = today.getFullYear() - birthDate.getFullYear();
@@ -526,8 +520,8 @@ export default {
       if (person_age == 0 || person_age < 0) {
         person_age = 0;
       }
+      this.applicant.date_birthday = this.date_temp;
       this.applicant.age = person_age;
-
     },
     onFile_img(event) {
       const reader = new FileReader();
@@ -549,8 +543,10 @@ export default {
       //console.log("FILE SIZE = ", exactSize);
       //check file type and type file //
       //10mb
-      if (_size < 10485760 && (_file_type == "png" || _file_type == "jpg" || _file_type == "jpeg")) 
-      {
+      if (
+        _size < 10485760 &&
+        (_file_type == "png" || _file_type == "jpg" || _file_type == "jpeg")
+      ) {
         reader.readAsDataURL(event.target.files[0]);
         // for upload
         this.applicant.imageURL = event.target.files[0];
@@ -579,8 +575,13 @@ export default {
       var exactSize = Math.round(_size * 100) / 100 + " " + fSExt[i];
       //console.log("FILE SIZE = ", exactSize);
       //check file type and type file //
-      if (_size < 10485760 &&  (_file_type == "pdf" || _file_type == "docx" || _file_type == "doc" || _file_type == "png")) 
-      {
+      if (
+        _size < 10485760 &&
+        (_file_type == "pdf" ||
+          _file_type == "docx" ||
+          _file_type == "doc" ||
+          _file_type == "png")
+      ) {
         reader.readAsDataURL(event.target.files[0]);
         // for upload
         this.applicant.resumeURL = event.target.files[0];
@@ -597,31 +598,32 @@ export default {
       this.tab = "tab-" + tabString;
     },
     onClickMenu(link) {
-
       this.dialog_messenger.status = false;
-      if (link == "/login") {
+      if (link == "/profile") {
         this.$router.push(link).catch((err) => {});
       }
-
     },
     getProfileImage() {
-      if (this.imageURL!= null) {
+      if (this.imageURL != null) {
         return this.imageURL;
       } else {
         return `${imageUrl}/${this.applicant.imageURL}`;
       }
-    },  
+    },
     getProfileResume() {
       return `${resumeUrl}/${this.applicant.resumeURL}`;
+    },
+    getDateFormat(date_iso) {
+      var date = new Date(date_iso);
+      var real_day = moment(date).format("ddd, ll");
+      return real_day;
     },
     async submit() {
       var check;
 
-      if (this.applicant.imageURL == null || this.applicant.resumeURL == null) 
-      {
+      if (this.applicant.imageURL == null || this.applicant.resumeURL == null) {
         check = false;
-      } else 
-      {
+      } else {
         check = true;
       }
 
@@ -630,29 +632,26 @@ export default {
         let formData = new FormData();
 
         Object.keys(this.applicant).forEach((key) =>
-           formData.append(key, this.applicant[key])
+          formData.append(key, this.applicant[key])
         );
 
-
-          this.dialog_load.status = true;
-        if (await api.updateProfile(formData)) 
-        {
+        this.dialog_load.status = true;
+        if (await api.updateProfile(formData)) {
           this.dialog_load.status = false;
           this.dialog_messenger.text = "Your Profile Update";
           this.dialog_messenger.sub_text = "";
           this.dialog_messenger.status = true;
           this.dialog_messenger.router = "/profile";
-        } else 
-        {
+        } else {
           this.dialog_load.status = false;
-          this.dialog_messenger.text = "Someting error";
+          this.dialog_messenger.text = "Someting Error";
           this.dialog_messenger.sub_text = "";
           this.dialog_messenger.status = true;
         }
       } else {
-          this.dialog_messenger.text = "Please Check Your Information";
-          this.dialog_messenger.sub_text = "";
-          this.dialog_messenger.status = true;
+        this.dialog_messenger.text = "Please Check Your Information";
+        this.dialog_messenger.sub_text = "";
+        this.dialog_messenger.status = true;
       }
     },
   },

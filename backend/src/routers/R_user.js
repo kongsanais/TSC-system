@@ -5,6 +5,7 @@ const router = new express.Router()
 const formaidable  = require("formidable")
 const path = require("path")
 const fs  = require("fs-extra")
+const { update } = require('../models/M_user')
 
 uploadImage = async (files, doc) => {
   if (files.imageURL != null) {
@@ -73,46 +74,59 @@ router.post('/users', async (req, res) => {
 })
 
 
-router.put("/users/update", (req, res)=>{
+router.put("/users/update", auth , (req, res)=>{
   try {
     const form = new formaidable.IncomingForm()
-    form.parse(req, async (error, fields, files) => {
+    form.parse(req, async (error, fields, files) => 
+    {
         const user  = new User(fields)
-        const user_file  = files ;
-        let result = await User.findOneAndUpdate({_id:user._id},{user});
-        console.log(result)
-        // let result = await User.findOneAndUpdate(user._id, fields);
-        // console.log(result)
-      // let result = await product.update(fields, {where : {id: fields.id}});
-      // result = await uploadImage(files, fields);
-      // res.json({
-      //   result: constants.kResultOk,
-      //   message: JSON.stringify(result)
-      // });
-    });
+        const user_file  = files;
 
-  } catch (error) 
-  {
-    console.log(error)
-    // res.status(401).send(error)
-    // res.json({ result: constants.kResultNok, message: JSON.stringify(error) });
+        let result = await User.findOneAndUpdate({ "_id": user._id }, 
+        { "$set": { 
+
+          "th_prefix"  :  user.th_prefix,
+          "th_firstname": user.th_firstname,
+          "th_lastname" : user.th_lastname,
+          "eng_prefix"  : user.eng_prefix,
+          "eng_firstname" : user.eng_firstname,
+          "eng_lastname"  : user.eng_lastname, 
+          "nationality"  : user.nationality,
+          "phone_number" : user.phone_number,
+          "phone_number_famaily" : user.phone_number_famaily,
+          "person_relationship"  : user.person_relationship,
+          "eng_address"   : user.eng_address,
+          "date_birthday" : user.date_birthday,
+          "job_level" : user.job_level,
+          "job_position" : user.job_position,
+          "job_salary" : user.job_salary,
+          "age": user.age,
+          "education" : user.education,
+          "gpa" : user.gpa
+
+        }},{ new: true })
+
+        await uploadImage(user_file, fields);
+        await uploadResume(user_file,fields);
+
+        res.json({result: true , message: JSON.stringify(result)})
+
+    }); 
+  } catch (error) {
+        res.json({result: false , message: JSON.stringify(result)})
   }
 })
-
 
 
   
 router.post('/users/login', async (req, res) => {
   try {
-
       const user = await User.findByCredentials(req.body.email, req.body.password)
       const token = await user.generateAuthToken()
       res.send({result:true,user,token })
     } catch (e) {
       res.send({result:false})
-      console.log("fail")
   }
-
 })
 
 
@@ -150,8 +164,6 @@ router.post('/users/logoutAll', auth, async (req, res) => {
         res.status(500).send()
     }
 })
-
-
 
 
 

@@ -90,6 +90,12 @@ const userSchema = new mongoose.Schema({
     job_salary:{
         type: String 
     },
+    education:{
+        type: String 
+    },
+    gpa:{
+        type: String 
+    },
     tokens: [{
         token: {
             type: String,
