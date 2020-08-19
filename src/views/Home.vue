@@ -2,7 +2,7 @@
   <v-container>
      <v-card
     elevation="24"
-    class="mx-auto"
+    class="mx-auto mt-1"
   >
   <v-carousel       
       :continuous="false"
@@ -22,7 +22,13 @@
 </template>
 
 <script>
+  import api from "@/services/api";
   export default {
+  mounted() {
+    if (api.isLoggedIn()) {
+      this.$router.push("/profile");
+    }
+  },
     data () {
       return {
         items: [

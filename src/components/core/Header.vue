@@ -21,6 +21,7 @@
           {{ title }}
         </v-btn>
       </div>
+       <v-btn v-if="$store.state.isLogged"  class="ma-2" @click="onGoProfile()">Profile</v-btn>
       <v-icon v-if="$store.state.isLogged" class="mr-2">mdi-account-circle</v-icon>
       <span v-if="$store.state.isLogged" class="mr-2"><b>Welcome</b></span>
       <span v-if="$store.state.isLogged" ><b>{{ $store.getters["username"]  | capitalize }}</b></span>
@@ -98,6 +99,9 @@ export default {
     onClickLogOff() {
       this.$store.dispatch("doLogout");
     },
+    onGoProfile(){
+      this.$router.push("/profile").catch((err) => {});
+    }
   },
 };
 </script>

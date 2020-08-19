@@ -1,7 +1,7 @@
 <template>
   <v-container grid-list-xs>
     <div>
-      Check now 
+      about
     </div>
   </v-container>
 </template>
