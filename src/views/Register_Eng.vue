@@ -61,6 +61,7 @@
                     />
                   </v-col>
 
+
                   <!-- Confirm Password -->
                   <v-col class="d-flex" xl="4" lg="3" md="3" sm="12" cols="12">
                     <v-text-field
@@ -81,6 +82,7 @@
                       required
                     />
                   </v-col>
+
 
                   <!-- TH prefix  -->
                   <v-col class="d-flex" xl="2" lg="3" md="3" sm="12" cols="12">
@@ -181,12 +183,11 @@
 
                   <!-- Relationship -->
                   <v-col class="d-flex" xl="3" lg="3" md="2" sm="3" cols="12">
-                    <v-select
+                    <v-text-field
                       v-model="applicant.person_relationship"
-                      :items="data_Relationship"
-                      label="Relationship"
-                      :rules="[(v1) => !!v1 || 'Pleace Select Relationship']"
-                    ></v-select>
+                      label="Relationship Ex. ( Father, Mother, Etc.)"
+                      :rules="[(v1) => !!v1 || 'Pleace Enter Relationship']"
+                    ></v-text-field>
                   </v-col>
 
                   <!-- Address -->
@@ -367,19 +368,43 @@
 
 
                  <v-row>
+                   
+
+                  <!-- Degree -->
+                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
+                    <v-select
+                      v-model="applicant.degree_education"
+                      :items="degree_item"
+                      label="Degree Education"
+                      :rules="[(v1) => !!v1 || 'Please Degree Education']"
+                    >
+                    </v-select>
+                  </v-col>
+
 
                   <!-- Education -->
                   <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.education"
-                      label="Education"
+                      label="Education Name (Ex. Burapha University )"
                       :rules="[(v1) => !!v1 || 'Please Enter Education']"
                     >
                     </v-text-field>
                   </v-col>
 
+                  
+                  <!-- Major -->
+                  <v-col class="d-flex" xl="2" lg="2" md="2" sm="12" cols="12">
+                    <v-text-field
+                      v-model="applicant.majoy_education"
+                      label="Major"
+                      :rules="[(v1) => !!v1 || 'Please Enter Major']"
+                    >
+                    </v-text-field>
+                  </v-col>
+
                   <!-- Gpa -->
-                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="2" lg="2" md="2" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.gpa"
                       label="GPA"
@@ -595,18 +620,14 @@ export default {
       job_position: "",
       job_salary: "", 
       education:"",
+      degree_education:"",
+      majoy_education:"",
       gpa:""
     },
     checked_ac: false,
     data_th_prefix: ["นาย", "นาง", "นางสาว"],
     data_eng_prefix: ["Mr", "Mrs", "Miss"],
-    data_Relationship: [
-      "Father",
-      "Mother",
-      "Grandfather",
-      "Grandmather",
-      "Other",
-    ],
+    degree_item: ["Bachelor Degrees", "Master Degrees" ,"Doctor Degrees"],
     data_level: ["Office/Engineer", "Management"],
     data_position: ["Developer", "Data Analysis"],
     show_password: true,

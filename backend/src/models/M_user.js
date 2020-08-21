@@ -93,6 +93,12 @@ const userSchema = new mongoose.Schema({
     education:{
         type: String 
     },
+    degree_education:{
+        type: String  
+    },
+    majoy_education:{
+        type: String
+    },
     gpa:{
         type: String 
     },

@@ -37,7 +37,7 @@ export default {
     //  
     items: [
       { text: "Engineer & Management", icon: "mdi-account-circle-outline" ,link: "/option_job" },
-      { text: "Production", icon: "mdi-account-cog-outline",link: "/" }
+      { text: "Production", icon: "mdi-account-cog-outline",link: "/register_production" }
     ],
   }),
   methods: {

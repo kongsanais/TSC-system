@@ -70,8 +70,8 @@
                 </v-text-field>
 
                 <v-text-field
-                  v-model="applicant.education"
-                  label="Education"
+                  :value="getEducation()"
+                  label="Degress / Education"
                   prepend-icon="mdi-medal"
                   readonly
                 >
@@ -79,8 +79,8 @@
 
                 
                 <v-text-field
-                  v-model="applicant.gpa"
-                  label="GPA"
+                  :value="getMojorGPA()"
+                  label="Major / GPA"
                   prepend-icon="mdi-card-bulleted-outline"
                   readonly
                 >
@@ -247,6 +247,14 @@ export default {
       let level_position =
         this.applicant.job_level + " : " + this.applicant.job_position;
       return level_position;
+    },
+    getEducation(){
+      let education = this.applicant.degree_education+ " : " + this.applicant.education;
+      return education; 
+    },
+    getMojorGPA(){
+      let education = this.applicant.majoy_education+ " / GPA : " + this.applicant.gpa;
+      return education; 
     },
      go_update() {
       this.$router.push('/profile_update');

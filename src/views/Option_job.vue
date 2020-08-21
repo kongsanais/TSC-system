@@ -37,7 +37,7 @@ export default {
     //  
     items: [
       { text: "Login", icon: "mdi-account-circle-outline" ,link: "/login" },
-      { text: "Register", icon: "mdi-account-cog-outline",link: "/register" }
+      { text: "Register", icon: "mdi-account-cog-outline",link: "/register_engineer" }
     ],
   }),
   methods: {

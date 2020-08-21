@@ -7,14 +7,11 @@ const path = require("path")
 const fs  = require("fs-extra")
 const { update } = require('../models/M_user')
 
-
 uploadImage = async (files, doc) => {
   if (files.imageURL != null) {
     var fileExtention = files.imageURL.name.split(".")[1];
     doc.imageURL = `${doc._id}.${fileExtention}`;
-    var newpath =
-      path.resolve("./uploaded/images/") + "/" + doc.imageURL;
-
+    var newpath = path.resolve("./uploaded/images/") + "/" + doc.imageURL;
     if (fs.exists(newpath)) {
       await fs.remove(newpath);
     }
@@ -56,7 +53,7 @@ router.post('/users', async (req, res) => {
           const user_file  = files ; 
 
           await User.find({email : user.email}, async function (err, docs) 
-          {
+            {
             if (docs.length == 1) {
                  res.json({ result: false, message: JSON.stringify(error) }); 
             }else{               
@@ -165,23 +162,6 @@ router.post('/users/logoutAll', auth, async (req, res) => {
     }
 })
 
-
-router.get('/test', async (req, res) => {
-  var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-   console.log(fullUrl)
-})
-
-
-
-
-// router.delete('/users/me', auth, async (req, res) => {
-//     try {
-//         await req.user.remove()
-//         res.send(req.user)
-//     } catch (e) {
-//         res.status(500).send()
-//     }
-// })
 
 
 
