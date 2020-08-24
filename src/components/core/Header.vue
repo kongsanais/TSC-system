@@ -83,7 +83,7 @@ export default {
     ],
     top_right_menu: [
       ["Home", "/stock"],
-      ["Job", "/job"],
+      ["Job", "/option_job"],
       ["About", "/about"],
     ],
   }),

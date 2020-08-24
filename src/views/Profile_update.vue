@@ -22,7 +22,7 @@
               <v-card-text>
                 <v-row>
                   <!-- TH prefix  -->
-                  <v-col class="d-flex" xl="2" lg="3" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="2" lg="2" md="2" sm="12" cols="12">
                     <v-select
                       :items="data_th_prefix"
                       v-model="applicant.th_prefix"
@@ -34,7 +34,7 @@
                   </v-col>
 
                   <!-- TH fristname -->
-                  <v-col class="d-flex" xl="5" lg="4" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="5" lg="5" md="5" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.th_firstname"
                       label="ชื่อ"
@@ -44,7 +44,7 @@
                   </v-col>
 
                   <!-- TH lastname -->
-                  <v-col class="d-flex" xl="5" lg="5" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="5" lg="5" md="5" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.th_lastname"
                       label="นามสกุล"
@@ -54,7 +54,7 @@
                   </v-col>
 
                   <!-- EN prefix -->
-                  <v-col class="d-flex" xl="2" lg="3" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="2" lg="2" md="2" sm="12" cols="12">
                     <v-select
                       label="Prefix"
                       :items="data_eng_prefix"
@@ -65,7 +65,7 @@
                   </v-col>
 
                   <!-- EN fristname -->
-                  <v-col class="d-flex" xl="5" lg="4" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="5" lg="5" md="5" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.eng_firstname"
                       label="Frist Name"
@@ -75,7 +75,7 @@
                   </v-col>
 
                   <!-- EN lastname -->
-                  <v-col class="d-flex" xl="5" lg="4" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="5" lg="5" md="5" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.eng_lastname"
                       label="Last Name"
@@ -85,7 +85,7 @@
                   </v-col>
 
                   <!-- Nationality -->
-                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="3" cols="12">
+                  <v-col class="d-flex" xl="3" lg="3" md="6" sm="3" cols="12">
                     <v-text-field
                       v-model="applicant.nationality"
                       :items="CountryList"
@@ -97,7 +97,7 @@
                   </v-col>
 
                   <!-- Phone number -->
-                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="3" cols="12">
+                  <v-col class="d-flex" xl="3" lg="3" md="6" sm="3" cols="12">
                     <v-text-field
                       v-model="applicant.phone_number"
                       label="Your Phone Number"
@@ -109,7 +109,7 @@
                   </v-col>
 
                   <!-- Phone number family-->
-                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="3" cols="12">
+                  <v-col class="d-flex" xl="3" lg="3" md="6" sm="3" cols="12">
                     <v-text-field
                       v-model="applicant.phone_number_famaily"
                       label="Phone Number Family"
@@ -121,13 +121,13 @@
                   </v-col>
 
                   <!-- Relationship -->
-                  <v-col class="d-flex" xl="3" lg="3" md="2" sm="3" cols="12">
-                    <v-select
+                  <v-col class="d-flex" xl="3" lg="3" md="6" sm="3" cols="12">
+                    <v-text-field
                       v-model="applicant.person_relationship"
-                      :items="data_Relationship"
                       label="Relationship"
                       :rules="[(v1) => !!v1 || 'Pleace Select Relationship']"
-                    ></v-select>
+                    >
+                    </v-text-field>
                   </v-col>
 
                   <!-- Address -->
@@ -145,7 +145,7 @@
                   </v-col>
 
                   <!--  Birthday  -->
-                  <v-col class="d-flex" xl="4" lg="3" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="4" lg="4" md="6" sm="12" cols="12">
                     <v-menu
                       ref="date_menu"
                       v-model="date_menu"
@@ -207,7 +207,7 @@
                   </v-col>
 
                   <!-- upload img file input and resume -->
-                  <v-col class="d-flex" xl="5" lg="4" md="6" sm="12" cols="12">
+                  <v-col class="d-flex" xl="5" lg="5" md="6" sm="12" cols="12">
                     <v-card outlined>
                       <v-list-item>
                         <v-list-item-content>
@@ -307,8 +307,19 @@
 
                 <v-row>
 
+                    <!-- Degree -->
+                  <v-col class="d-flex" xl="3" lg="4" md="4" sm="12" cols="12">
+                    <v-select
+                      v-model="applicant.degree_education"
+                      :items="degree_item"
+                      label="Degree Education"
+                      :rules="[(v1) => !!v1 || 'Please Degree Education']"
+                    >
+                    </v-select>
+                  </v-col>
+
                   <!-- Education -->
-                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="3" lg="4" md="4" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.education"
                       label="Education"
@@ -318,7 +329,7 @@
                   </v-col>
 
                   <!-- Gpa -->
-                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="3" lg="4" md="4" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.gpa"
                       label="GPA"
@@ -335,7 +346,7 @@
 
                 <v-row>
                   <!-- Level -->
-                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="3" lg="4" md="4" sm="12" cols="12">
                     <v-select
                       v-model="applicant.job_level"
                       :items="data_level"
@@ -346,7 +357,7 @@
                   </v-col>
 
                     <!-- Position -->
-                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="3" lg="4" md="4" sm="12" cols="12">
                     <v-select
                       v-model="applicant.job_position"
                       :items="data_position"
@@ -357,7 +368,7 @@
                   </v-col>
 
                    <!-- Salary -->
-                   <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
+                   <v-col class="d-flex" xl="3" lg="4" md="4" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.job_salary"
                       label="Salary (Bath)"
@@ -455,6 +466,7 @@ export default {
       "Grandmather",
       "Other",
     ],
+    degree_item: ["Bachelor Degrees", "Master Degrees" ,"Doctor Degrees"],
     data_level: ["Office/Engineer", "Management"],
     data_position: ["Developer", "Data Analysis"],
     show_password: true,

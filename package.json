@@ -14,7 +14,7 @@
     "jw-vue-pagination": "^1.0.3",
     "material-design-icons-iconfont": "^5.0.1",
     "vue": "^2.6.11",
-    "vue-chartjs": "^3.5.0",
+    "vue-chartjs": "^3.5.1",
     "vue-country-region-select": "^2.0.14",
     "vue-headful": "^2.1.0",
     "vue-moment": "^4.1.0",

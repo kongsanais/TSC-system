@@ -11,7 +11,7 @@ uploadImage = async (files, doc) => {
   if (files.imageURL != null) {
     var fileExtention = files.imageURL.name.split(".")[1];
     doc.imageURL = `${doc._id}.${fileExtention}`;
-    var newpath = path.resolve("./uploaded/images/") + "/" + doc.imageURL;
+    var newpath = path.resolve("./src/uploaded/images/") + "/" + doc.imageURL;
     if (fs.exists(newpath)) {
       await fs.remove(newpath);
     }
@@ -29,7 +29,7 @@ uploadResume = async (files, doc) => {
     var fileExtention = files.resumeURL.name.split(".")[1];
     doc.resumeURL = `${doc._id}.${fileExtention}`;
     var newpath =
-      path.resolve("./uploaded/resume/") + "/" + doc.resumeURL;
+      path.resolve("./src/uploaded/resume/") + "/" + doc.resumeURL;
 
     if (fs.exists(newpath)) {
       await fs.remove(newpath);
@@ -98,6 +98,7 @@ router.put("/users/update", auth , (req, res)=>{
           "job_position" : user.job_position,
           "job_salary" : user.job_salary,
           "age": user.age,
+          "degree_education": user.degree_education,
           "education" : user.education,
           "gpa" : user.gpa
 

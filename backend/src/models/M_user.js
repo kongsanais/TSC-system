@@ -102,6 +102,13 @@ const userSchema = new mongoose.Schema({
     gpa:{
         type: String 
     },
+    role:{
+        type: String 
+    },
+    reg_status:{
+        type: String,
+        default: 'Waitting'
+    },
     tokens: [{
         token: {
             type: String,

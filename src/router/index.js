@@ -10,7 +10,7 @@ import About from "@/views/About.vue"
 import Login from "@/views/Login.vue"
 import Profile from "@/views/Profile.vue"
 import Profile_update from "@/views/Profile_update.vue"
-
+import User_list from "@/views/User_list.vue"
 Vue.use(VueRouter);
 
 const routes = [
@@ -59,6 +59,11 @@ const routes = [
     path: "/profile_update",
     name: "profile_update",
     component : Profile_update
+  },
+  {
+    path: "/user_list",
+    name: "user_list",
+    component : User_list
   },
   {
     path: "/test",

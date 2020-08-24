@@ -17,6 +17,7 @@ export const server = {
   USER_PROFILE: `users/profile`,
   LOGOUT_URL: `users/logout`,
   UPDATE_PROFILE: `users/update`, 
+  GET_ALL_APP: `users/update`, 
   TRANSACTION_URL: `transaction`,
   REPORT_URL: `report`,
   TOKEN_KEY: `token`,

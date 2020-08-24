@@ -36,8 +36,8 @@ export default {
   data: () => ({
     //  
     items: [
-      { text: "Login", icon: "mdi-account-circle-outline" ,link: "/login" },
-      { text: "Register", icon: "mdi-account-cog-outline",link: "/register_engineer" }
+      { text: "Login ( เข้าสู่ระบบ ) ",  icon: "mdi-account-circle-outline" ,link: "/login" },
+      { text: "Register ( สมัครงาน )", icon: "mdi-account-cog-outline",link: "/job" }
     ],
   }),
   methods: {

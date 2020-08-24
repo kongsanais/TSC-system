@@ -50,7 +50,7 @@
             <v-row class="justify-space-between px-3 pt-4">
               <v-btn
                 class="mt-2"
-                @click.prevent="$router.push('/register')"
+                @click.prevent="$router.push('/register_engineer')"
                 color="indigo"
                 dark
                 >Register</v-btn

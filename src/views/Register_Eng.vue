@@ -3,7 +3,7 @@
     <v-form @submit.prevent="submit" ref="form" v-model="valid" lazy-validation>
       <v-card>
         <v-toolbar flat color="primary" dark>
-          <v-toolbar-title>Form Register</v-toolbar-title>
+          <v-toolbar-title>Form Register ( Engineer & Mangement )</v-toolbar-title>
         </v-toolbar>
 
         <v-tabs v-model="tab" vertical>
@@ -21,10 +21,10 @@
           <v-tab-item value="tab-1">
             <v-card flat>
               <v-card-text>
-                <!-- {{ applicant }} -->
+                {{ applicant }}
                 <v-row>
                   <!-- E-mail -->
-                  <v-col class="d-flex" xl="4" lg="3" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="4" lg="4" md="4" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.email"
                       type="email"
@@ -41,7 +41,7 @@
                   </v-col>
 
                   <!-- Password -->
-                  <v-col class="d-flex" xl="4" lg="3" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="4" lg="4" md="4" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.password"
                       label="Password"
@@ -63,7 +63,7 @@
 
 
                   <!-- Confirm Password -->
-                  <v-col class="d-flex" xl="4" lg="3" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="4" lg="4" md="4" sm="12" cols="12">
                     <v-text-field
                       v-model="checkpassword"
                       label="Confirm Password"
@@ -85,7 +85,7 @@
 
 
                   <!-- TH prefix  -->
-                  <v-col class="d-flex" xl="2" lg="3" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="2" lg="2" md="3" sm="12" cols="12">
                     <v-select
                       :items="data_th_prefix"
                       v-model="applicant.th_prefix"
@@ -97,7 +97,7 @@
                   </v-col>
 
                   <!-- TH fristname -->
-                  <v-col class="d-flex" xl="5" lg="4" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="5" lg="5" md="4" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.th_firstname"
                       label="ชื่อ"
@@ -107,7 +107,7 @@
                   </v-col>
 
                   <!-- TH lastname -->
-                  <v-col class="d-flex" xl="5" lg="5" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="5" lg="5" md="4" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.th_lastname"
                       label="นามสกุล"
@@ -117,7 +117,7 @@
                   </v-col>
 
                   <!-- EN prefix -->
-                  <v-col class="d-flex" xl="2" lg="3" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="2" lg="2" md="3" sm="12" cols="12">
                     <v-select
                       label="Prefix"
                       :items="data_eng_prefix"
@@ -128,7 +128,7 @@
                   </v-col>
 
                   <!-- EN fristname -->
-                  <v-col class="d-flex" xl="5" lg="4" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="5" lg="5" md="4" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.eng_firstname"
                       label="Frist Name"
@@ -138,7 +138,7 @@
                   </v-col>
 
                   <!-- EN lastname -->
-                  <v-col class="d-flex" xl="5" lg="4" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="5" lg="5" md="4" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.eng_lastname"
                       label="Last Name"
@@ -148,7 +148,7 @@
                   </v-col>
 
                   <!-- Nationality -->
-                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="3" cols="12">
+                  <v-col class="d-flex" xl="3" lg="6" md="6" sm="3" cols="12">
                       <v-text-field
                       v-model="applicant.nationality"
                       label="Nationality "
@@ -158,7 +158,7 @@
                   </v-col>
 
                   <!-- Phone number -->
-                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="3" cols="12">
+                  <v-col class="d-flex" xl="3" lg="6" md="6" sm="3" cols="12">
                     <v-text-field
                       v-model="applicant.phone_number"
                       label="Your Phone Number"
@@ -170,7 +170,7 @@
                   </v-col>
 
                   <!-- Phone number  family-->
-                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="3" cols="12">
+                  <v-col class="d-flex" xl="3" lg="6" md="6" sm="3" cols="12">
                     <v-text-field
                       v-model="applicant.phone_number_famaily"
                       label="Phone Number Family"
@@ -182,7 +182,7 @@
                   </v-col>
 
                   <!-- Relationship -->
-                  <v-col class="d-flex" xl="3" lg="3" md="2" sm="3" cols="12">
+                  <v-col class="d-flex" xl="3" lg="6" md="6" sm="3" cols="12">
                     <v-text-field
                       v-model="applicant.person_relationship"
                       label="Relationship Ex. ( Father, Mother, Etc.)"
@@ -205,7 +205,7 @@
                   </v-col>
 
                   <!--  Birthday  -->
-                  <v-col class="d-flex" xl="4" lg="3" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="4" lg="6" md="6" sm="12" cols="12">
                     <v-menu
                       ref="date_menu"
                       v-model="date_menu"
@@ -281,7 +281,7 @@
                   </v-col>
 
                   <!-- upload img file input and resume -->
-                  <v-col class="d-flex" xl="5" lg="4" md="6" sm="12" cols="12">
+                  <v-col class="d-flex" xl="5" lg="6" md="6" sm="12" cols="12">
                     <v-card outlined>
                       <v-list-item>
                         <v-list-item-content>
@@ -371,7 +371,7 @@
                    
 
                   <!-- Degree -->
-                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="3" lg="3" md="6" sm="12" cols="12">
                     <v-select
                       v-model="applicant.degree_education"
                       :items="degree_item"
@@ -383,7 +383,7 @@
 
 
                   <!-- Education -->
-                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="3" lg="4" md="6" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.education"
                       label="Education Name (Ex. Burapha University )"
@@ -394,7 +394,7 @@
 
                   
                   <!-- Major -->
-                  <v-col class="d-flex" xl="2" lg="2" md="2" sm="12" cols="12">
+                  <v-col class="d-flex" xl="2" lg="3" md="6" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.majoy_education"
                       label="Major"
@@ -404,7 +404,7 @@
                   </v-col>
 
                   <!-- Gpa -->
-                  <v-col class="d-flex" xl="2" lg="2" md="2" sm="12" cols="12">
+                  <v-col class="d-flex" xl="2" lg="2" md="6" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.gpa"
                       label="GPA"
@@ -420,7 +420,7 @@
               
                 <v-row>
                   <!-- Level -->
-                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="3" lg="4" md="4" sm="12" cols="12">
                     <v-select
                       v-model="applicant.job_level"
                       :items="data_level"
@@ -431,7 +431,7 @@
                   </v-col>
                   
                   <!-- Position -->
-                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="3" lg="4" md="4" sm="12" cols="12">
                     <v-select
                       v-model="applicant.job_position"
                       :items="data_position"
@@ -443,7 +443,7 @@
                   </v-col>
 
                   <!-- Salary -->
-                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="3" lg="4" md="4" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.job_salary"
                       label="Salary (Bath)"
@@ -622,7 +622,8 @@ export default {
       education:"",
       degree_education:"",
       majoy_education:"",
-      gpa:""
+      gpa:"",
+      role:"Engineer"
     },
     checked_ac: false,
     data_th_prefix: ["นาย", "นาง", "นางสาว"],
@@ -771,25 +772,25 @@ export default {
       }
     },
     async submit() {
-      var check;
 
-      if (this.applicant.imageURL == null || this.applicant.resumeURL == null) {
+
+      var check = this.$refs.form.validate();
+
+      if (this.applicant.imageURL == null || this.applicant.resumeURL == null) 
+      {
         check = false;
       } else {
         check = true;
       }
-
-      check = this.$refs.form.validate();
-
+          
       if (check) {
 
         let formData = new FormData();
-        
         Object.keys(this.applicant).forEach((key) =>
            formData.append(key, this.applicant[key])
         );
-
           this.dialog_load.status = true;
+        
         if (await api.register(formData)) {
           this.dialog_load.status = false;
           this.dialog_messenger.text = "Complete GO Login";

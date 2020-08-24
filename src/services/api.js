@@ -14,7 +14,6 @@ const logoff = async () => {
 };
 
 
-
 const login = async values => 
 {
   let result = await httpClient.post(server.LOGIN_URL, values);
@@ -22,13 +21,19 @@ const login = async values =>
   {
     localStorage.setItem(server.USERNAME, result.data.user.eng_firstname);
     localStorage.setItem(server.TOKEN_KEY, result.data.token);
-    router.push("/profile");
+    let role =  result.data.user.role;
+
+    if(role == "Engineer" || role == "Production"){
+      router.push("/profile");
+    }else if (role == "Admin"){
+      router.push("/user_list")
+    }
+
     return true;
   } else {
     return false;
   }
 };
-
 
 const register = async values => {
   let result = await httpClient.post(server.REGISTER_URL, values);
@@ -43,7 +48,14 @@ const updateProfile = async values => {
 const readProfile = async () => {
   let result =  await httpClient.get(server.USER_PROFILE);
   return result.data.profile;
-} 
+}
+
+const getAllApplicant  = async () => {
+  let result  =  await httpClient.get()
+  
+}
+ 
+
 
 
 

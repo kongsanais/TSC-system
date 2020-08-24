@@ -3,7 +3,7 @@
     <v-form @submit.prevent="submit" ref="form" v-model="valid" lazy-validation>
       <v-card>
         <v-toolbar flat color="primary" dark>
-          <v-toolbar-title>แบบฟอร์มสมัคร</v-toolbar-title>
+          <v-toolbar-title>แบบฟอร์มสมัครงาน ( ฝ่ายผลิต )</v-toolbar-title>
         </v-toolbar>
 
         <v-tabs v-model="tab" vertical>
@@ -21,10 +21,10 @@
           <v-tab-item value="tab-1">
             <v-card flat>
               <v-card-text>
-                {{ applicant }}
+                <!-- {{ applicant }} -->
                 <v-row>
                   <!-- E-mail -->
-                  <v-col class="d-flex" xl="4" lg="3" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="4" lg="4" md="3" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.email"
                       type="email"
@@ -41,7 +41,7 @@
                   </v-col>
 
                   <!-- Password -->
-                  <v-col class="d-flex" xl="4" lg="3" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="4" lg="4" md="3" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.password"
                       label="รหัสผ่าน"
@@ -62,7 +62,7 @@
                   </v-col>
 
                   <!-- Confirm Password -->
-                  <v-col class="d-flex" xl="4" lg="3" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="4" lg="4" md="3" sm="12" cols="12">
                     <v-text-field
                       v-model="checkpassword"
                       label="ยืนยันรหัสผ่าน"
@@ -105,7 +105,7 @@
                   </v-col>
 
                   <!-- TH lastname -->
-                  <v-col class="d-flex" xl="5" lg="5" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="5" lg="4" md="3" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.th_lastname"
                       label="นามสกุล ( ภาษาไทย )"
@@ -146,7 +146,7 @@
                   </v-col>
 
                   <!-- Nationality -->
-                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="3" cols="12">
+                  <v-col class="d-flex" xl="3" lg="6" md="3" sm="3" cols="12">
                       <v-text-field
                       v-model="applicant.nationality"
                       label="สัญชาติ "
@@ -156,7 +156,7 @@
                   </v-col>
 
                   <!-- Phone number -->
-                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="3" cols="12">
+                  <v-col class="d-flex" xl="3" lg="6" md="3" sm="3" cols="12">
                     <v-text-field
                       v-model="applicant.phone_number"
                       label="เบอร์ โทรศัพท์"
@@ -168,7 +168,7 @@
                   </v-col>
 
                   <!-- Phone number  family-->
-                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="3" cols="12">
+                  <v-col class="d-flex" xl="3" lg="6" md="3" sm="3" cols="12">
                     <v-text-field
                       v-model="applicant.phone_number_famaily"
                       label="เบอร์โทรบุลคลที่ติดต่อได้กรณีฉุกเฉิน"
@@ -180,7 +180,7 @@
                   </v-col>
 
                   <!-- Relationship -->
-                  <v-col class="d-flex" xl="3" lg="3" md="2" sm="3" cols="12">
+                  <v-col class="d-flex" xl="3" lg="6" md="2" sm="3" cols="12">
                     <v-text-field
                       v-model="applicant.person_relationship"
                       label="ความสัมพันธ์ เช่น (บิดา, มารดา) "
@@ -204,7 +204,7 @@
                   </v-col>
 
                   <!--  Birthday  -->
-                  <v-col class="d-flex" xl="4" lg="3" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="4" lg="6" md="3" sm="12" cols="12">
                     <v-menu
                       ref="date_menu"
                       v-model="date_menu"
@@ -281,12 +281,12 @@
                   </v-col>
 
                   <!-- upload img file input and resume -->
-                  <v-col class="d-flex" xl="5" lg="4" md="6" sm="12" cols="12">
+                  <v-col class="d-flex" xl="5" lg="6" md="6" sm="12" cols="12">
                     <v-card outlined>
                       <v-list-item>
                         <v-list-item-content>
                           <v-list-item-title class="headline mb-6"
-                            >Upload Document</v-list-item-title
+                            >อัพโหลดรูปภาพ</v-list-item-title
                           >
                           <v-list-item-subtitle>
                             <!--btn upload profile picture-->
@@ -563,7 +563,8 @@ export default {
       job_position: "",
       job_salary: "", 
       education:"",
-      gpa:""
+      gpa:"",
+      role:"Production"
     },
     checked_ac: false,
     data_th_prefix: ["นาย", "นาง", "นางสาว"],
@@ -584,7 +585,7 @@ export default {
     date_menu: false, //for date
     imageURL: "https://image.flaticon.com/icons/svg/882/882849.svg",
     CountryList: ["Thailand"],
-    message_filename_pic: "Upload Profile Picture",
+    message_filename_pic: "อัพโหลดรูปภาพของคุณ",
     message_filename_resume: " Upload Resume / CV",
     tab: "tab-1",
     tabs: [
@@ -729,9 +730,8 @@ export default {
       check = this.$refs.form.validate();
 
       if (check) {
-
-        let formData = new FormData();
         
+        let formData = new FormData();
         Object.keys(this.applicant).forEach((key) =>
            formData.append(key, this.applicant[key])
         );

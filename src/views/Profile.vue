@@ -2,9 +2,9 @@
   <v-container grid-list-xs>
     <v-card class="mb-2">
       <v-row>
-        <v-col class="d-flex" xl="12" lg="3" md="12" sm="12" cols="12">
+        <v-col class="d-flex" xl="12" lg="12" md="12" sm="12" cols="12">
             <h1 class="ma-2"><v-icon large  class="mb-2">mdi-file-account-outline</v-icon>Information Profile</h1>
-            <v-spacer></v-spacer>
+             <v-spacer></v-spacer>
              <v-spacer></v-spacer>
 
                 <v-btn
@@ -140,6 +140,10 @@
             </v-card>
           </v-col>
 
+          <v-col class="d-flex d-xl-none"  lg="3" md="12" sm="12" cols="12">
+               
+          </v-col>
+
           <v-col class="d-flex" xl="3" lg="4" md="12" sm="12" cols="12">
             <v-card width="100%">
               <v-card-title>
@@ -196,11 +200,41 @@ import { resumeUrl } from "@/services/constants";
 import moment from "moment";
 export default {
   data: () => ({
-    applicant: {imageURL: "samsung-icon.png"},
+      applicant: {
+      email: "",
+      password: "",
+      th_prefix: "",
+      th_firstname: "",
+      th_lastname: "",
+      eng_prefix: "",
+      eng_firstname: "",
+      eng_lastname: "",
+      nationality: "",
+      phone_number: "",
+      phone_number_famaily: "",
+      person_relationship: "",
+      eng_address: "",
+      date_birthday: null,
+      age: "",
+      imageURL: "samsung-icon.png",
+      resumeURL: null,
+      job_level: null,
+      job_position: "",
+      job_salary: "", 
+      education:"",
+      degree_education:"",
+      majoy_education:"",
+      gpa:""
+    },
   }),
   async mounted() {
-    let result = await api.readProfile();
-    this.applicant = result;
+    if (api.isLoggedIn())
+    {
+        let result = await api.readProfile();
+        this.applicant = result;
+    }else{
+      this.$router.push("/login");
+    }
   },
   methods: {
     getProfileImage() {
