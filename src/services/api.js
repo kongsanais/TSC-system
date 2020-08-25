@@ -51,19 +51,23 @@ const readProfile = async () => {
 }
 
 const getAllApplicant  = async () => {
-  let result  =  await httpClient.get()
-  
+  let result  =  await httpClient.get(server.GET_ALL_APP);
+  return result.data.all_user;
 }
- 
 
-
+const getOneApplicant = async _id  => {
+  let result  =  await httpClient.get(server.GET_ONE_APP + "/" +`${_id}`);
+  return result.data.one_user;
+}
 
 
 export default {
+  getOneApplicant,
   register,
   login,
   isLoggedIn,
   logoff,
   readProfile,
-  updateProfile
+  updateProfile,
+  getAllApplicant
 };

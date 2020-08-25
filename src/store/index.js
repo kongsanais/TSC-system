@@ -8,7 +8,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     isLogged: false,
-    username: ""
+    username: "",
+    role:""
   },  
   getters: {
     isLogin(state) {

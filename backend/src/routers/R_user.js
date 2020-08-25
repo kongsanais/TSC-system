@@ -7,16 +7,16 @@ const path = require("path")
 const fs  = require("fs-extra")
 const { update } = require('../models/M_user')
 
+
 uploadImage = async (files, doc) => {
   if (files.imageURL != null) {
     var fileExtention = files.imageURL.name.split(".")[1];
     doc.imageURL = `${doc._id}.${fileExtention}`;
-    var newpath = path.resolve("./src/uploaded/images/") + "/" + doc.imageURL;
+    var newpath = path.resolve("./uploaded/images/") + "/" + doc.imageURL;
     if (fs.exists(newpath)) {
       await fs.remove(newpath);
     }
     await fs.moveSync(files.imageURL.path, newpath);
-
     // Update database
     let result = User.findOneAndUpdate({ _id: doc._id }, {imageURL: doc.imageURL});
     return result;
@@ -28,15 +28,11 @@ uploadResume = async (files, doc) => {
   if (files.resumeURL != null) {
     var fileExtention = files.resumeURL.name.split(".")[1];
     doc.resumeURL = `${doc._id}.${fileExtention}`;
-    var newpath =
-      path.resolve("./src/uploaded/resume/") + "/" + doc.resumeURL;
-
+    var newpath = path.resolve("./uploaded/resume/") + "/" + doc.resumeURL;
     if (fs.exists(newpath)) {
       await fs.remove(newpath);
     }
-
     await fs.moveSync(files.resumeURL.path, newpath);
-
     // Update database
     let result = User.findOneAndUpdate({ _id: doc._id }, {resumeURL: doc.resumeURL});
     return result;
@@ -151,6 +147,16 @@ router.get('/users/profile', auth, async (req, res) => {
 })
 
 
+router.get('/users/all', async (req, res) => {
+  let all_user = await User.find({}).sort({createdAt: -1})
+  res.send({all_user})
+})
+
+
+router.get('/users/get_appProfile/:_id', async (req, res) => {
+  let one_user = await User.findOne({_id:req.params._id});
+  res.send({one_user})
+})
 
 
 router.post('/users/logoutAll', auth, async (req, res) => {

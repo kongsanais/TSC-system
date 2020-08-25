@@ -21,7 +21,7 @@
           <v-tab-item value="tab-1">
             <v-card flat>
               <v-card-text>
-                {{ applicant }}
+                <!-- {{ applicant }} -->
                 <v-row>
                   <!-- E-mail -->
                   <v-col class="d-flex" xl="4" lg="4" md="4" sm="12" cols="12">
@@ -711,9 +711,7 @@ export default {
       //console.log("FILE SIZE = ", exactSize);
       //check file type and type file //
       //10mb
-      if (
-        _size < 10485760 &&
-        (_file_type == "png" || _file_type == "jpg" || _file_type == "jpeg")
+      if (_size < 10485760 && (_file_type == "png" || _file_type == "jpg" || _file_type == "jpeg" || _file_type == "PNG" || _file_type == "JPG")
       ) {
         reader.readAsDataURL(event.target.files[0]);
         // for upload
@@ -743,13 +741,8 @@ export default {
       var exactSize = Math.round(_size * 100) / 100 + " " + fSExt[i];
       //console.log("FILE SIZE = ", exactSize);
       //check file type and type file //
-      if (
-        _size < 10485760 &&
-        (_file_type == "pdf" ||
-          _file_type == "docx" ||
-          _file_type == "doc" ||
-          _file_type == "png")
-      ) {
+      if (_size < 10485760 && (_file_type == "pdf" || _file_type == "docx" || _file_type == "doc" ||  _file_type == "png" || _file_type == "")) 
+      {
         reader.readAsDataURL(event.target.files[0]);
         // for upload
         this.applicant.resumeURL = event.target.files[0];

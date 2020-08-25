@@ -555,10 +555,7 @@ export default {
       //console.log("FILE SIZE = ", exactSize);
       //check file type and type file //
       //10mb
-      if (
-        _size < 10485760 &&
-        (_file_type == "png" || _file_type == "jpg" || _file_type == "jpeg")
-      ) {
+      if (_size < 10485760 && (_file_type == "png" || _file_type == "jpg" || _file_type == "jpeg" || _file_type == "PNG" || _file_type == "JPG")) {
         reader.readAsDataURL(event.target.files[0]);
         // for upload
         this.applicant.imageURL = event.target.files[0];

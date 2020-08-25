@@ -8,7 +8,7 @@ Vue.config.productionTip = false
 import Vue2Filters from "vue2-filters";
 import { imageUrl } from "@/services/constants";
 import { resumeUrl} from "@/services/constants";
-
+import moment from "moment";
 
 Vue.use(Vue2Filters);
 Vue.use(require('vue-moment'));
@@ -20,8 +20,15 @@ new Vue({
   render: h => h(App)
 }).$mount('#app')
 
+import VueFriendlyIframe from 'vue-friendly-iframe';
+Vue.use(VueFriendlyIframe);
 
 
+Vue.filter("formatDate", function(value) {
+  if (value) {
+    return moment(value).format("ddd, ll")
+  }
+});
 
 Vue.filter("imageUrl", function(image) {
   return `${imageUrl}/${image}?timestamp=${Date.now()}`;

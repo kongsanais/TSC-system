@@ -11,6 +11,7 @@ import Login from "@/views/Login.vue"
 import Profile from "@/views/Profile.vue"
 import Profile_update from "@/views/Profile_update.vue"
 import User_list from "@/views/User_list.vue"
+import Profile_one_list from "@/views/Profile_show_fromlist.vue"
 Vue.use(VueRouter);
 
 const routes = [
@@ -64,6 +65,11 @@ const routes = [
     path: "/user_list",
     name: "user_list",
     component : User_list
+  },
+  {   
+    path: "/profile_one_list/:_id",
+    name: "profile_one_list",
+    component:Profile_one_list
   },
   {
     path: "/test",
