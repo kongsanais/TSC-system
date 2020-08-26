@@ -19,6 +19,7 @@ export const server = {
   UPDATE_PROFILE: `users/update`, 
   GET_ALL_APP: `users/all`, 
   GET_ONE_APP: 'users/get_appProfile',
+  GET_STATUS_DATA : 'users/count_status',
   TRANSACTION_URL: `transaction`,
   REPORT_URL: `report`,
   TOKEN_KEY: `token`,

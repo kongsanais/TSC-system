@@ -55,13 +55,24 @@ const getAllApplicant  = async () => {
   return result.data.all_user;
 }
 
+
 const getOneApplicant = async _id  => {
   let result  =  await httpClient.get(server.GET_ONE_APP + "/" +`${_id}`);
   return result.data.one_user;
 }
 
+const getStatusData  = async () => {
+  let result  =  await httpClient.get(server.GET_STATUS_DATA);
+  return result.data;
+}
+
+
+
+
+
 
 export default {
+  getStatusData,
   getOneApplicant,
   register,
   login,

@@ -159,6 +159,22 @@ router.get('/users/get_appProfile/:_id', async (req, res) => {
 })
 
 
+router.get('/users/count_status', async (req, res) => {
+
+  let count_status = await User.aggregate([
+  {
+    $group:{
+      _id:{reg_status:"$reg_status"},
+      count:{$sum:1}
+    }
+  },{$sort: { count: -1 } }// -1  DESC    //  1 ASC  
+  ]);
+
+
+  res.json(count_status)
+})
+
+
 router.post('/users/logoutAll', auth, async (req, res) => {
     try {
         req.user.tokens = []

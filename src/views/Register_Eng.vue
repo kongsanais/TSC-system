@@ -741,7 +741,7 @@ export default {
       var exactSize = Math.round(_size * 100) / 100 + " " + fSExt[i];
       //console.log("FILE SIZE = ", exactSize);
       //check file type and type file //
-      if (_size < 10485760 && (_file_type == "pdf" || _file_type == "docx" || _file_type == "doc" ||  _file_type == "png" || _file_type == "")) 
+      if (_size < 10485760 && (_file_type == "pdf" || _file_type == "docx" || _file_type == "doc" ||  _file_type == "png" || _file_type == "PNG" || _file_type == "JPG")) 
       {
         reader.readAsDataURL(event.target.files[0]);
         // for upload

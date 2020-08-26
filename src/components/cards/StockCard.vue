@@ -8,8 +8,8 @@
         }}</v-list-item-subtitle>
       </v-list-item-content>
 
-      <v-list-item-avatar  size="65" :color="avatar_bg">
-        <v-icon color="white" size="40" >{{ avatar_ic }}</v-icon>
+      <v-list-item-avatar size="65" :color="avatar_bg">
+        <v-icon color="black" size="40">{{ icon_set_up }}</v-icon>
       </v-list-item-avatar>
     </v-list-item>
   </v-card>
@@ -18,7 +18,37 @@
 <script>
 export default {
   name: "StockCard",
-  props: ["title", "subtitle", "avatar_bg", "avatar_ic"]
+  mounted() {
+    this.getIcon();
+  },
+  props: ["title", "subtitle", "avatar_bg", "avatar_ic"],
+  data() {
+    return {
+      icon_data: {
+        icon_wait: "mdi-account-clock",
+        icon_con: "mdi-comment-account",
+        icon_inter: "mdi-account-question",
+        icon_hiring:"mdi-account-check-outline",
+        icon_fail:"mdi-account-remove-outline"
+      },
+      icon_set_up: ""
+    };
+  },
+  methods: {
+    getIcon(){
+          if(this.title == "Waitting"){
+            this.icon_set_up = this.icon_data.icon_wait
+          }else if (this.title == "HR Consider"){
+            this.icon_set_up = this.icon_data.icon_con
+          }else if (this.title == "Interview"){
+            this.icon_set_up = this.icon_data.icon_inter
+          }else if (this.title == "Hiring"){
+            this.icon_set_up = this.icon_data.icon_hiring
+          }else if (this.title == "Fail"){
+            this.icon_set_up = this.icon_data.fail
+          }
+    },
+  },
 };
 </script>
 
