@@ -126,7 +126,6 @@ export default {
       var check = this.$refs.form.validate();
 
       if (check == true) {
-        
         await this.$store.dispatch({
           type: "doLogin",
           email: this.account.email,

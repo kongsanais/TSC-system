@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-xs>
+    <div class="ma-5">
     <v-card class="mb-2" color="primary" dark >
       <v-row >
         <v-col class="d-flex" xl="12" lg="12" md="12" sm="12" cols="12">
@@ -14,23 +14,85 @@
     </v-card>
 
     <v-card class="mt-5 mb-5">
-      <v-row>
-       <v-col xl="2" lg="4" md="6" sm="12" cols="12"  v-for="item in statusArray" :key="item" >
+      <v-row class="pa-3">
+
+        <v-col xl="2" lg="4" md="4" sm="12" cols="12">
+          <StockCard
+            title="All Applicant"
+            avatar_ic="mdi-account-group-outline"
+            avatar_bg="blue"
+            :subtitle="card_status.card_all"
+          />
+        </v-col>
+
+
+        <v-col  xl="2" lg="4" md="4" sm="12" cols="12">
+          <StockCard
+            title="Waitting"
+            avatar_ic="mdi-account-clock"
+            avatar_bg="#f39c12"
+            :subtitle="card_status.card_wait"
+          />
+        </v-col>
+
+        <v-col  xl="2" lg="4" md="4" sm="12" cols="12">
+          <StockCard
+            title="HR Consider"
+            avatar_ic="mdi-comment-account"
+            avatar_bg="#3F51B5"
+            :subtitle="card_status.card_con"
+          />
+        </v-col>
+
+
+
+          <v-col  xl="2" lg="4" md="4" sm="12" cols="12">
+          <StockCard
+            title="Interview"
+            avatar_ic="mdi-account-question"
+            avatar_bg="#00c0ef"
+            :subtitle="card_status.card_inter"
+          />
+        </v-col>
+        
+
+        
+          <v-col  xl="2" lg="4" md="4" sm="12" cols="12">
+          <StockCard
+            title="Hiring"
+            avatar_ic="mdi-account-check-outline"
+            avatar_bg="green"
+            :subtitle="card_status.card_hiring"
+          />
+        </v-col>
+
+
+          <v-col  xl="2" lg="4" md="4" sm="12" cols="12">
+          <StockCard
+            title="Fail"
+            avatar_ic="mdi-earth-minus"
+            avatar_bg="red"
+            :subtitle="card_status.card_fail"
+          />
+        </v-col>
+
+       <!-- <v-col xl="2" lg="4" md="6" sm="12" cols="12"  v-for="item in statusArray" :key="item" >
           <StockCard
             :title="item._id.reg_status"
             :subtitle="item.count"
           /> 
-        </v-col>
+        </v-col> -->
       </v-row>
     </v-card>
   
   
+
   <v-row >
-    <v-col xl="6" lg="6" md="6" sm="12" cols="12">
-  <v-card class="mb-2">
-      <v-btn class="success mt-2 ml-2" @click="fillData()"><v-icon>mdi-refresh</v-icon></v-btn>
-      <BarChart style="height: 300px;" :chartData="datacollection_BarChart" />
-  </v-card>
+  <v-col xl="6" lg="6" md="6" sm="12" cols="12">
+    <v-card class="mb-2">
+        <v-btn class="success mt-2 ml-2" @click="fillData()"><v-icon>mdi-refresh</v-icon></v-btn>
+        <BarChart style="height: 300px;" :chartData="datacollection_BarChart" />
+    </v-card>
   </v-col>
 
       <v-col xl="6" lg="6" md="6" sm="12" cols="12">
@@ -71,12 +133,87 @@
             ></v-text-field>
             <v-spacer></v-spacer>
             
-
-
-           <v-btn color="indigo" dark class="mb-4 mr-2">
+    <v-dialog v-model="data_dateTemplete.date_dialog" persistent max-width="600px">
+      <template v-slot:activator="{ on, attrs }">
+     <v-btn color="indigo" dark class="mb-4 mr-2" v-bind="attrs"  v-on="on">
               <v-icon left>mdi-account-search-outline</v-icon>
               <span>Filter</span>
             </v-btn>
+      </template>
+      <v-card>
+        <v-card-title>
+          <span class="headline">Filter Data</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+
+            <!-- start date -->
+                <v-col cols="12" xl="6" sm="6" md="4">
+                <v-menu
+                  v-model="data_dateTemplete.menu_start"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="data_dateTemplete.date_start"
+                      label="Select Date Start"
+                      prepend-icon="event"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker v-model="data_dateTemplete.date_start" @input="data_dateTemplete.menu_start = false"></v-date-picker>
+                </v-menu>
+                </v-col>
+
+           <!-- stop end -->
+                <v-col cols="12" xl="6" sm="6" md="4">
+                  
+                <v-menu
+                  v-model="data_dateTemplete.menu_end"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="data_dateTemplete.date_end"
+                      label="Select Date End"
+                      prepend-icon="event"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker v-model="data_dateTemplete.date_end" @input="data_dateTemplete.menu_end = false"></v-date-picker>
+                </v-menu>
+                </v-col>
+
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          
+          <!-- <v-btn class="error" @click="dialog = false" >
+            Close
+          </v-btn> -->
+
+          <v-btn class="primary" text @click="filterDataTable()" >FIND</v-btn>
+
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    
 
            <v-btn color="green" dark class="mb-4">
               <v-icon left>mdi-microsoft-excel</v-icon>
@@ -121,7 +258,11 @@
         </template>
       </v-data-table>
   </v-card>
-  </v-container>
+
+
+
+
+  </div>
 </template>
 
 <script>
@@ -141,10 +282,19 @@ export default {
   },
  async  mounted () {
         await this.loadApplicant();
+        await this.getCardData()
         await this.fillData();
   },
   data() {
     return {
+      card_status: {
+        card_all: 0,
+        card_wait: 0,
+        card_con: 0,
+        card_inter: 0,
+        card_hiring:0,
+        card_fail: 0
+      },
       dialog: false,
       notifications: false,
       sound: true,
@@ -169,6 +319,13 @@ export default {
           { text: 'Reg.Date' , value:'createdAt'},
           { text: 'Action', value:'_id'},
         ],
+      data_dateTemplete: {
+        date_dialog :false,
+        date_start: "",
+        menu_start: false,
+        date_end: "",
+        menu_end: false,
+      }
     };
    },methods: {
      async loadApplicant(){
@@ -179,7 +336,7 @@ export default {
      },
      show_Profile(item) {
        this.$router.push(`/profile_one_list/${item._id}`);
-      },
+     },
      async fillData () {
           this.datacollection_BarChart = {
           //Data to be represented on x-axis
@@ -207,7 +364,6 @@ export default {
             ],
             }
       ]};
-
       this.datacollection_LineChart = {
           //Data to be represented on x-axis
           labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
@@ -240,14 +396,12 @@ export default {
           ]};
       },
       getRandomInt () {
-
         let randoms = []
         for (let index = 0; index < 12; index++) 
         {
           randoms.push(Math.floor(Math.random() * (1 - 5 + 1)) + 5)
         }
         return randoms
-
       },
       getChartData(){
 
@@ -260,20 +414,37 @@ export default {
 
       },
       getChartLable(){
-        
         let data_chart = []
-        let check_status = ['Waitting','HR Consider','Interview','Hiring','Fail']
-
         for (var i = 0; i < this.statusArray.length;i++)
         {
            data_chart.push(this.statusArray[i]._id.reg_status)
         } 
         this.label_name = data_chart;
-        
-        
-        
         return data_chart
-
+      },
+      getCardData(){
+        for (var i = 0; i < this.statusArray.length;i++)
+        {
+            if(this.statusArray[i]._id.reg_status == "Waitting"){
+              this.card_status.card_wait = this.statusArray[i].count;
+            }else if(this.statusArray[i]._id.reg_status == "HR Consider"){
+              this.card_status.card_con  = this.statusArray[i].count;
+            }else if(this.statusArray[i]._id.reg_status == "Interview"){
+              this.card_status.card_inter = this.statusArray[i].count;
+            }else if(this.statusArray[i]._id.reg_status == "Hiring"){
+              this.card_status.card_hiring = this.statusArray[i].count; 
+            }else if(this.statusArray[i]._id.reg_status == "Fail"){
+              this.card_status.card_fail = this.statusArray[i].count; 
+            }
+            this.card_status.card_all += this.statusArray[i].count;
+        }       
+      },
+       async filterDataTable(){
+        this.data_dateTemplete.date_dialog = false;
+        let date_start = this.data_dateTemplete.date_start;
+        let date_end  = this.data_dateTemplete.date_end;
+        let result = await api.getAllApplicantByDate({ date_start, date_end });
+        this.mDataArray = result;
       }
     }
 };

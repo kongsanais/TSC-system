@@ -3,13 +3,14 @@
     <v-list-item two-line>
       <v-list-item-content>
         <v-list-item-title class="headline mb-1">{{ title }}</v-list-item-title>
-        <v-list-item-subtitle class="title">{{
+        <v-list-item-subtitle class="title">
+          {{
           subtitle
         }}</v-list-item-subtitle>
       </v-list-item-content>
 
-      <v-list-item-avatar size="65" :color="avatar_bg">
-        <v-icon color="black" size="40">{{ icon_set_up }}</v-icon>
+      <v-list-item-avatar size="80" :color="avatar_bg">
+        <v-icon  color="white" size="45">{{ avatar_ic }}</v-icon>
       </v-list-item-avatar>
     </v-list-item>
   </v-card>

@@ -18,10 +18,10 @@ export const server = {
   LOGOUT_URL: `users/logout`,
   UPDATE_PROFILE: `users/update`, 
   GET_ALL_APP: `users/all`, 
+  GET_ALL_APP_BY_DATE: 'users/allByDate',
   GET_ONE_APP: 'users/get_appProfile',
   GET_STATUS_DATA : 'users/count_status',
   TRANSACTION_URL: `transaction`,
-  REPORT_URL: `report`,
   TOKEN_KEY: `token`,
   USERNAME: `username`
 };

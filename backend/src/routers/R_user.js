@@ -153,6 +153,26 @@ router.get('/users/all', async (req, res) => {
 })
 
 
+router.post('/users/allByDate', async (req, res) => {
+  // let count_status = await User.aggregate([
+  //   {
+  //     createdAt: {
+  //       $gte : new Date("2020-08-23T00:00:00.000Z"),
+  //       $lt:  new Date("2020-09-27T00:00:00.000Z")
+  //    }
+  //   }
+  //   ]);
+   var date = new Date("2020-08-23T00:00:00.000Z"); 
+   console.log(date)
+  try {
+     let all_user_bydate = await User.find({ createdAt: { $gt: new Date("2020-08-23T00:00:00.000Z"), $lt:  new Date("2020-09-27T00:00:00.000Z") } }).sort({ createdAt: -1});
+     res.send({all_user_bydate})
+  } catch (e) {
+     res.send({result:false})
+  }
+})
+
+
 router.get('/users/get_appProfile/:_id', async (req, res) => {
   let one_user = await User.findOne({_id:req.params._id});
   res.send({one_user})
@@ -160,7 +180,6 @@ router.get('/users/get_appProfile/:_id', async (req, res) => {
 
 
 router.get('/users/count_status', async (req, res) => {
-
   let count_status = await User.aggregate([
   {
     $group:{
@@ -169,10 +188,12 @@ router.get('/users/count_status', async (req, res) => {
     }
   },{$sort: { count: -1 } }// -1  DESC    //  1 ASC  
   ]);
-
-
   res.json(count_status)
 })
+
+
+
+
 
 
 router.post('/users/logoutAll', auth, async (req, res) => {
