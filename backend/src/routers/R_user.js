@@ -206,7 +206,11 @@ router.get('/users/count_status', async (req, res) => {
 // ])
 
 
-
-ฝฝhttps://kb.objectrocket.com/mongo-db/mongodb-group-by-date-622#:~:text=A%20string%20containing%20date%20and,is%20a%20bit%20complex%20command.
+/*db.getCollection('Users').aggregate([
+   { $match: { reg_status: "Waitting" } },
+   { $group: { _id : { month: { $month: "$createdAt" } }, count: { $sum: 1 } } }
+])
+*/
+//https://kb.objectrocket.com/mongo-db/mongodb-group-by-date-622#:~:text=A%20string%20containing%20date%20and,is%20a%20bit%20complex%20command.
 
 module.exports = router
