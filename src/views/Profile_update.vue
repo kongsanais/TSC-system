@@ -20,6 +20,7 @@
           <v-tab-item value="tab-1">
             <v-card flat>
               <v-card-text>
+                {{applicant}}
                 <v-row>
                   <!-- TH prefix  -->
                   <v-col class="d-flex" xl="2" lg="2" md="2" sm="12" cols="12">
@@ -327,6 +328,19 @@
                     >
                     </v-text-field>
                   </v-col>
+
+
+                 <!-- Major -->
+                  <v-col class="d-flex" xl="2" lg="3" md="6" sm="12" cols="12">
+                    <v-text-field
+                      v-model="applicant.majoy_education"
+                      label="Major"
+                      :rules="[(v1) => !!v1 || 'Please Enter Major']"
+                    >
+                    </v-text-field>
+                  </v-col>
+
+
 
                   <!-- Gpa -->
                   <v-col class="d-flex" xl="3" lg="4" md="4" sm="12" cols="12">

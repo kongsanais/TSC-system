@@ -72,6 +72,10 @@ const getStatusData  = async () => {
 }
 
 
+const updateRegStatus = async values => {
+  let result  =  await  httpClient.put(server.UPDATE_REG_STATUS,values);
+  return result.data.result;
+}
 
 
 
@@ -86,5 +90,6 @@ export default {
   readProfile,
   updateProfile,
   getAllApplicant,
-  getAllApplicantByDate
+  getAllApplicantByDate,
+  updateRegStatus
 };

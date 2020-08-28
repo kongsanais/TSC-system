@@ -1,20 +1,19 @@
 <template>
   <v-container grid-list-xs>
-    <v-card class="mb-2">
+    <v-card class="mb-1">
       <v-row>
-        <v-col class="d-flex" xl="12" lg="12" md="12" sm="12" cols="12">
-            <h1 class="ma-2"><v-icon large  class="mb-2">mdi-file-account-outline</v-icon>Information Profile</h1>
-             <v-spacer></v-spacer>
-             <v-spacer></v-spacer>
-
+        <v-col class="d-flex" xl="10" lg="10" md="9" sm="12" cols="12">
+            <h1 class="ml-6" ><v-icon large  class="mb-2">mdi-file-account-outline</v-icon>Information Profile</h1>
+        </v-col>
+        <v-col class="d-flex" xl="2" lg="2" md="2" sm="12" cols="12">
                 <v-btn
                   color="warning"
-                  class="mt-3 mr-2 white--text"
+                  class="white--text ma-1"
                   @click="go_update"
                 >
-                  Update Form
+                  Update FORM
                   <v-icon right dark>mdi-file-document</v-icon>
-                </v-btn>
+                </v-btn> 
         </v-col>
       </v-row>
     </v-card>

@@ -70,10 +70,12 @@ router.post('/users', async (req, res) => {
 router.put("/users/update", auth , (req, res)=>{
   try {
     const form = new formaidable.IncomingForm()
+
     form.parse(req, async (error, fields, files) => 
     {
         const user  = new User(fields)
         const user_file  = files;
+        
 
         let result = await User.findOneAndUpdate({ "_id": user._id }, 
         { "$set": { 
@@ -90,15 +92,16 @@ router.put("/users/update", auth , (req, res)=>{
           "person_relationship"  : user.person_relationship,
           "eng_address"   : user.eng_address,
           "date_birthday" : user.date_birthday,
+          "age": user.age,
           "job_level" : user.job_level,
           "job_position" : user.job_position,
           "job_salary" : user.job_salary,
-          "age": user.age,
           "degree_education": user.degree_education,
           "education" : user.education,
+          "majoy_education" :user.majoy_education,
           "gpa" : user.gpa
 
-        }},{ new: true })
+        }},{ new: true }) //new for return
 
         await uploadImage(user_file, fields);
         await uploadResume(user_file,fields);
@@ -106,6 +109,18 @@ router.put("/users/update", auth , (req, res)=>{
         res.json({result: true , message: JSON.stringify(result)})
 
     }); 
+  } catch (error) {
+        res.json({result: false , message: JSON.stringify(result)})
+  }
+})
+
+router.put("/users/update_reg_status", async (req, res)=>{
+  try {
+    let update_status = await User.findOneAndUpdate({ "_id": req.body.update_id}, 
+    { "$set": { 
+      "reg_status"  :  req.body.update_status,
+    }},{ new: true })
+        res.json({result: true , message: JSON.stringify(update_status)})
   } catch (error) {
         res.json({result: false , message: JSON.stringify(result)})
   }
@@ -153,30 +168,21 @@ router.get('/users/all', async (req, res) => {
 })
 
 
+router.get('/users/get_appProfile/:_id', async (req, res) => {
+  let one_user = await User.findOne({_id:req.params._id});
+  res.send({one_user})
+})
+
+
 router.post('/users/allByDate', async (req, res) => {
-  // let count_status = await User.aggregate([
-  //   {
-  //     createdAt: {
-  //       $gte : new Date("2020-08-23T00:00:00.000Z"),
-  //       $lt:  new Date("2020-09-27T00:00:00.000Z")
-  //    }
-  //   }
-  //   ]);
-   var date = new Date("2020-08-23T00:00:00.000Z"); 
-   console.log(date)
   try {
-     let all_user_bydate = await User.find({ createdAt: { $gt: new Date("2020-08-23T00:00:00.000Z"), $lt:  new Date("2020-09-27T00:00:00.000Z") } }).sort({ createdAt: -1});
+     let all_user_bydate = await User.find({ reg_date: { $gte: req.body.date_start , $lte:req.body.date_end } }).sort({ createdAt: -1});
      res.send({all_user_bydate})
   } catch (e) {
      res.send({result:false})
   }
 })
 
-
-router.get('/users/get_appProfile/:_id', async (req, res) => {
-  let one_user = await User.findOne({_id:req.params._id});
-  res.send({one_user})
-})
 
 
 router.get('/users/count_status', async (req, res) => {
@@ -186,7 +192,7 @@ router.get('/users/count_status', async (req, res) => {
       _id:{reg_status:"$reg_status"},
       count:{$sum:1}
     }
-  },{$sort: { count: -1 } }// -1  DESC    //  1 ASC  
+  }, {$sort: { count: -1 } }// -1  DESC    //  1 ASC  
   ]);
   res.json(count_status)
 })
@@ -194,21 +200,13 @@ router.get('/users/count_status', async (req, res) => {
 
 
 
-
-
-router.post('/users/logoutAll', auth, async (req, res) => {
-    try {
-        req.user.tokens = []
-        await req.user.save()
-        res.send()
-    } catch (e) {
-        res.status(500).send()
-    }
-})
+// db.getCollection('Users').aggregate([
+//   { $match: { reg_status: "Waitting" } },
+//   { $group: { _id : { month: { $month: "$createdAt" } }, count: { $sum: 1 } } }
+// ])
 
 
 
-
-
+ฝฝhttps://kb.objectrocket.com/mongo-db/mongodb-group-by-date-622#:~:text=A%20string%20containing%20date%20and,is%20a%20bit%20complex%20command.
 
 module.exports = router

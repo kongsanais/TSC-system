@@ -2,31 +2,18 @@
   <v-container grid-list-xs>
     <v-card class="mb-2">
       <v-row>
-        <v-col class="d-flex" xl="12" lg="12" md="12" sm="12" cols="12">
-            <h1 class="ma-2"><v-icon large  class="mb-2">mdi-file-account-outline</v-icon>Information Profile</h1>
-             <v-spacer></v-spacer>
-             <v-spacer></v-spacer>
-
-                <!-- <v-btn
-                  color="warning"
-                  class="mt-3 mr-2 white--text"
-                  @click="go_update"
-                >
-                  Update Form
-                  <v-icon right dark>mdi-file-document</v-icon>
-                </v-btn> -->
-                
-                <!-- <a @click="$router.go(-1)">back</a> -->
-
-                <v-btn
-                  color="blue"
-                  class="mt-3 mr-2 white--text"
-                  @click="$router.go(-1)"
-                >
-                  Back
-                  <v-icon right dark>mdi-file-document</v-icon>
-                </v-btn>
+        <v-col class="d-flex" xl="9" lg="8" md="7" sm="12" cols="12">
+          <h1 class="ml-6">
+            <v-icon large class="mb-2">mdi-file-account-outline</v-icon
+            >Information Profile
+          </h1>
         </v-col>
+        <v-spacer></v-spacer>
+        <v-spacer></v-spacer>
+        <v-btn class="ma-5" @click="$router.go(-1)">
+          Back
+          <v-icon right dark>mdi-file-document</v-icon>
+        </v-btn>
       </v-row>
     </v-card>
 
@@ -42,7 +29,6 @@
               />
             </v-card>
           </v-col>
-          
 
           <v-col class="d-flex" xl="3" lg="4" md="12" sm="12" cols="12">
             <v-card width="100%">
@@ -51,8 +37,51 @@
                   mdi-badge-account-horizontal-outline
                 </v-icon>
                 <h3>Profile</h3>
-              </v-card-title>
 
+                <v-dialog v-model="dialog" persistent max-width="600px">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      class="ma-2"
+                      tile
+                      outlined
+                      :color="color_status"
+                      v-bind="attrs"
+                      v-on="on"
+                    >
+                     <v-icon left>mdi-pencil</v-icon>
+                      {{ text_status }}
+                    </v-btn>
+                  </template>
+                  <v-card>
+                    <v-card-title>
+                      <span class="headline">Update Register Status</span>
+                    </v-card-title>
+                    <v-card-text>
+                      <v-container>
+                        <v-row>
+                          <v-col>
+                            <v-select
+                              :items="['Waitting', 'HR Consider', 'Interview', 'Hiring', 'Fail']"
+                              v-model="applicant.reg_status"
+                              label="Register Status"
+                            >
+                            </v-select>
+                          </v-col>
+                        </v-row>
+                      </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="blue darken-1" text @click="dialog = false"
+                        >Close</v-btn
+                      >
+                      <v-btn color="blue darken-1" text @click="go_update_status()"
+                        >Save</v-btn
+                      >
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+              </v-card-title>
 
               <v-card-text class="headline font-weight-bold">
                 <v-text-field
@@ -62,7 +91,6 @@
                   readonly
                 >
                 </v-text-field>
-
 
                 <v-text-field
                   :value="getFullName_th()"
@@ -88,16 +116,13 @@
                 >
                 </v-text-field>
 
-                
                 <v-text-field
                   :value="getMojorGPA()"
                   label="Major / GPA"
                   prepend-icon="mdi-card-bulleted-outline"
                   readonly
                 >
-
                 </v-text-field>
-
               </v-card-text>
             </v-card>
           </v-col>
@@ -135,7 +160,7 @@
                   readonly
                 >
                 </v-text-field>
-                
+
                 <v-textarea
                   class="mt-2"
                   v-model="applicant.eng_address"
@@ -146,14 +171,12 @@
                   row-height="25"
                   shaped
                 ></v-textarea>
-
               </v-card-text>
             </v-card>
           </v-col>
 
-          <v-col class="d-flex d-xl-none"  lg="3" md="12" sm="12" cols="12">
+          <v-col class="d-flex d-xl-none" lg="3" md="12" sm="12" cols="12">
           </v-col>
-          
 
           <v-col class="d-flex" xl="3" lg="4" md="12" sm="12" cols="12">
             <v-card width="100%">
@@ -191,7 +214,6 @@
                   Resume
                   <v-icon right dark>mdi-file-document</v-icon>
                 </v-btn>
-
               </v-card-text>
             </v-card>
           </v-col>
@@ -211,7 +233,8 @@ import { resumeUrl } from "@/services/constants";
 import moment from "moment";
 export default {
   data: () => ({
-      applicant: {
+    applicant: {
+      _id: "",
       email: "",
       password: "",
       th_prefix: "",
@@ -231,16 +254,21 @@ export default {
       resumeURL: null,
       job_level: null,
       job_position: "",
-      job_salary: "", 
-      education:"",
-      degree_education:"",
-      majoy_education:"",
-      gpa:""
+      job_salary: "",
+      education: "",
+      degree_education: "",
+      majoy_education: "",
+      gpa: "",
+      reg_status: "",
     },
+    color_status: "",
+    text_status:"",
+    dialog: false,
   }),
   async mounted() {
     let result = await api.getOneApplicant(this.$route.params._id);
     this.applicant = result;
+    this.check_color_status();
   },
   methods: {
     getProfileImage() {
@@ -275,29 +303,48 @@ export default {
       return full_TH_name;
     },
     getPhone_Fmaliy() {
-      let phone_fmaliy =
-        this.applicant.phone_number_famaily +
-        " " +
-        "(" +
-        this.applicant.person_relationship +
-        ")";
+      let phone_fmaliy = this.applicant.phone_number_famaily +" " +"(" + this.applicant.person_relationship +")";
       return phone_fmaliy;
     },
     getLevelandPosition() {
-      let level_position =
-        this.applicant.job_level + " : " + this.applicant.job_position;
+      let level_position = this.applicant.job_level + " : " + this.applicant.job_position;
       return level_position;
     },
-    getEducation(){
-      let education = this.applicant.degree_education+ " : " + this.applicant.education;
-      return education; 
+    getEducation() {
+      let education = this.applicant.degree_education + " : " + this.applicant.education;
+      return education;
     },
-    getMojorGPA(){
-      let education = this.applicant.majoy_education+ " / GPA : " + this.applicant.gpa;
-      return education; 
+    getMojorGPA() {
+      let education = this.applicant.majoy_education + " / GPA : " + this.applicant.gpa;
+        return education;
     },
-     go_update() {
-      this.$router.push('/profile_update');
+    async go_update_status() {
+       this.dialog = false;
+       let update_status = this.applicant.reg_status;
+       let update_id  = this.$route.params._id;
+       let result = await api.updateRegStatus({ update_status, update_id });
+       if(result){
+         //set text status //
+           this.applicant.reg_status = update_status
+           this.check_color_status()
+       }
+    
+    },
+    check_color_status() {
+
+      if (this.applicant.reg_status == "Waitting") {
+        this.color_status = "#f39c12";
+      } else if (this.applicant.reg_status == "HR Consider") {
+        this.color_status = "#3F51B5";
+      } else if (this.applicant.reg_status == "Interview") {
+        this.color_status = "#00c0ef";
+      } else if (this.applicant.reg_status == "Hiring") {
+        this.color_status = "green";
+      } else if (this.applicant.reg_status == "Fail") {
+        this.color_status = "red";
+      }
+
+      this.text_status = this.applicant.reg_status;
     },
   },
 };

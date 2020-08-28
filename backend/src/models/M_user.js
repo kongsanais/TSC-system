@@ -109,6 +109,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: 'Waitting'
     },
+    reg_date:{
+        type:Date,
+        default:  new Date().toISOString().slice(0, 10)
+    },
     tokens: [{
         token: {
             type: String,
@@ -135,10 +139,8 @@ userSchema.methods.toJSON = function () {
 userSchema.methods.generateAuthToken = async function () {
     const user = this
     const token = jwt.sign({ _id: user._id.toString() }, 'thisismynewcourse')
-
     user.tokens = user.tokens.concat({ token })
     await user.save()
-
     return token
 }
 

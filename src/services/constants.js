@@ -21,6 +21,7 @@ export const server = {
   GET_ALL_APP_BY_DATE: 'users/allByDate',
   GET_ONE_APP: 'users/get_appProfile',
   GET_STATUS_DATA : 'users/count_status',
+  UPDATE_REG_STATUS : 'users/update_reg_status',
   TRANSACTION_URL: `transaction`,
   TOKEN_KEY: `token`,
   USERNAME: `username`

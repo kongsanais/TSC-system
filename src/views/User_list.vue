@@ -20,7 +20,7 @@
           <StockCard
             title="All Applicant"
             avatar_ic="mdi-account-group-outline"
-            avatar_bg="blue"
+            avatar_bg="#2196F3"
             :subtitle="card_status.card_all"
           />
         </v-col>
@@ -61,7 +61,7 @@
           <StockCard
             title="Hiring"
             avatar_ic="mdi-account-check-outline"
-            avatar_bg="green"
+            avatar_bg="#4CAF50"
             :subtitle="card_status.card_hiring"
           />
         </v-col>
@@ -71,7 +71,7 @@
           <StockCard
             title="Fail"
             avatar_ic="mdi-earth-minus"
-            avatar_bg="red"
+            avatar_bg="#F44336"
             :subtitle="card_status.card_fail"
           />
         </v-col>
@@ -225,7 +225,7 @@
         </template>
 
         <!-- table tr section -->
-        <template v-slot:item="{ item}">
+        <template v-slot:item="{item}">
           <tr class="mb-2" >
             <td >
             <v-img
@@ -354,14 +354,7 @@ export default {
               //   'red'
               //  ],
                borderWidth: 2,
-               backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
+               backgroundColor: await this.getChartColor(),
             }
       ]};
       this.datacollection_LineChart = {
@@ -379,39 +372,22 @@ export default {
                ],
                borderWidth: 2,
                backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)',
-                 'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
+                '#2196F3',
+                '#2196F3',
+                '#2196F3',
+                '#2196F3',
+                '#2196F3'
             ],
             }
           ]};
       },
-      getRandomInt () {
-        let randoms = []
-        for (let index = 0; index < 12; index++) 
-        {
-          randoms.push(Math.floor(Math.random() * (1 - 5 + 1)) + 5)
-        }
-        return randoms
-      },
       getChartData(){
-
         let data_chart = []
         for (var i = 0; i < this.statusArray.length;i++)
         {
            data_chart.push(this.statusArray[i].count)
         }
         return data_chart
-
       },
       getChartLable(){
         let data_chart = []
@@ -419,6 +395,34 @@ export default {
         {
            data_chart.push(this.statusArray[i]._id.reg_status)
         } 
+        this.label_name = data_chart;
+        return data_chart
+      },
+      getChartColor(){
+        let data_chart = []
+
+        let color_02 = "#f39c12";
+        let color_03 = "#3F51B5";
+        let color_04 = "#00c0ef";
+        let color_05 = "#4CAF50";
+        let color_06 = "#F44336";
+
+        for (var i = 0; i < this.statusArray.length;i++)
+        {
+           if(this.statusArray[i]._id.reg_status == "Waitting"){
+             data_chart.push(color_02)
+           }else if (this.statusArray[i]._id.reg_status == "HR Consider"){
+              data_chart.push(color_03)
+           }else if (this.statusArray[i]._id.reg_status == "Interview"){
+              data_chart.push(color_04)
+           }else if (this.statusArray[i]._id.reg_status == "Hiring"){
+              data_chart.push(color_05)
+           }else if (this.statusArray[i]._id.reg_status == "Fail"){
+              data_chart.push(color_06)
+           }
+           
+        } 
+
         this.label_name = data_chart;
         return data_chart
       },
@@ -440,11 +444,13 @@ export default {
         }       
       },
        async filterDataTable(){
+
         this.data_dateTemplete.date_dialog = false;
         let date_start = this.data_dateTemplete.date_start;
         let date_end  = this.data_dateTemplete.date_end;
         let result = await api.getAllApplicantByDate({ date_start, date_end });
         this.mDataArray = result;
+        
       }
     }
 };

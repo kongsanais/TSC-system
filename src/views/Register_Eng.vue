@@ -619,8 +619,8 @@ export default {
       job_level: null,
       job_position: "",
       job_salary: "", 
-      education:"",
       degree_education:"",
+      education:"",
       majoy_education:"",
       gpa:"",
       role:"Engineer"
