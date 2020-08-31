@@ -76,6 +76,11 @@ const getRegYear = async () => {
   return result.data;
 }
 
+const getJSON_Export =  async values => {
+  let result  =  await httpClient.post(server.GET_DATA_EXPORT_EXCEL,values);
+  return result.data;
+}
+
 
 const updateRegStatus = async values => {
   let result  =  await  httpClient.put(server.UPDATE_REG_STATUS,values);
@@ -88,6 +93,7 @@ const updateRegStatus = async values => {
 
 
 export default {
+  getJSON_Export,
   getStatusData,
   getRegYear,
   getOneApplicant,

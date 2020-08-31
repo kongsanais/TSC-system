@@ -4,6 +4,7 @@ import router from "@/router";
 
 const isAbsoluteURLRegex = /^(?:\w+:)\/\//;
 
+
 axios.interceptors.request.use(async config => {
   if (!isAbsoluteURLRegex.test(config.url)) {
     const userToken = localStorage.getItem(server.TOKEN_KEY);
@@ -15,6 +16,7 @@ axios.interceptors.request.use(async config => {
   config.timeout = 10000; // 10 Second
   return config;
 });
+
 
 axios.interceptors.response.use(
   response => {

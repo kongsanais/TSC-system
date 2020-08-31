@@ -215,6 +215,17 @@ router.get('/users/count_reg_year', async (req, res) => {
 
  })
 
+
+
+ router.post('/users/get_json_export', async (req, res) => {
+  console.log(req.body)
+  // var email = 'email'
+  // let all_user = await User.find({}).select(email);
+  // res.json(all_user)
+ })
+
+
+
  
 // db.getCollection('Users').aggregate([
 //   { $match: { reg_status: "Waitting" } },

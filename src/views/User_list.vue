@@ -148,7 +148,6 @@
         <v-card-text>
           <v-container>
             <v-row>
-
             <!-- start date -->
                 <v-col cols="12" xl="6" sm="6" md="4">
                 <v-menu
@@ -203,23 +202,104 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          
           <v-btn class="error" @click="data_dateTemplete.date_dialog = false" >
             Close
           </v-btn>
-
           <v-btn class="primary" text @click="filterDataTable()" >FIND</v-btn>
-
         </v-card-actions>
       </v-card>
     </v-dialog>
 
     
-
-           <v-btn color="green" dark class="mb-4">
+      <v-dialog v-model="data_exportExcel.ep_dialog" hide-overlay persistent max-width="600px">
+      <template v-slot:activator="{ on, attrs }">
+           <v-btn color="green" dark class="mb-4" v-bind="attrs"  v-on="on" >
               <v-icon left>mdi-microsoft-excel</v-icon>
               <span>Export</span>
             </v-btn>
+      </template>
+      <v-card>
+        <v-card-title>
+          <span class="headline">Export  Data</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            {{filter_data_value}}
+            <v-row>
+             <v-col cols="12" xl="12" sm="12" md="4" >
+             <li  style="display: inline;" v-for="(item, i) in filter_data" :key="i">
+              <!-- <v-checkbox
+              v-model="filter_data_value[name]"
+              :label="name"
+              color="info"
+              value=""
+              hide-details
+            ></v-checkbox> -->
+
+            </li>
+            </v-col>
+<!-- 
+            <v-col cols="12" xl="3" sm="6" md="4">
+            <v-checkbox
+              v-model="filter_data_value.data_email"
+              label="Email"
+              color="info"
+              value="email"
+              hide-details
+            ></v-checkbox>
+           </v-col>
+
+           <v-col cols="12" xl="4" sm="6" md="4">
+            <v-checkbox
+              v-model="filter_data_value.data_fullname_th"
+              label="Full Name TH "
+              color="info"
+              value="data_fullname_th"
+              hide-details
+            ></v-checkbox>
+           </v-col>
+
+            
+            <v-col cols="12" xl="4" sm="6" md="4">
+              <v-checkbox
+                v-model="filter_data_value.data_fullname_th"
+                label="Full Name ENG "
+                color="info"
+                value="data_fullname_th"
+                hide-details
+              ></v-checkbox>
+             </v-col>
+
+
+                      
+              
+              <v-col cols="12" xl="4" sm="6" md="4">
+              <v-checkbox
+                v-model="filter_data_value.data_fullname_th"
+                label="Nationality"
+                color="info"
+                value="data_fullname_th"
+                hide-details
+              ></v-checkbox>
+             </v-col> -->
+
+
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          
+          <v-btn class="error" @click="data_exportExcel.ep_dialog = false" >
+            Close
+          </v-btn>
+
+          <v-btn class="primary" text @click="getDataExport() ">SUBMIT</v-btn>
+
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
 
           
           </v-toolbar>
@@ -324,17 +404,24 @@ export default {
       data_dateTemplete: {
         date_dialog :false,
         date_start: "",
-        menu_start: false,
         date_end: "",
+        menu_start: false,
         menu_end: false,
-      }
+      },
+      data_exportExcel:{
+        ep_dialog : false,
+        data: []
+      },
+      filter_data:[
+        {label:"email",value:""},
+        {label:"fullname",value:""},
+      ]      
     };
    },methods: {
      async loadApplicant(){
         this.mDataArray  = await api.getAllApplicant()
         this.statusArray = await api.getStatusData()
         this.regcountArray = await api.getRegYear()
-        this.getRegData()
   },
      show_Profile(item) {
        this.$router.push(`/profile_one_list/${item._id}`);
@@ -479,7 +566,11 @@ export default {
         let date_end  = this.data_dateTemplete.date_end;
         let result = await api.getAllApplicantByDate({ date_start, date_end });
         this.mDataArray = result;
-      }
+      },
+       async getDataExport(){
+        let passdata = this.data_exportExcel.data;
+        let data =  await api.getJSON_Export(passdata);
+       }
     }
 };
 </script>

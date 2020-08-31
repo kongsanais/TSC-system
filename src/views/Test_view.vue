@@ -1,82 +1,32 @@
-<template lang="html">
-  <v-container>
-    <v-card>
-      <v-btn class="success" @click="fillData()">Refresh</v-btn>
-      <LineChart style="height: 300px;" :chartData="datacollection" />
-      <BarChart style="height: 300px;"  :chartData="datacollection" />
-    </v-card>
-  </v-container>
+<template>
+  <div style="text-align:center;" >
+    <h1>Export JSON to Excel</h1>
+    <button @click="onExport" >Export</button> <!-- เพิ่มปุ่ม Export -->
+  </div>
 </template>
 
-<script lang="js">
-import LineChart from "@/components/charts/LineChart.vue";
-import BarChart from "@/components/charts/BarChart.vue";
-
-  export default  {
-    name: 'report',
-      components: {
-      LineChart,
-      BarChart
-    },
-    mounted () {
-        this.fillData()
-    },
-    data () {
-      return {
-        datacollection: null
-      }
-    },
-    methods: {
-     fillData () {
-      this.datacollection = {
-          //Data to be represented on x-axis
-          labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-          datasets: [
-            {
-              label: '2019',
-              pointBackgroundColor: 'white',
-              borderWidth: 1,
-              pointBorderColor: '#249EBF',
-              data: this.getRandomInt(),
-
-              borderColor: [
-                '#43A047'
-               ],
-               borderWidth: 2,
-               backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)',
-                 'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            }
-            
-          ]};
-          
-      },
-      getRandomInt () {
-        let randoms = []
-        for (let index = 0; index < 12; index++) {
-          randoms.push(Math.floor(Math.random() * (50000 - 5 + 1)) + 5)
-        }
-        return randoms
-      }
-    },
-    computed: {
-
+<script>
+import XLSX from 'xlsx' // import xlsx
+export default {
+  name: 'app',
+  data(){
+    return {
+      // ข้อมูล JSON ทีต้องการ Export
+      json : [
+        { name: 'Dady', age: '21' },
+        { name: 'Jonh', age: '25' },
+        { name: 'James', age: '17' },
+      ]
     }
+  },
+  methods: {
+    // เมื่อกดปุ่มจะทำการสร้างไฟล์ xcel ด้วย xlsx
+    onExport() {
+      const dataWS = XLSX.utils.json_to_sheet(this.json)
+      const wb = XLSX.utils.book_new()
+      XLSX.utils.book_append_sheet(wb, dataWS)
+      XLSX.writeFile(wb,'export.xlsx')
+    },
+  }
 }
 </script>
-
-<style scoped lang="scss">
-.report {
-}
-</style>
