@@ -114,6 +114,7 @@ router.put("/users/update", auth , (req, res)=>{
   }
 })
 
+
 router.put("/users/update_reg_status", async (req, res)=>{
   try {
     let update_status = await User.findOneAndUpdate({ "_id": req.body.update_id}, 
@@ -198,19 +199,41 @@ router.get('/users/count_status', async (req, res) => {
 })
 
 
+router.get('/users/count_reg_year', async (req, res) => {
 
+  var date = new Date()
+  var d_year =  date.getFullYear()
+  
+  let count_status = await User.aggregate([
+    { $project: { createdAt: "$createdAt", year :{ "$year" : new Date()}}},
+    { $match: { year: d_year } },
+    { $group: { _id : {month: { $month: "$createdAt" }, year: { $year: new Date() }  }, count: { $sum: 1 } } },
+    { $sort :{"_id.month":1}}
+  ]);
 
+  res.json(count_status)
+
+ })
+
+ 
 // db.getCollection('Users').aggregate([
 //   { $match: { reg_status: "Waitting" } },
 //   { $group: { _id : { month: { $month: "$createdAt" } }, count: { $sum: 1 } } }
 // ])
+//{ $match: { reg_date: new Date() } }
 
 
 /*db.getCollection('Users').aggregate([
    { $match: { reg_status: "Waitting" } },
    { $group: { _id : { month: { $month: "$createdAt" } }, count: { $sum: 1 } } }
-])
-*/
+])*/
 //https://kb.objectrocket.com/mongo-db/mongodb-group-by-date-622#:~:text=A%20string%20containing%20date%20and,is%20a%20bit%20complex%20command.
+
+
+
+// db.getCollection('Users').aggregate([
+//   { $match: { status: "A" } },
+//   { $group: { _id : { month: { $month: "$createdAt" }, year: { $year: new Date() }  }, count: { $sum: 1 } } }
+// ])
 
 module.exports = router

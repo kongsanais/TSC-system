@@ -88,8 +88,9 @@
   
 
   <v-row >
+  
   <v-col xl="6" lg="6" md="6" sm="12" cols="12">
-    <v-card class="mb-2">
+    <v-card class="mb-2" >
         <v-btn class="success mt-2 ml-2" @click="fillData()"><v-icon>mdi-refresh</v-icon></v-btn>
         <BarChart style="height: 300px;" :chartData="datacollection_BarChart" />
     </v-card>
@@ -133,7 +134,7 @@
             ></v-text-field>
             <v-spacer></v-spacer>
             
-    <v-dialog v-model="data_dateTemplete.date_dialog" persistent max-width="600px">
+    <v-dialog v-model="data_dateTemplete.date_dialog" hide-overlay persistent max-width="600px">
       <template v-slot:activator="{ on, attrs }">
      <v-btn color="indigo" dark class="mb-4 mr-2" v-bind="attrs"  v-on="on">
               <v-icon left>mdi-account-search-outline</v-icon>
@@ -203,9 +204,9 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           
-          <!-- <v-btn class="error" @click="dialog = false" >
+          <v-btn class="error" @click="data_dateTemplete.date_dialog = false" >
             Close
-          </v-btn> -->
+          </v-btn>
 
           <v-btn class="primary" text @click="filterDataTable()" >FIND</v-btn>
 
@@ -304,6 +305,7 @@ export default {
       datacollection_LineChart: { labels:[], datasets: [] },
       mDataArray:[],
       statusArray:[],
+      regcountArray:[],
       index_count: 0,
       label_name:[],
       label_data:[],
@@ -329,11 +331,11 @@ export default {
     };
    },methods: {
      async loadApplicant(){
-        let result = await api.getAllApplicant()
-        this.mDataArray = result;
-        let status_data = await api.getStatusData();
-        this.statusArray = status_data;
-     },
+        this.mDataArray  = await api.getAllApplicant()
+        this.statusArray = await api.getStatusData()
+        this.regcountArray = await api.getRegYear()
+        this.getRegData()
+  },
      show_Profile(item) {
        this.$router.push(`/profile_one_list/${item._id}`);
      },
@@ -366,17 +368,13 @@ export default {
               pointBackgroundColor: 'white',
               borderWidth: 1,
               pointBorderColor: '#249EBF',
-              data: this.getRandomInt(),
+              data: await this.getRegData(),
               borderColor: [
-                '#43A047'
+                '#4CAF50'
                ],
                borderWidth: 2,
                backgroundColor: [
-                '#2196F3',
-                '#2196F3',
-                '#2196F3',
-                '#2196F3',
-                '#2196F3'
+                'rgba(255,177,193,0.2)',
             ],
             }
           ]};
@@ -401,11 +399,11 @@ export default {
       getChartColor(){
         let data_chart = []
 
-        let color_02 = "#f39c12";
-        let color_03 = "#3F51B5";
-        let color_04 = "#00c0ef";
-        let color_05 = "#4CAF50";
-        let color_06 = "#F44336";
+        let color_02 = "rgba(243,156,18,0.2)";
+        let color_03 = "rgba(63,81,181,0.2)";
+        let color_04 = "rgba(54, 162, 235, 0.2)";
+        let color_05 = "rgb(132, 225, 132,0.2)";
+        let color_06 = "rgba(255, 99, 132, 0.2)";
 
         for (var i = 0; i < this.statusArray.length;i++)
         {
@@ -420,7 +418,6 @@ export default {
            }else if (this.statusArray[i]._id.reg_status == "Fail"){
               data_chart.push(color_06)
            }
-           
         } 
 
         this.label_name = data_chart;
@@ -443,14 +440,45 @@ export default {
             this.card_status.card_all += this.statusArray[i].count;
         }       
       },
-       async filterDataTable(){
+      async getRegData() {
+        let month12 = [0,0,0,0,0,0,0,0,0,0,0,0];
 
+        for (var i = 0; i < this.regcountArray.length;i++)
+        {
+           if(this.regcountArray[i]._id.month == 1){
+             month12[0] = this.regcountArray[i].count
+           }else if(this.regcountArray[i]._id.month == 2){
+             month12[1] = this.regcountArray[i].count
+           }else if(this.regcountArray[i]._id.month == 3){
+             month12[2] = this.regcountArray[i].count
+           }else if(this.regcountArray[i]._id.month == 4){
+             month12[3] = this.regcountArray[i].count
+           }else if(this.regcountArray[i]._id.month == 5){
+             month12[4] = this.regcountArray[i].count
+           }else if(this.regcountArray[i]._id.month == 6){
+             month12[5] = this.regcountArray[i].count
+           }else if(this.regcountArray[i]._id.month == 7){
+             month12[6] = this.regcountArray[i].count
+           }else if(this.regcountArray[i]._id.month == 8){
+             month12[7] = this.regcountArray[i].count
+           }else if(this.regcountArray[i]._id.month == 9){
+             month12[8] = this.regcountArray[i].count
+           }else if(this.regcountArray[i]._id.month == 10){
+             month12[9] = this.regcountArray[i].count
+           }else if(this.regcountArray[i]._id.month == 11){
+             month12[10] = this.regcountArray[i].count
+           }else if(this.regcountArray[i]._id.month == 12){
+             month12[11] = this.regcountArray[i].count
+           }
+        }
+        return month12;
+      },
+       async filterDataTable() {
         this.data_dateTemplete.date_dialog = false;
         let date_start = this.data_dateTemplete.date_start;
         let date_end  = this.data_dateTemplete.date_end;
         let result = await api.getAllApplicantByDate({ date_start, date_end });
         this.mDataArray = result;
-        
       }
     }
 };
