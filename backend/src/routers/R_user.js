@@ -199,29 +199,66 @@ router.get('/users/count_status', async (req, res) => {
 })
 
 
-router.get('/users/count_reg_year', async (req, res) => {
 
+router.get('/users/count_reg_year', async (req, res) => {
   var date = new Date()
   var d_year =  date.getFullYear()
-  
   let count_status = await User.aggregate([
     { $project: { createdAt: "$createdAt", year :{ "$year" : new Date()}}},
     { $match: { year: d_year } },
     { $group: { _id : {month: { $month: "$createdAt" }, year: { $year: new Date() }  }, count: { $sum: 1 } } },
     { $sort :{"_id.month":1}}
   ]);
-
   res.json(count_status)
-
  })
 
 
 
  router.post('/users/get_json_export', async (req, res) => {
-  console.log(req.body)
-  // var email = 'email'
-  // let all_user = await User.find({}).select(email);
-  // res.json(all_user)
+   let result = req.body;
+   var data_check =  ['email','fullnameTH','fullnameENG','nationality','phone_number',
+   'phone_number_famaily','person_relationship','eng_address','date_birthday','age',
+   'job_level','job_position','job_salary','education','degree_education',
+   'majoy_education','gpa','createdDate','_id']
+   const index = 1;
+   for (var i = 0; i < result.length; i++ ) {
+    for (var j = 0; j < data_check.length; j++ ){
+      if(result[i].filed == data_check[j]){
+        const index = data_check.indexOf(data_check[j])
+        data_check.splice(index,1);
+      }
+    }
+   }
+   var data = await User.aggregate([
+    { $project: { 
+      email: "$email"  ,
+      fullnameTH: { $concat: [ "$th_prefix"," ","$th_firstname", " ", "$th_lastname" ] } ,
+      fullnameENG: { $concat:[ "$eng_prefix"," ","$eng_firstname", " ", "$eng_lastname" ] } ,
+      nationality: "$nationality",
+      phone_number: "$phone_number",
+      phone_number_famaily: "$phone_number_famaily",
+      person_relationship:"$person_relationship",
+      eng_address:"$eng_address",
+      date_birthday:"$date_birthday",
+      age:"$age",
+      job_level:"$job_level",
+      job_position:"$job_position",
+      job_salary:"$job_salary",
+      education:"$education",
+      degree_education:"$degree_education",
+      majoy_education:"$majoy_education",
+      gpa:"$gpa",
+      createdDate: "$createdAt"
+   }}
+  ]);
+
+  for (var j = 0; j < data.length; j++ ) {
+    for (var k = 0; k < data_check.length; k++ ){
+          var val = data_check[k]
+          delete data[j][val]
+    }
+  }
+    res.json(data)
  })
 
 

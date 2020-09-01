@@ -91,14 +91,14 @@
   
   <v-col xl="6" lg="6" md="6" sm="12" cols="12">
     <v-card class="mb-2" >
-        <v-btn class="success mt-2 ml-2" @click="fillData()"><v-icon>mdi-refresh</v-icon></v-btn>
+        <!-- <v-btn class="success mt-2 ml-2" @click="fillData()"><v-icon>mdi-refresh</v-icon></v-btn> -->
         <BarChart style="height: 300px;" :chartData="datacollection_BarChart" />
     </v-card>
   </v-col>
 
       <v-col xl="6" lg="6" md="6" sm="12" cols="12">
   <v-card class="mb-2">
-      <v-btn class="success mt-2 ml-2" @click="fillData()"><v-icon>mdi-refresh</v-icon></v-btn>
+      <!-- <v-btn class="success mt-2 ml-2" @click="fillData()"><v-icon>mdi-refresh</v-icon></v-btn> -->
       <LineChart style="height: 300px;" :chartData="datacollection_LineChart" />
   </v-card>
   </v-col>
@@ -220,75 +220,52 @@
       </template>
       <v-card>
         <v-card-title>
+          {{json_export}}
           <span class="headline">Export  Data</span>
         </v-card-title>
         <v-card-text>
           <v-container>
-            {{filter_data_value}}
-            <v-row>
-             <v-col cols="12" xl="12" sm="12" md="4" >
-             <li  style="display: inline;" v-for="(item, i) in filter_data" :key="i">
-              <!-- <v-checkbox
-              v-model="filter_data_value[name]"
-              :label="name"
-              color="info"
-              value=""
-              hide-details
-            ></v-checkbox> -->
 
-            </li>
-            </v-col>
-<!-- 
-            <v-col cols="12" xl="3" sm="6" md="4">
-            <v-checkbox
-              v-model="filter_data_value.data_email"
-              label="Email"
-              color="info"
-              value="email"
-              hide-details
-            ></v-checkbox>
-           </v-col>
+        <v-row>
+          <v-col cols="12" xl="12" sm="12" md="4" >
+          <v-btn x-small @click="selectAll" class="mb-2">Select all</v-btn>
+          <!-- {{field_selected}} -->
+          <v-select
+            multiple
+            chips
+            label='Select Filed'
+            v-model='field_selected'
+            :items='field_data_export'
+            item-value='id'
+            item-text='name'
+            :menu-props="{ maxHeight: '400' }"
+            persistent-hint
+            return-object
+          >
 
-           <v-col cols="12" xl="4" sm="6" md="4">
-            <v-checkbox
-              v-model="filter_data_value.data_fullname_th"
-              label="Full Name TH "
-              color="info"
-              value="data_fullname_th"
-              hide-details
-            ></v-checkbox>
-           </v-col>
+            <!-- <template slot='item' slot-scope='{ item }'>
+              {{ item.name }}
+            </template>
+             -->
+          </v-select>
 
-            
-            <v-col cols="12" xl="4" sm="6" md="4">
-              <v-checkbox
-                v-model="filter_data_value.data_fullname_th"
-                label="Full Name ENG "
-                color="info"
-                value="data_fullname_th"
-                hide-details
-              ></v-checkbox>
-             </v-col>
+            <!-- <v-combobox
+              v-model="field_data_export.select_item"
+              :items="field_data_export.items"
+              label="Select"
+              :disabled="field_data_export.disibled_select == 1" 
+              multiple
+              outlined
+              dense
+            >
+            </v-combobox> -->
+          </v-col>
+        </v-row>
 
-
-                      
-              
-              <v-col cols="12" xl="4" sm="6" md="4">
-              <v-checkbox
-                v-model="filter_data_value.data_fullname_th"
-                label="Nationality"
-                color="info"
-                value="data_fullname_th"
-                hide-details
-              ></v-checkbox>
-             </v-col> -->
-
-
-            </v-row>
           </v-container>
         </v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
+      <v-spacer></v-spacer>
           
           <v-btn class="error" @click="data_exportExcel.ep_dialog = false" >
             Close
@@ -347,7 +324,7 @@
 </template>
 
 <script>
-
+import XLSX from 'xlsx' // import xlsx
 import StockCard from "@/components/cards/StockCard.vue";
 import BarChart from "@/components/charts/BarChart.vue";
 import LineChart from "@/components/charts/LineChart.vue";
@@ -396,7 +373,7 @@ export default {
           { text: 'Age' , value:'age'},
           { text: 'Degree' , value:'degree_education'},
           { text: 'Education' , value:'education'},
-          { text: 'Majoy'  , value:'majoy_education'},
+          { text: 'Major'  , value:'majoy_education'},
           { text: 'GPA'  , value:'gpa'},
           { text: 'Reg.Date' , value:'createdAt'},
           { text: 'Action', value:'_id'},
@@ -412,18 +389,37 @@ export default {
         ep_dialog : false,
         data: []
       },
-      filter_data:[
-        {label:"email",value:""},
-        {label:"fullname",value:""},
-      ]      
+      field_data_export:[
+        {filed: '_id' ,  name: '_id'},
+        {filed: 'email',  name: 'Email'},
+        {filed: 'fullnameTH',  name: 'Fullname TH'},
+        {filed: 'fullnameENG',  name: 'Fullname ENG'},
+        {filed: 'nationality',  name: 'Nationality'},
+        {filed: 'phone_number',  name: 'Phone Number'},
+        {filed: 'phone_number_famaily',  name: 'Phone Number Family'},
+        {filed: 'person_relationship',  name: 'Family Relationship'},
+        {filed: 'eng_address',  name: 'Address'},
+        {filed: 'date_birthday',  name: 'Birth Day'},
+        {filed: 'age', name: 'Age'},
+        {filed: 'job_level', name: 'Level'},
+        {filed: 'job_position', name: 'Postsition'},
+        {filed: 'job_salary', name: 'Salary'},
+        {filed: 'education', name: 'Education Name'},
+        {filed: 'degree_education', name: 'Degree Education'},
+        {filed: 'majoy_education', name: 'Major'},
+        {filed: 'gpa', name: 'GPA'},
+        {filed: 'createdDate', name: 'Reg Date'},
+      ],
+      field_selected:[],
+      json_export:null        
     };
    },methods: {
      async loadApplicant(){
         this.mDataArray  = await api.getAllApplicant()
         this.statusArray = await api.getStatusData()
         this.regcountArray = await api.getRegYear()
-  },
-     show_Profile(item) {
+   },
+     async show_Profile(item) {
        this.$router.push(`/profile_one_list/${item._id}`);
      },
      async fillData () {
@@ -466,7 +462,7 @@ export default {
             }
           ]};
       },
-      getChartData(){
+      async getChartData(){
         let data_chart = []
         for (var i = 0; i < this.statusArray.length;i++)
         {
@@ -474,7 +470,7 @@ export default {
         }
         return data_chart
       },
-      getChartLable(){
+      async getChartLable(){
         let data_chart = []
         for (var i = 0; i < this.statusArray.length;i++)
         {
@@ -483,7 +479,7 @@ export default {
         this.label_name = data_chart;
         return data_chart
       },
-      getChartColor(){
+      async getChartColor(){
         let data_chart = []
 
         let color_02 = "rgba(243,156,18,0.2)";
@@ -510,7 +506,7 @@ export default {
         this.label_name = data_chart;
         return data_chart
       },
-      getCardData(){
+      async getCardData(){
         for (var i = 0; i < this.statusArray.length;i++)
         {
             if(this.statusArray[i]._id.reg_status == "Waitting"){
@@ -560,16 +556,24 @@ export default {
         }
         return month12;
       },
-       async filterDataTable() {
+      async filterDataTable() {
         this.data_dateTemplete.date_dialog = false;
         let date_start = this.data_dateTemplete.date_start;
         let date_end  = this.data_dateTemplete.date_end;
         let result = await api.getAllApplicantByDate({ date_start, date_end });
         this.mDataArray = result;
       },
-       async getDataExport(){
-        let passdata = this.data_exportExcel.data;
-        let data =  await api.getJSON_Export(passdata);
+      async getDataExport(){
+        let field = this.field_selected
+        let data =  await api.getJSON_Export(field);
+        this.json_export = data
+        const dataWS = XLSX.utils.json_to_sheet(this.json_export)
+        const wb = XLSX.utils.book_new()
+        XLSX.utils.book_append_sheet(wb, dataWS)
+        XLSX.writeFile(wb,'export.xlsx')
+       },
+      async selectAll(){
+        this.field_selected = this.field_data_export
        }
     }
 };
