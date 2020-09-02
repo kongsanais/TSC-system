@@ -7,6 +7,7 @@
       ></v-app-bar-nav-icon>
 
       <v-img
+      @click="onClickGoHome"
         max-height="145"
         max-width="200"
          src="@/assets/samsung-icon.png"
@@ -21,11 +22,13 @@
           {{ title }}
         </v-btn>
       </div>
-       <v-btn v-if="$store.state.isLogged"  class="ma-2" @click="onGoProfile()">Profile</v-btn>
+       <v-btn v-if="$store.state.isLogged && ($store.state.role != 'Admin')"  class="ma-2" @click="onGoProfile()">Profile</v-btn>
       <v-icon v-if="$store.state.isLogged" class="mr-2">mdi-account-circle</v-icon>
-      <span v-if="$store.state.isLogged" class="mr-2"><b>Welcome</b></span>
       <span v-if="$store.state.isLogged" ><b>{{ $store.getters["username"]  | capitalize }}</b></span>
-      <v-btn v-if="$store.state.isLogged" icon @click="onClickLogOff">
+      <v-btn v-if="$store.state.isLogged && ($store.state.role != 'Admin')" icon @click="onClickLogOff">
+        <v-icon>mdi-export</v-icon>
+      </v-btn>
+    <v-btn v-if="$store.state.isLogged && ($store.state.role == 'Admin')" icon @click="onClickLogOffAdmin">
         <v-icon>mdi-export</v-icon>
       </v-btn>
 
@@ -84,7 +87,7 @@ export default {
     top_right_menu: [
       ["Home", "/stock"],
       ["Job", "/option_job"],
-      ["About", "/about"],
+      ["Contact", "/about"],
     ],
   }),
   watch: {
@@ -93,11 +96,17 @@ export default {
     },
   },
   methods: {
+    onClickGoHome(link) {
+      this.$router.push("home").catch((err) => {});
+    },
     onClickMenu(link) {
       this.$router.push(link).catch((err) => {});
     },
     onClickLogOff() {
       this.$store.dispatch("doLogout");
+    },
+    onClickLogOffAdmin() {
+      this.$store.dispatch("doLogoutAdmin");
     },
     onGoProfile(){
       this.$router.push("/profile").catch((err) => {});

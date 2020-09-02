@@ -43,7 +43,8 @@ const adminSchema = new mongoose.Schema({
         trim:true
     },
     role:{
-        type: String 
+        type: String,
+        default: 'Admin'
     },
     tokens: [{
         token: {
@@ -58,47 +59,47 @@ const adminSchema = new mongoose.Schema({
 
 
 adminSchema.methods.toJSON = function () {
-    const user = this
-    const userObject = user.toObject()
+    const admin = this
+    const adminObject = admin.toObject()
 
-    delete userObject.password
-    delete userObject.tokens
+    delete adminObject.password
+    delete adminObject.tokens
 
-    return userObject
+    return adminObject
 }
 
 
 adminSchema.methods.generateAuthToken = async function () {
-    const user = this
-    const token = jwt.sign({ _id: user._id.toString() }, 'thisismynewcourse')
-    user.tokens = user.tokens.concat({ token })
-    await user.save()
+    const admin = this
+    const token = jwt.sign({ _id: admin._id.toString() }, 'thisismynewcourse')
+    admin.tokens = admin.tokens.concat({ token })
+    await admin.save()
     return token
 }
 
 
 adminSchema.statics.findByCredentials = async (email, password) => {
-    const user = await User.findOne({ email })
+    const admin = await Admin.findOne({ email })
 
-    if (!user) {
+    if (!admin) {
         throw new Error('Unable to login')
     }
 
-    const isMatch = await bcrypt.compare(password, user.password)
+    const isMatch = await bcrypt.compare(password, admin.password)
 
     if (!isMatch) {
         throw new Error('Unable to login')
     }
 
-    return user
+    return admin
 }
 
 
 // Hash the plain text password before saving
 adminSchema.pre('save', async function (next) {
-    const user = this    
-    if (user.isModified('password')) {
-        user.password = await bcrypt.hash(user.password, 8)
+    const admin = this    
+    if (admin.isModified('password')) {
+        admin.password = await bcrypt.hash(admin.password, 8)
     }
     next()
 })

@@ -1,5 +1,6 @@
 import httpClient from "@/services/httpClient";
 import { server } from "@/services/constants";
+import * as apiAdmin from "@/services/api_admin.js"
 import router from "@/router";
 
 const isLoggedIn = () => {
@@ -7,9 +8,15 @@ const isLoggedIn = () => {
   return token != null;
 };
 
+const getRole = () => {
+  let role = localStorage.getItem(server.ROLE);
+  return role;
+};
+
 const logoff = async () => {
   await httpClient.post(server.LOGOUT_URL);
   localStorage.removeItem(server.TOKEN_KEY);
+  localStorage.removeItem(server.ROLE);
   router.push("/login");
 };
 
@@ -21,6 +28,7 @@ const login = async values =>
   {
     localStorage.setItem(server.USERNAME, result.data.user.eng_firstname);
     localStorage.setItem(server.TOKEN_KEY, result.data.token);
+    localStorage.setItem(server.ROLE, result.data.user.role)
     let role =  result.data.user.role;
 
     if(role == "Engineer" || role == "Production"){
@@ -33,7 +41,8 @@ const login = async values =>
   } else {
     return false;
   }
-};
+ };
+
 
 const register = async values => {
   let result = await httpClient.post(server.REGISTER_URL, values);
@@ -97,6 +106,7 @@ export default {
   getStatusData,
   getRegYear,
   getOneApplicant,
+  getRole,
   register,
   login,
   isLoggedIn,
@@ -105,5 +115,6 @@ export default {
   updateProfile,
   getAllApplicant,
   getAllApplicantByDate,
-  updateRegStatus
+  updateRegStatus,
+  ...apiAdmin
 };

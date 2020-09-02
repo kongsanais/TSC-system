@@ -9,25 +9,34 @@ export const imageUrl = "http://localhost:3000/images";
 export const resumeUrl = "http://localhost:3000/resume"
 
 
-
-
 export const server = {
   LOGIN_URL: `users/login`,
   REGISTER_URL: `users`,
   USER_PROFILE: `users/profile`,
   LOGOUT_URL: `users/logout`,
   UPDATE_PROFILE: `users/update`, 
-  GET_ALL_APP: `users/all`, 
+  GET_ALL_APP: `users/all/engineer`, 
   GET_ALL_APP_BY_DATE: 'users/allByDate',
   GET_ONE_APP: 'users/get_appProfile',
   GET_STATUS_DATA : 'users/count_status',
   GET_STATUS_DATA_REG_YEAR : 'users/count_reg_year',
   GET_DATA_EXPORT_EXCEL: 'users/get_json_export',
   UPDATE_REG_STATUS : 'users/update_reg_status',
+  ROLE:'role',
   TRANSACTION_URL: `transaction`,
   TOKEN_KEY: `token`,
   USERNAME: `username`
 };
+
+
+export const admin = {
+  REGISTER_URL : 'admin/register',
+  LOGIN_URL : 'admin/login',
+  LOGOUT_URL : 'admin/logout',
+  TOKEN_KEY: `token`,
+  USERNAME: `username`,
+  ROLE:'role'
+}
 
 
 // location /images {

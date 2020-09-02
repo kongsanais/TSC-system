@@ -20,7 +20,7 @@
           <v-tab-item value="tab-1">
             <v-card flat>
               <v-card-text>
-                {{applicant}}
+                <!-- {{applicant}} -->
                 <v-row>
                   <!-- TH prefix  -->
                   <v-col class="d-flex" xl="2" lg="2" md="2" sm="12" cols="12">

@@ -1,10 +1,12 @@
 const express = require('express')
 const User = require('../models/M_user')
 const auth = require('../middleware/auth')
+const auth_admin = require('../middleware/admin_auth')
 const router = new express.Router()
 const formaidable  = require("formidable")
 const path = require("path")
 const fs  = require("fs-extra")
+
 const { update } = require('../models/M_user')
 
 
@@ -156,15 +158,16 @@ router.post('/users/logout', auth, async (req, res) => {
 
 
 
-
 router.get('/users/profile', auth, async (req, res) => {
     let profile  = req.user;
     res.send({profile})
 })
 
 
-router.get('/users/all', async (req, res) => {
-  let all_user = await User.find({}).sort({createdAt: -1})
+router.get('/users/all/engineer',auth_admin ,async (req, res) => {
+  let all_user = await User.find({})
+                      // .where('role').equals('Engineer')
+                      .sort({createdAt: -1})
   res.send({all_user})
 })
 
@@ -249,7 +252,8 @@ router.get('/users/count_reg_year', async (req, res) => {
       majoy_education:"$majoy_education",
       gpa:"$gpa",
       createdDate: "$createdAt"
-   }}
+     }
+    }
   ]);
 
   for (var j = 0; j < data.length; j++ ) {

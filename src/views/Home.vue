@@ -1,11 +1,12 @@
 <template>
-  <v-container>
+  <div>
   <v-carousel       
       :continuous="false"
       :show-arrows="false"
       hide-delimiter-background
       delimiter-icon="mdi-minus"
-      height="800px" >
+      height="800px" 
+      class="mt-5">
       
     <v-carousel-item
       v-for="(item,i) in items"
@@ -13,7 +14,7 @@
       :src="item.src"
     ></v-carousel-item>
   </v-carousel>
-  </v-container>
+  </div>
 </template>
 
 <script>

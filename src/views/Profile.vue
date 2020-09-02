@@ -227,11 +227,14 @@ export default {
     },
   }),
   async mounted() {
-    if (api.isLoggedIn())
+    if (api.isLoggedIn() && (api.getRole() != "Admin"))
     {
         let result = await api.readProfile();
         this.applicant = result;
-    }else{
+    }else if(api.isLoggedInAdmin() && (api.getRoleAdmin() == "Admin")){
+        this.$router.push("/user_list");
+    }
+    else{
       this.$router.push("/login");
     }
   },

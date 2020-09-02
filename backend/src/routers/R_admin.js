@@ -1,6 +1,6 @@
 const express = require('express')
 const Admin = require('../models/M_admin')
-const auth = require('../middleware/auth')
+const auth = require('../middleware/admin_auth.js')
 const router = new express.Router()
 const formaidable  = require("formidable")
 const path = require("path")
@@ -13,7 +13,7 @@ router.post('/admin/register', async (req, res) => {
       const form = new formaidable.IncomingForm()
       form.parse(req, async (error,fields,files) =>
       {   
-          res.send(fields)
+          
           const admin  = new Admin(fields)
           await Admin.find({email : admin.email}, async function (err, docs) 
             {
@@ -34,21 +34,21 @@ router.post('/admin/register', async (req, res) => {
 
 router.post('/admin/login', async (req, res) => {
   try {
-      const user = await User.findByCredentials(req.body.email, req.body.password)
-      const token = await user.generateAuthToken()
-      res.send({result:true,user,token })
+      const admin = await Admin.findByCredentials(req.body.email, req.body.password)
+      const token = await admin.generateAuthToken()
+      res.send({result:true,admin,token })
     } catch (e) {
       res.send({result:false})
   }
 })
 
 
-router.post('/admin/logout', auth, async (req, res) => {
+router.post('/admin/logout', auth , async (req, res) => {
     try {
-        req.user.tokens = req.user.tokens.filter((token) => {
+        req.admin.tokens = req.admin.tokens.filter((token) => {
             return token.token !== req.token
         })
-        await req.user.save()
+        await req.admin.save()
         res.send()
     } catch (e) {
         res.status(500).send()

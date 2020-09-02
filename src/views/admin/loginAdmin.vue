@@ -2,13 +2,8 @@
   <v-container>
     <v-row class="justify-center">
       <v-card style="width:400px;" class="mt-8">
-        <!-- <v-img
-          class="white--text align-end ml-5 mt-5 mr-5 mb-5"
-          src="@/assets/samsung-icon.png"
-          height="150px"
-        > -->
           <v-card-title primary-title>
-            Login
+            Login for Admin
           </v-card-title>
         </v-img>
         <v-card-text>
@@ -48,13 +43,6 @@
             />
 
             <v-row class="justify-space-between px-3 pt-4">
-              <v-btn
-                class="mt-2"
-                @click.prevent="$router.push('/register_engineer')"
-                color="indigo"
-                dark
-                >Register</v-btn
-              >
               <v-btn type="submit" color="success" class="mt-2">Login</v-btn>
             </v-row>
           </v-form>
@@ -101,9 +89,9 @@ import api from "@/services/api";
 
 export default {
   mounted() {
-    if (api.isLoggedIn()) {
-       this.$router.push("/profile");
-    }
+    // if (api.isLoggedIn() && (api.getRole() == "Admin") ) {
+    //   this.$router.push("/user_list");
+    // }
   },
   data() {
     return {
@@ -124,10 +112,9 @@ export default {
   methods: {
     async submit() {
       var check = this.$refs.form.validate();
-
       if (check == true) {
         await this.$store.dispatch({
-          type: "doLogin",
+          type: "doLoginAdmin",
           email: this.account.email,
           password: this.account.password,
         });

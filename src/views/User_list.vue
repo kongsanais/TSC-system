@@ -132,7 +132,8 @@
               single-line
               hide-details
             ></v-text-field>
-            <v-spacer></v-spacer>
+            <v-spacer>
+            </v-spacer>
             
     <v-dialog v-model="data_dateTemplete.date_dialog" hide-overlay persistent max-width="600px">
       <template v-slot:activator="{ on, attrs }">
