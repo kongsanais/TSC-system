@@ -228,7 +228,7 @@
           <v-container>
 
         <v-row>
-          <v-col cols="12" xl="12" sm="12" md="4" >
+          <v-col cols="12" xl="12" lg="12" sm="12" md="4" >
           <v-btn x-small @click="selectAll" class="mb-2">Select all</v-btn>
           <!-- {{field_selected}} -->
           <v-select

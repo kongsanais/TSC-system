@@ -3,7 +3,7 @@
     <v-row class="pt-5 pl-5 pr-5">
       <v-col xl="6" lg="5" md="6" sm="12" cols="12">
         <v-card>
-          <v-toolbar flat color="#518BB0" dark>
+          <v-toolbar flat color="primary" dark>
             <v-icon large left>
               mdi-card-account-phone </v-icon
             ><v-toolbar-title>Contact</v-toolbar-title>
@@ -30,15 +30,17 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col xl="7" lg="5" md="6" sm="12" cols="12">
+                <v-col xl="2" lg="2" md="3" sm="2" cols="2">
                   <v-btn class="mr-2">
                     <v-icon>mdi-facebook</v-icon>
                   </v-btn>
-
+                </v-col>
+                <v-col xl="2" lg="2" md="3" sm="2" cols="2">
                   <v-btn class="mr-2">
                     <v-icon> mdi-facebook-messenger</v-icon>
                   </v-btn>
-
+                </v-col>
+                <v-col xl="2" lg="2" md="3" sm="2" cols="2">
                   <v-btn class="mr-2">
                     <v-icon>mdi-google-maps</v-icon>
                   </v-btn>
