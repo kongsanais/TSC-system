@@ -5,7 +5,7 @@
         <v-col class="d-flex" xl="12" lg="12" md="12" sm="12" cols="12">
           <h2 class="ma-2">
             <v-icon large class="mb-2">mdi-file-account-outline</v-icon>
-            User list
+            Report User
           </h2>
           <v-spacer></v-spacer>
           <v-spacer></v-spacer>
@@ -110,7 +110,7 @@
         <v-col class="d-flex" xl="12" lg="12" md="12" sm="12" cols="12">
           <h2 class="ma-2">
             <v-icon large class="mb-2">mdi-file-account-outline</v-icon>
-            Table list
+            User list
           </h2>
           <v-spacer></v-spacer>
           <v-spacer></v-spacer>
