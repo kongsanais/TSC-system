@@ -120,7 +120,7 @@ export default {
         });
 
           if(this.$store.state.isLogged){
-            //////
+            //////c
           }else{
             this.dialog_messenger.text = "Email or Password Incorrect";
             this.dialog_messenger.sub_text = "";

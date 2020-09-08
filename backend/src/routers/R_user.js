@@ -219,7 +219,7 @@ router.get('/users/count_reg_year', async (req, res) => {
 
  router.post('/users/get_json_export', async (req, res) => {
    let result = req.body;
-   var data_check =  ['email','fullnameTH','fullnameENG','nationality','phone_number',
+   var data_check = ['email','fullnameTH','fullnameENG','nationality','phone_number',
    'phone_number_famaily','person_relationship','eng_address','date_birthday','age',
    'job_level','job_position','job_salary','education','degree_education',
    'majoy_education','gpa','createdDate','_id']
@@ -252,8 +252,7 @@ router.get('/users/count_reg_year', async (req, res) => {
       majoy_education:"$majoy_education",
       gpa:"$gpa",
       createdDate: "$createdAt"
-     }
-    }
+    }}
   ]);
 
   for (var j = 0; j < data.length; j++ ) {

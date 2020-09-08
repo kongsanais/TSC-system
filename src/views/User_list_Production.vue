@@ -5,7 +5,7 @@
         <v-col class="d-flex" xl="12" lg="12" md="12" sm="12" cols="12">
           <h2 class="ma-2">
             <v-icon large class="mb-2">mdi-file-account-outline</v-icon>
-            Report User
+            Report User [ Production ]
           </h2>
           <v-spacer></v-spacer>
           <v-spacer></v-spacer>
@@ -221,7 +221,7 @@
       </template>
       <v-card>
         <v-card-title>
-          {{json_export}}
+          <!-- {{json_export}} -->
           <span class="headline">Export  Data</span>
         </v-card-title>
         <v-card-text>
@@ -299,7 +299,6 @@
             <td>{{ item.nationality | capitalize }}</td>
             <td>{{ item.age}}</td>
             <td>{{ item.degree_education}}</td>
-            <td>{{ item.education}}</td>
             <td>{{item.majoy_education}}</td>
             <td>{{item.gpa}}</td>
             <td>{{item.createdAt | formatDate}}</td>
@@ -373,7 +372,6 @@ export default {
           { text: 'Nationality', value: 'Nationality'},
           { text: 'Age' , value:'age'},
           { text: 'Degree' , value:'degree_education'},
-          { text: 'Education' , value:'education'},
           { text: 'Major'  , value:'majoy_education'},
           { text: 'GPA'  , value:'gpa'},
           { text: 'Reg.Date' , value:'createdAt'},
@@ -414,12 +412,13 @@ export default {
       field_selected:[],
       json_export:null        
     };
-   },methods: {
-     async loadApplicant(){
-        this.mDataArray  = await api.getAllApplicant()
-        this.statusArray = await api.getStatusData()
-        this.regcountArray = await api.getRegYear()
    },
+   methods: {
+     async loadApplicant(){
+        this.mDataArray  = await api.getReportAllProduction()
+        this.statusArray = await api.getReportStatusProduction()
+        this.regcountArray = await api.getReportRegYearProduction()
+     },
      async show_Profile(item) {
        this.$router.push(`/profile_one_list/${item._id}`);
      },

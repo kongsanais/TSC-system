@@ -2,7 +2,7 @@
 <template>
   <v-card
     max-width="1000"
-    class="mx-auto mt-5"
+    class="mx-auto ma-8"
   >
     <v-container>
       <v-row dense>
@@ -30,7 +30,7 @@
           <v-card
             :color="item.color"
             dark
-			@click=""
+			@click="onClickMenu(item.link)"
           >
             <div class="d-flex flex-no-wrap justify-space-between">
               <div  >
@@ -62,19 +62,12 @@
 
   export default {
 	async  mounted () {
-		
-		var chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
-		var string = '';
-		for(var ii=0; ii<50; ii++){
-			string += chars[Math.floor(Math.random() * chars.length)];
-		}
-		alert(string + '@domain.com');
-	//   var data = [];
-	//   this.count_all_app =  await api.getReportCountAll()
-	//   data = await api.getReportCountRole();	  
-	//   for(var i = 0 ; i < this.items.length ; i++){ 
-	// 	  this.items[i].count   = data[i].count;
-	//   }
+	  var data = [];
+	  this.count_all_app =  await api.getReportCountAll()
+	  data = await api.getReportCountRole();	  
+	  for(var i = 0 ; i < this.items.length ; i++){ 
+		  this.items[i].count   = data[i].count;
+	  }
 
   	},
     data: () => ({
@@ -87,14 +80,21 @@
           src: 'https://image.flaticon.com/icons/svg/2192/2192367.svg',
           title: 'Engineer & Management',
           count: null,
+          link: "/user_list_engineer"
         },
         {
-          color: '#952175',
+          color: '#434247',
           src: 'https://image.flaticon.com/icons/svg/2942/2942804.svg',
           title: 'Production',
           count: null,
+          link: "/user_list_production"
         },
       ],
-	})
+    }),
+    methods: {
+    onClickMenu(link) {
+      this.$router.push(link).catch((err) => {});
+    },
+  },
   }
 </script>

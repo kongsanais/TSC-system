@@ -21,10 +21,10 @@
           <v-tab-item value="tab-1">
             <v-card flat>
               <v-card-text>
-                <!-- {{ applicant }} -->
+                {{ applicant }}
                 <v-row>
                   <!-- E-mail -->
-                  <v-col class="d-flex" xl="4" lg="4" md="3" sm="12" cols="12">
+                  <!-- <v-col class="d-flex" xl="4" lg="4" md="3" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.email"
                       type="email"
@@ -38,10 +38,10 @@
                       ]"
                     >
                     </v-text-field>
-                  </v-col>
+                  </v-col> -->
 
                   <!-- Password -->
-                  <v-col class="d-flex" xl="4" lg="4" md="3" sm="12" cols="12">
+                  <!-- <v-col class="d-flex" xl="4" lg="4" md="3" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.password"
                       label="รหัสผ่าน"
@@ -59,10 +59,10 @@
                       ]"
                       required
                     />
-                  </v-col>
+                  </v-col> -->
 
                   <!-- Confirm Password -->
-                  <v-col class="d-flex" xl="4" lg="4" md="3" sm="12" cols="12">
+                  <!-- <v-col class="d-flex" xl="4" lg="4" md="3" sm="12" cols="12">
                     <v-text-field
                       v-model="checkpassword"
                       label="ยืนยันรหัสผ่าน"
@@ -80,7 +80,7 @@
                       ]"
                       required
                     />
-                  </v-col>
+                  </v-col> -->
 
                   <!-- TH prefix  -->
                   <v-col class="d-flex" xl="2" lg="3" md="3" sm="12" cols="12">
@@ -335,15 +335,28 @@
 
                  <v-row>
 
-                  <!-- Education -->
-                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
+                  <!-- Degree -->
+                  <v-col class="d-flex" xl="3" lg="3" md="6" sm="12" cols="12">
+                    <v-select
+                      v-model="applicant.degree_education"
+                      :items="degree_item"
+                      label="ระดับการศึกษา"
+                      :rules="[(v1) => !!v1 || 'Please Degree Education']"
+                    >
+                    </v-select>
+                  </v-col>
+
+
+                  <!-- Major -->
+                  <v-col class="d-flex" xl="3" lg="3" md="6" sm="12" cols="12">
                     <v-text-field
-                      v-model="applicant.education"
-                      label="การศึกษาสูงสุด"
-                      :rules="[(v1) => !!v1 || 'Please Enter Education']"
+                      v-model="applicant.majoy_education"
+                      label="สาขาวิชา"
+                      :rules="[(v1) => !!v1 || 'Please Enter Major']"
                     >
                     </v-text-field>
                   </v-col>
+
 
                   <!-- Gpa -->
                   <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
@@ -362,41 +375,18 @@
               
                 <v-row>
 
-                  <!-- Level -->
-                  <!-- <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
+                  <!-- skill -->
+                  <v-col class="d-flex" xl="5" lg="5" md="5" sm="12" cols="12">
                     <v-select
-                      v-model="applicant.job_level"
+                      v-model="applicant.job_skill"
                       :items="data_level"
-                      label="Level"
+                      label="ทักษะด้านในต่างๆ"
+                      multiple
                       :rules="[(v1) => !!v1 || 'Please Select Level']"
                     >
                     </v-select>
-                  </v-col> -->
-                  
-                  <!-- Position -->
-                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
-                    <v-select
-                      v-model="applicant.job_position"
-                      :items="data_position"
-                      label="ตำแหน่งงานที่สมัคร"
-                      :rules="[(v1) => !!v1 || 'Please Select Position']"
-                    >
-                    </v-select>
-
                   </v-col>
-
-                  <!-- Salary -->
-                  <!-- <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
-                    <v-text-field
-                      v-model="applicant.job_salary"
-                      label="Salary (Bath)"
-                      type="number"
-                      min="0"
-                      :rules="[(v1) => !!v1 || 'Please Enter Salary']"
-                    >
-                    </v-text-field>
-                  </v-col> -->
-
+                  
                 </v-row>
 
                 <v-row>
@@ -543,7 +533,7 @@ export default {
   data: () => ({
     applicant: {
       email: "",
-      password: "",
+      password: "tse@2020admin",
       th_prefix: "",
       th_firstname: "",
       th_lastname: "",
@@ -559,16 +549,19 @@ export default {
       age: "",
       imageURL: null,
       resumeURL: null,
-      job_level: null,
+      job_skill: null,
       job_position: "",
       job_salary: "", 
+      degree_education:"",
       education:"",
+      majoy_education:"",
       gpa:"",
       role:"Production"
     },
     checked_ac: false,
     data_th_prefix: ["นาย", "นาง", "นางสาว"],
     data_eng_prefix: ["Mr", "Mrs", "Miss"],
+    degree_item: ["มัธยมศึกษาตอนต้น (ม.3)", "มัธยมศึกษาตอนปลาย (ม.6)" ,"ประกาศนียบัตรวิชาชีพ (ปวช)","ประกาศนียบัตรวิชาชีพชั้นสูง (ปวส)","ระดับปริญญาตรี","ปริญญาโท","ปริญญาเอก"],
     data_Relationship: [
       "Father",
       "Mother",
@@ -576,12 +569,12 @@ export default {
       "Grandmather",
       "Other",
     ],
-    data_level: ["Office/Engineer", "Management"],
+    data_level: ["ทักษะการประกอบ", "ทักษะการตรวจสอบคุณภาพ","ทักษะการยิงสกรู","ทักษะการควบคุมเครื่องจักร ( เครื่องกลึง, เครื่องกัด, เครื่องเจียร เป็นต้น)","ทักษะการปั๊มขึ้นรูปชิ้นงาน","ทักษะการฉีดขึ้นรูปชิ้นงาน","ทักษะการขับโฟล์คลิฟ","ทักษะการใช้เครื่องมือวัด (เวอร์เนีย, ไมโคร เป็นต้น)","ทักษะการใช้คอมพิวเตอร์","ทักษะการควบคุมสต็อกวัตถุดิบ"],
     data_position: ["Developer", "Data Analysis"],
     show_password: true,
     show_password_con: true,
     valid: true,
-    checkpassword: "",
+    checkpassword: "tse@2020admin",
     date_menu: false, //for date
     imageURL: "https://image.flaticon.com/icons/svg/882/882849.svg",
     CountryList: ["Thailand"],
@@ -717,7 +710,15 @@ export default {
       }
     },
     async submit() {
+          
       var check;
+      var chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
+      var string = '';
+      for(var ii=0; ii<30; ii++){
+            string += chars[Math.floor(Math.random() * chars.length)];
+      }
+
+      this.applicant.email = string+'@domain.com';
 
       if (this.applicant.imageURL == null) {
         check = false;

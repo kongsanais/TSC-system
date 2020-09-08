@@ -1,6 +1,7 @@
 import httpClient from "@/services/httpClient";
 import { server } from "@/services/constants";
 import * as apiAdmin from "@/services/api_admin.js"
+import * as apiReport  from "@/services/api_report.js"
 import router from "@/router";
 
 const isLoggedIn = () => {
@@ -99,8 +100,6 @@ const updateRegStatus = async values => {
 
 
 
-
-
 export default {
   getJSON_Export,
   getStatusData,
@@ -116,5 +115,6 @@ export default {
   getAllApplicant,
   getAllApplicantByDate,
   updateRegStatus,
-  ...apiAdmin
+  ...apiAdmin,
+  ...apiReport
 };

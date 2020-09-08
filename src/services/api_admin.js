@@ -26,9 +26,7 @@ export const logoffAdmin = async () => {
     router.push("/admin_login");
  };
 
-
   
-
 export const loginAdmin = async values => 
 {
   let result = await httpClient.post(admin.LOGIN_URL, values);
@@ -38,7 +36,7 @@ export const loginAdmin = async values =>
     localStorage.setItem(admin.USERNAME, result.data.admin.eng_firstname);
     localStorage.setItem(admin.TOKEN_KEY, result.data.token);
     localStorage.setItem(admin.ROLE, result.data.admin.role)
-    router.push("/user_list")
+    router.push("/admin_home")
     return true;
   } else {
     return false;

@@ -10,11 +10,12 @@ import About from "@/views/About.vue"
 import Login from "@/views/Login.vue"
 import Profile from "@/views/Profile.vue"
 import Profile_update from "@/views/Profile_update.vue"
-import User_list from "@/views/User_list.vue"
+import User_List_Eng from "@/views/User_list_Engineer.vue"
+import User_List_Pro from "@/views/User_list_Production.vue"
 import Profile_one_list from "@/views/Profile_show_fromlist.vue"
 import Admin_login from "@/views/admin/loginAdmin.vue"
+import Admin_home from "@/views/admin/homeAdmin.vue"
 Vue.use(VueRouter);
-
 const routes = [
   {
     path: "/home",
@@ -63,9 +64,14 @@ const routes = [
     component : Profile_update
   },
   {
-    path: "/user_list",
-    name: "user_list",
-    component : User_list
+    path: "/user_list_engineer",
+    name: "user_list_engineer",
+    component : User_List_Eng
+  },
+  {
+    path: "/user_list_production",
+    name: "user_list_production",
+    component : User_List_Pro
   },
   {   
     path: "/profile_one_list/:_id",
@@ -76,6 +82,11 @@ const routes = [
     path: "/admin_login",
     name: "admin_login",
     component: Admin_login 
+  },
+  {
+    path: "/admin_home",
+    name: "admin_home",
+    component: Admin_home 
   },
   {
     path: "/test",

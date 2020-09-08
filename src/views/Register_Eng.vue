@@ -779,9 +779,11 @@ export default {
       if (check) {
 
         let formData = new FormData();
-        Object.keys(this.applicant).forEach((key) =>
+        
+        await Object.keys(this.applicant).forEach((key) =>
            formData.append(key, this.applicant[key])
         );
+
           this.dialog_load.status = true;
         
         if (await api.register(formData)) {

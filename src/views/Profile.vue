@@ -232,7 +232,7 @@ export default {
         let result = await api.readProfile();
         this.applicant = result;
     }else if(api.isLoggedInAdmin() && (api.getRoleAdmin() == "Admin")){
-        this.$router.push("/user_list");
+        this.$router.push("/admin_home");
     }
     else{
       this.$router.push("/login");
