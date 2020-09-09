@@ -84,12 +84,10 @@ const userSchema = new mongoose.Schema({
     job_level:{
         type: String 
     },
-    job_skill:{
-        type: String 
-    },
+    job_skill:{type: Array},
     job_position:{
         type: String
-    },
+    },  
     job_salary:{
         type: String 
     },

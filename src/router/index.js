@@ -12,7 +12,8 @@ import Profile from "@/views/Profile.vue"
 import Profile_update from "@/views/Profile_update.vue"
 import User_List_Eng from "@/views/User_list_Engineer.vue"
 import User_List_Pro from "@/views/User_list_Production.vue"
-import Profile_one_list from "@/views/Profile_show_fromlist.vue"
+import Profile_show_engineer from "@/views/Profile_show_engineer.vue"
+import Profile_show_production from "@/views/Profile_show_production.vue"
 import Admin_login from "@/views/admin/loginAdmin.vue"
 import Admin_home from "@/views/admin/homeAdmin.vue"
 Vue.use(VueRouter);
@@ -74,9 +75,14 @@ const routes = [
     component : User_List_Pro
   },
   {   
-    path: "/profile_one_list/:_id",
-    name: "profile_one_list",
-    component:Profile_one_list
+    path: "/profile_show_engineer/:_id",
+    name: "profile_show_engineer",
+    component:Profile_show_engineer
+  },
+  {   
+    path: "/profile_show_production/:_id",
+    name: "profile_show_production",
+    component:Profile_show_production
   },
   {
     path: "/admin_login",

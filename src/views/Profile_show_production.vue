@@ -5,7 +5,7 @@
         <v-col class="d-flex" xl="9" lg="8" md="7" sm="12" cols="12">
           <h1 class="ml-6">
             <v-icon large class="mb-2">mdi-file-account-outline</v-icon
-            >Information Profile
+            >Information Profile [ Production ]
           </h1>
         </v-col>
         <v-spacer></v-spacer>
@@ -137,13 +137,6 @@
               </v-card-title>
 
               <v-card-text class="headline font-weight-bold">
-                <v-text-field
-                  v-model="applicant.email"
-                  label="Email"
-                  prepend-icon="mdi-email-box"
-                  readonly
-                >
-                </v-text-field>
 
                 <v-text-field
                   v-model="applicant.phone_number"
@@ -184,37 +177,23 @@
                 <v-icon large left color="black">
                   mdi-card-account-phone
                 </v-icon>
-                <h3>Resume / CV</h3>
+                <h3>Skill / Exp</h3>
               </v-card-title>
 
               <v-card-text class="headline font-weight-bold">
-                <v-text-field
-                  :value="getLevelandPosition()"
-                  label="Level / Position"
-                  prepend-icon="mdi-tablet-dashboard"
+                
+                <v-textarea
+                  class="mt-2"
+                  v-model="applicant.job_skill"
+                  label="Skill / ทักษะ"
                   readonly
-                >
-                </v-text-field>
-
-                <v-text-field
-                  v-model="applicant.job_salary"
-                  label="Salary ( Bath ) "
-                  prepend-icon="mdi-bitcoin"
-                  readonly
-                >
-                </v-text-field>
-
-                <v-btn
-                  color="primary"
-                  class="ma-2 white--text"
-                  :href="getProfileResume()"
-                  target="_blank"
-                  download
-                >
-                  Resume
-                  <v-icon right dark>mdi-file-document</v-icon>
-                </v-btn>
+                  outlined
+                  rows="5"
+                  row-height="30"
+                  shaped
+                ></v-textarea>
               </v-card-text>
+
             </v-card>
           </v-col>
         </v-row>

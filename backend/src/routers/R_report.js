@@ -138,7 +138,7 @@ router.get('/report/count_all_user_by_role', async (req, res) => {
 })
 
 
-//get json for export 
+//get json for export  engineer
 router.get('/report/export_json/engineer', async (req, res) => {
   let data = await User.aggregate([ 
     { $match: { role : "Production" } },
@@ -157,8 +157,7 @@ router.get('/report/export_json/engineer', async (req, res) => {
         majoy_education:"$majoy_education", 
         gpa:"$gpa", 
         createdDate: "$createdAt" }},
-        
-      ])
+    ])
   res.json(data)
 })
 

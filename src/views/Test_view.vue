@@ -1,100 +1,72 @@
-
 <template>
-  <v-card
-    max-width="1000"
-    class="mx-auto mt-5"
-  >
-    <v-container>
-      <v-row dense>
-		
-        <v-col cols="12">
-          <v-card
-            color="#385F73"
-            dark
-          >
-            <v-card-title class="headline">All Applicant</v-card-title>
+  <div>
+    <v-responsive
+      max-width="400"
+      class="mx-auto mb-4"
+    >
+      <v-text-field
+        v-model="benched"
+        type="number"
+        label="Total Benched"
+        min="0"
+        max="10"
+      ></v-text-field>
+    </v-responsive>
 
-            <v-card-subtitle class="mt-2"><h1>{{count_all_app}}</h1></v-card-subtitle>
-
-            <v-card-actions>
-              <v-btn text>THAI Samsung</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-col>
-
-        <v-col
-          v-for="(item, i) in items"
-          :key="i"
-          cols="12"
-        >
-          <v-card
-            :color="item.color"
-            dark
-			@click=""
-          >
-            <div class="d-flex flex-no-wrap justify-space-between">
-              <div  >
-                <v-card-title
-                  class="headline"
-                  v-text="item.title"
-                ></v-card-title>
-
-                <v-card-subtitle class="mt-2" ><h1>{{item.count}}</h1></v-card-subtitle>
-              </div>
-
-              <v-avatar
-                class="ma-3"
-                size="125"
-                tile
+    <v-card
+      elevation="16"
+      max-width="400"
+      class="mx-auto"
+    >
+      <v-virtual-scroll
+        :bench="benched"
+        :items="items"
+        height="300"
+        item-height="64"
+      >
+        <template v-slot="{ item }">
+          <v-list-item :key="item">
+            <v-list-item-action>
+              <v-btn
+                fab
+                small
+                depressed
+                color="primary"
               >
-                <v-img :src="item.src"></v-img>
-              </v-avatar>
-            </div>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-card>
+                {{ item }}
+              </v-btn>
+            </v-list-item-action>
+
+            <v-list-item-content>
+              <v-list-item-title>
+                User Database Record <strong>ID {{ }}</strong>
+              </v-list-item-title>
+            </v-list-item-content>
+
+            <v-list-item-action>
+              <v-icon small>mdi-open-in-new</v-icon>
+            </v-list-item-action>
+          </v-list-item>
+
+          <v-divider></v-divider>
+        </template>
+      </v-virtual-scroll>
+    </v-card>
+  </div>
 </template>
 
 <script>
-  import api from "@/services/api";
-
   export default {
-	async  mounted () {
-		
-		var chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
-		var string = '';
-		for(var ii=0; ii<50; ii++){
-			string += chars[Math.floor(Math.random() * chars.length)];
-		}
-		alert(string + '@domain.com');
-	//   var data = [];
-	//   this.count_all_app =  await api.getReportCountAll()
-	//   data = await api.getReportCountRole();	  
-	//   for(var i = 0 ; i < this.items.length ; i++){ 
-	// 	  this.items[i].count   = data[i].count;
-	//   }
-
-  	},
     data: () => ({
-	  count_all_app: null ,
-	  count_all_engineer: null ,
-	  count_all_production: null ,
-      items: [
-        {
-          color: '#1F7087',
-          src: 'https://image.flaticon.com/icons/svg/2192/2192367.svg',
-          title: 'Engineer & Management',
-          count: null,
-        },
-        {
-          color: '#952175',
-          src: 'https://image.flaticon.com/icons/svg/2942/2942804.svg',
-          title: 'Production',
-          count: null,
-        },
-      ],
-	})
+      benched: 0,
+    }),
+    computed: {
+      items () {
+        return Array.from({ length: this.length }, (k, v) => v + 1)
+      },
+      length () {
+        return 7000
+      },
+    },
   }
 </script>

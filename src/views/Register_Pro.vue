@@ -374,19 +374,71 @@
 
               
                 <v-row>
-
+                    <!-- {{applicant.job_skill}} -->
                   <!-- skill -->
-                  <v-col class="d-flex" xl="5" lg="5" md="5" sm="12" cols="12">
-                    <v-select
-                      v-model="applicant.job_skill"
+                  <v-col class="d-flex" xl="4" lg="6" md="5" sm="12" cols="12">
+                    <v-simple-table
+                    dense="false"
+                    fixed-header="false"
+                    height="300"
+                     >
+                    <template v-slot:default>
+                      <thead>
+                        <tr>
+                          <th>ทักษะ</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                        <tr v-for="(item) in applicant.job_skill" :key="item.id">
+                           <td> <v-checkbox v-model="item.checked" :label="item.name" ></v-checkbox></td>
+
+                        </tr>
+                      </tbody>
+                    </template>
+                  </v-simple-table>
+                  
+                     <!-- <v-list shaped>
+                      <v-subheader>ทักษะด้านในต่าง ๆ </v-subheader>
+                      <v-list-item-group  color="primary">
+                        <v-list-item
+                          v-for="(item, i) in applicant.job_skill"
+                          :key="i"
+                        >
+                          <v-list-item-content>
+                           <v-checkbox v-model="item.checked" :label="item.name" ></v-checkbox>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-list-item-group>
+                    </v-list> -->
+
+                    <!-- ทักษะด้านในต่าง ๆ : 
+                   <div class="mr-2" v-for="(item, index) in applicant.job_skill" :key="index">
+                    <v-checkbox v-model="item.checked" :label="item.name" ></v-checkbox>
+                    </div> -->
+                    <!-- <v-select
+                      v-model="applicant.job_skill.test1"
                       :items="data_level"
                       label="ทักษะด้านในต่างๆ"
                       multiple
+                      chips
                       :rules="[(v1) => !!v1 || 'Please Select Level']"
                     >
-                    </v-select>
+                    </v-select> -->
                   </v-col>
-                  
+                
+                  <v-col class="d-flex" xl="6" lg="6" md="5" sm="12" cols="12">
+                      <v-textarea
+                      label="ประสบการณ์การทำงาน""
+                      auto-grow
+                      outlined
+                      rows="3"
+                      row-height="25"
+                      v-model="applicant.eng_address"
+                      :rules="[(v1) => !!v1 || 'โปรดใส่ที่อยู่อาศัยปัจจุบัน']"
+                      shaped
+                    ></v-textarea>
+                  </v-col>
                 </v-row>
 
                 <v-row>
@@ -549,7 +601,31 @@ export default {
       age: "",
       imageURL: null,
       resumeURL: null,
-      job_skill: null,
+      // job_skill: {
+      //   skill_1: false, 
+      //   skill_2: false,
+      //   skill_3: false, 
+      //   skill_4: false,
+      //   skill_5: false, 
+      //   skill_6: false,
+      //   skill_7: false,
+      //   skill_8: false,
+      //   skill_9: false,
+      //   skill_10: false,
+      // },
+      job_skill:
+      [
+        { name: 'ทักษะการประกอบ', checked: false },
+        { name: 'ทักษะการตรวจสอบคุณภาพ', checked: false },
+        { name: 'ทักษะการยิงสกรู', checked: false },
+        { name: 'ทักษะการควบคุมเครื่องจักร ( เครื่องกลึง, เครื่องกัด, เครื่องเจียร เป็นต้น)', checked: false },
+        { name: 'ทักษะการปั๊มขึ้นรูปชิ้นงาน', checked: false },
+        { name: 'ทักษะการฉีดขึ้นรูปชิ้นงาน', checked: false },
+        { name: 'ทักษะการขับโฟล์คลิฟ', checked: false },
+        { name: 'ทักษะการใช้เครื่องมือวัด (เวอร์เนีย, ไมโคร เป็นต้น)', checked: false },
+        { name: 'ทักษะการใช้คอมพิวเตอร์', checked: false },
+        { name: 'ทักษะการควบคุมสต็อกวัตถุดิบ', checked: false },
+      ],
       job_position: "",
       job_salary: "", 
       degree_education:"",
@@ -731,11 +807,14 @@ export default {
       if (check) {
         
         let formData = new FormData();
+
+        
         Object.keys(this.applicant).forEach((key) =>
            formData.append(key, this.applicant[key])
         );
 
-          this.dialog_load.status = true;
+      
+         this.dialog_load.status = true;
         if (await api.register(formData)) {
           this.dialog_load.status = false;
           this.dialog_messenger.text = "Complete GO Login";

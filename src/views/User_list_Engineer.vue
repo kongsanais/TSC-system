@@ -1,6 +1,6 @@
 <template>
     <div class="ma-5">
-    <v-card class="mb-2" color="primary" dark >
+    <v-card class="mb-2" color="#1F7087" dark >
       <v-row >
         <v-col class="d-flex" xl="12" lg="12" md="12" sm="12" cols="12">
           <h2 class="ma-2">
@@ -105,7 +105,7 @@
   </v-row>
 
 
-  <v-card   color="primary" dark>
+  <v-card   color="#1F7087" dark>
       <v-row >
         <v-col class="d-flex" xl="12" lg="12" md="12" sm="12" cols="12">
           <h2 class="ma-2">
@@ -422,7 +422,7 @@ export default {
         this.regcountArray = await api.getReportRegYearEngineer()
      },
      async show_Profile(item) {
-       this.$router.push(`/profile_one_list/${item._id}`);
+       this.$router.push(`/profile_show_engineer/${item._id}`);
      },
      async fillData () {
           this.datacollection_BarChart = {
