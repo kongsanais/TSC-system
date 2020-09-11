@@ -177,25 +177,38 @@
                 <v-icon large left color="black">
                   mdi-card-account-phone
                 </v-icon>
-                <h3>Skill / Exp</h3>
+                <h3>Skill / Experience</h3>
               </v-card-title>
 
               <v-card-text class="headline font-weight-bold">
-                
                 <v-textarea
                   class="mt-2"
-                  v-model="applicant.job_skill"
+                  :value="getSkill()"
                   label="Skill / ทักษะ"
                   readonly
                   outlined
-                  rows="5"
-                  row-height="30"
+                  rows="3"
+                  row-height="15"
                   shaped
                 ></v-textarea>
+
+                 <v-textarea
+                  class="mt-2"
+                  v-model="applicant.job_exp"
+                  label="Experience / ประสบการณ์การทำงาน"
+                  readonly
+                  outlined
+                  rows="3"
+                  row-height="15"
+                  shaped
+                ></v-textarea>
+
               </v-card-text>
 
             </v-card>
           </v-col>
+
+          
         </v-row>
       </v-card-title>
 
@@ -248,6 +261,7 @@ export default {
     let result = await api.getOneApplicant(this.$route.params._id);
     this.applicant = result;
     this.check_color_status();
+    getSkill()
   },
   methods: {
     getProfileImage() {
@@ -297,6 +311,10 @@ export default {
       let education = this.applicant.majoy_education + " / GPA : " + this.applicant.gpa;
         return education;
     },
+    getSkill(){
+      let skill = this.applicant.job_skill;
+      return skill;
+    },
     async go_update_status() {
        this.dialog = false;
        let update_status = this.applicant.reg_status;
@@ -322,7 +340,6 @@ export default {
       } else if (this.applicant.reg_status == "Fail") {
         this.color_status = "red";
       }
-
       this.text_status = this.applicant.reg_status;
     },
   },

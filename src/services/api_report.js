@@ -65,3 +65,9 @@ export const getReportCountRole = async () => {
     let result  =  await httpClient.get(report.COUNT_ALL_USER_BY_ROLE);
     return result.data;
 }
+
+
+export const getJSON_Export_Production  =  async (values1,values2,values3) => {
+    let result  =  await httpClient.post(report.COUNT_GET_JSON_EXPORT_PRODUCTION,values1,values2,values3);
+    return result.data;
+}

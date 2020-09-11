@@ -47,7 +47,7 @@ router.post('/users', async (req, res) => {
       const form = new formaidable.IncomingForm()
       form.parse(req, async (error,fields,files) =>
       {   
-          console.log(fields)
+          
           const user  = new User(fields)
           const user_file  = files ; 
 
@@ -56,11 +56,7 @@ router.post('/users', async (req, res) => {
             if (docs.length == 1) {
                  res.json({ result: false, message: JSON.stringify(error) }); 
             }else{              
-                   var data = [{ firstName: 'Harry', lastName: 'Potter' }];
-                   console.log(data)
-                  user.job_skill.push(data);
-                  //console.log(user)
-                  //let result =  await user.save();
+                  let result =  await user.save();
                   await  uploadImage(user_file,result)
                   await  uploadResume(user_file,result)
                   res.json({result: true , message: JSON.stringify(result)})
@@ -69,7 +65,7 @@ router.post('/users', async (req, res) => {
       }
     )
     }catch(error){
-       res.json({ result: false, message: JSON.stringify(error) });
+      res.json({ result: false, message: JSON.stringify(error) });
     }
 })
 
@@ -120,6 +116,7 @@ router.put("/users/update", auth , (req, res)=>{
         res.json({result: false , message: JSON.stringify(result)})
   }
 })
+
 
 
 router.put("/users/update_reg_status", async (req, res)=>{
@@ -223,23 +220,7 @@ router.get('/users/count_reg_year', async (req, res) => {
 
 
  router.post('/users/get_json_export', async (req, res) => {
-     let result = req.body;
-
-    var data_check = ['email','fullnameTH','fullnameENG','nationality','phone_number',
-    'phone_number_famaily','person_relationship','eng_address','date_birthday','age',
-    'job_level','job_position','job_salary','education','degree_education',
-    'majoy_education','gpa','createdDate','_id']
-
-    const index = 1;
-   
-    for (var i = 0; i < result.length; i++ ) {
-      for (var j = 0; j < data_check.length; j++ ){
-       if(result[i].filed == data_check[j]){
-         const index = data_check.indexOf(data_check[j])
-         data_check.splice(index,1);
-       }
-     }
-    }
+    let result = req.body;
 
    var data = await User.aggregate([
     { $project: { 
@@ -264,12 +245,30 @@ router.get('/users/count_reg_year', async (req, res) => {
       }}
     ]);
 
-  for (var j = 0; j < data.length; j++ ) {
-    for (var k = 0; k < data_check.length; k++ ){
-          var val = data_check[k]
-          delete data[j][val]
+
+    var data_check = ['email','fullnameTH','fullnameENG','nationality','phone_number',
+    'phone_number_famaily','person_relationship','eng_address','date_birthday','age',
+    'job_level','job_position','job_salary','education','degree_education',
+    'majoy_education','gpa','createdDate','_id']
+
+    const index = 1;
+   
+    for (var i = 0; i < result.length; i++ ) {
+      for (var j = 0; j < data_check.length; j++ ){
+       if(result[i].filed == data_check[j]){
+         const index = data_check.indexOf(data_check[j])
+         data_check.splice(index,1);
+       }
+     }
     }
-  }
+
+
+    for (var j = 0; j < data.length; j++ ) {
+      for (var k = 0; k < data_check.length; k++ ){
+            var val = data_check[k]
+            delete data[j][val]
+      }
+    }
     res.json(data)
  })
 

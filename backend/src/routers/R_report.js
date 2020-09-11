@@ -126,6 +126,7 @@ router.get('/report/count_all_user', async (req, res) => {
   res.json(value)
 })
 
+
 //get count all user  by role 
 router.get('/report/count_all_user_by_role', async (req, res) => {
   let count = await User.aggregate(
@@ -138,27 +139,71 @@ router.get('/report/count_all_user_by_role', async (req, res) => {
 })
 
 
-//get json for export  engineer
-router.get('/report/export_json/engineer', async (req, res) => {
-  let data = await User.aggregate([ 
-    { $match: { role : "Production" } },
-    { $project: { email: "$email" , 
-        fullnameTH: { $concat: [ "$th_prefix"," ","$th_firstname", " ", "$th_lastname" ] } , 
-        fullnameENG: { $concat:[ "$eng_prefix"," ","$eng_firstname", " ", "$eng_lastname" ] } , 
-        nationality: "$nationality", phone_number: "$phone_number", phone_number_famaily: "$phone_number_famaily",
-        person_relationship:"$person_relationship", 
-        eng_address:"$eng_address", 
-        date_birthday:"$date_birthday", 
-        age:"$age", job_level:"$job_level",
-        job_position:"$job_position", 
-        job_salary:"$job_salary", 
-        education:"$education", 
-        degree_education:"$degree_education",
-        majoy_education:"$majoy_education", 
-        gpa:"$gpa", 
-        createdDate: "$createdAt" }},
-    ])
-  res.json(data)
+//get json export production // 
+router.post('/report/get_json_export/production', async (req, res) => {
+ let result = req.body
+ let data_th_prefix = req.body.gender
+ let date_start = req.body.date_start
+ let date_end = req.body.date_end
+
+ if(data_th_prefix != ""){
+  var filter_data = {$and:[{role:'Production'},{th_prefix:data_th_prefix}]}
+ }
+ 
+
+
+ var data = await User.aggregate([
+  { $match: filter_data},
+  { $project: { 
+    _id : "$_id",
+    th_prefix : "$th_prefix",
+    fullnameTH: { $concat: ["$th_firstname", " ", "$th_lastname" ] } ,
+    eng_prefix : "$eng_prefix",
+    fullnameENG: { $concat:["$eng_firstname", " ", "$eng_lastname" ] } ,
+    nationality: "$nationality",
+    phone_number: "$phone_number",
+    phone_number_famaily: "$phone_number_famaily",
+    person_relationship:"$person_relationship",
+    eng_address:"$eng_address",
+    age:"$age",
+    degree_education:"$degree_education",
+    majoy_education:"$majoy_education",
+    gpa:"$gpa",
+    createdDate: "$createdAt",
+    date_birthday:"$date_birthday",
+    }}
+  ]);
+
+ console.log(data)
+//   const filed_allowed = [];
+//   for (var i = 0; i < Object.keys(result).length-5 ; i++ ) {
+//     filed_allowed.push(result[i].filed);
+//   }
+
+  //console.log(filed_allowed)
+
+//   //get name off fild in obj//
+//   var data_check = Object.getOwnPropertyNames(data[0])
+
+//   const index = 1;
+//   for (var i = 0; i < filed_allowed.length; i++ ) {
+//     for (var j = 0; j < data_check.length; j++ ){
+//      if(filed_allowed[i] == data_check[j]) {
+//        // delete this element //
+//        const index = data_check.indexOf(data_check[j])
+//        data_check.splice(index);
+//       }
+//     }
+//   }
+  
+//   for (var j = 0; j < data.length; j++ ) {
+//     for (var k = 0; k < data_check.length; k++ ){
+//           var val = data_check[k]
+//           delete data[j][val]
+//     }
+//   }
+
+//   res.json(data)
 })
 
 

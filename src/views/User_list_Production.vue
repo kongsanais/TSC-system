@@ -221,7 +221,8 @@
       </template>
       <v-card>
         <v-card-title>
-          <!-- {{json_export}} -->
+          {{json_export}}
+          {{export_filter}}
           <span class="headline">Export  Data</span>
         </v-card-title>
         <v-card-text>
@@ -230,7 +231,55 @@
         <v-row>
           <v-col cols="12" xl="12" lg="12" sm="12" md="4" >
           <v-btn x-small @click="selectAll" class="mb-2">Select all</v-btn>
-          <!-- {{field_selected}} -->
+              
+              <v-menu
+                  v-model="export_filter.menu_start"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="export_filter.date_start"
+                      label="Select Date Start"
+                      prepend-icon="event"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker v-model="export_filter.date_start" @input="export_filter.menu_start = false"></v-date-picker>
+                </v-menu>
+                
+                <v-menu
+                  v-model="export_filter.menu_end"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="export_filter.date_end"
+                      label="Select Date End"
+                      prepend-icon="event"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker v-model="export_filter.date_end" @input="export_filter.menu_end = false"></v-date-picker>
+                </v-menu>
+
+              <v-select
+              v-model="export_filter.gender"
+              :items="['นาย','นาง']"
+              label="Select"
+              ></v-select>
+
           <v-select
             multiple
             chips
@@ -390,9 +439,10 @@ export default {
       },
       field_data_export:[
         {filed: '_id' ,  name: '_id'},
-        {filed: 'email',  name: 'Email'},
-        {filed: 'fullnameTH',  name: 'Fullname TH'},
-        {filed: 'fullnameENG',  name: 'Fullname ENG'},
+        {filed: 'th_prefix',  name: 'Th Prefix'},
+        {filed: 'fullnameTH',  name: 'Full Name TH'},
+        {filed: 'eng_prefix' , name: 'Eng prefix'},
+        {filed: 'fullnameENG' , name: 'Full Name ENG'},
         {filed: 'nationality',  name: 'Nationality'},
         {filed: 'phone_number',  name: 'Phone Number'},
         {filed: 'phone_number_famaily',  name: 'Phone Number Family'},
@@ -400,16 +450,19 @@ export default {
         {filed: 'eng_address',  name: 'Address'},
         {filed: 'date_birthday',  name: 'Birth Day'},
         {filed: 'age', name: 'Age'},
-        {filed: 'job_level', name: 'Level'},
-        {filed: 'job_position', name: 'Postsition'},
-        {filed: 'job_salary', name: 'Salary'},
-        {filed: 'education', name: 'Education Name'},
         {filed: 'degree_education', name: 'Degree Education'},
         {filed: 'majoy_education', name: 'Major'},
         {filed: 'gpa', name: 'GPA'},
         {filed: 'createdDate', name: 'Reg Date'},
       ],
       field_selected:[],
+      export_filter:{
+        gender :null,
+        date_start: "",
+        date_end: "",
+        menu_start: false,
+        menu_end: false,
+      },
       json_export:null        
     };
    },
@@ -563,18 +616,20 @@ export default {
         let result = await api.getAllApplicantByDate({ date_start, date_end });
         this.mDataArray = result;
       },
-      async getDataExport(){
+      async getDataExport()  {
         let field = this.field_selected
-        let data =  await api.getJSON_Export(field);
+
+        let merged = {...field, ...this.export_filter};
+        let data =  await api.getJSON_Export_Production(merged);
         this.json_export = data
         const dataWS = XLSX.utils.json_to_sheet(this.json_export)
         const wb = XLSX.utils.book_new()
         XLSX.utils.book_append_sheet(wb, dataWS)
         XLSX.writeFile(wb,'export.xlsx')
-       },
+      },
       async selectAll(){
         this.field_selected = this.field_data_export
-       }
+      }
     }
 };
 </script>

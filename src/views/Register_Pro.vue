@@ -21,7 +21,7 @@
           <v-tab-item value="tab-1">
             <v-card flat>
               <v-card-text>
-                {{ applicant }}
+                <!-- {{ applicant }} -->
                 <v-row>
                   <!-- E-mail -->
                   <!-- <v-col class="d-flex" xl="4" lg="4" md="3" sm="12" cols="12">
@@ -374,29 +374,10 @@
 
               
                 <v-row>
-                    <!-- {{applicant.job_skill}} -->
+
                   <!-- skill -->
                   <v-col class="d-flex" xl="4" lg="6" md="5" sm="12" cols="12">
-                    <v-simple-table
-                    dense="false"
-                    fixed-header="false"
-                    height="300"
-                     >
-                    <template v-slot:default>
-                      <thead>
-                        <tr>
-                          <th>ทักษะ</th>
-                        </tr>
-                      </thead>
-                      <tbody>
 
-                        <tr v-for="(item) in applicant.job_skill" :key="item.id">
-                           <td> <v-checkbox v-model="item.checked" :label="item.name" ></v-checkbox></td>
-
-                        </tr>
-                      </tbody>
-                    </template>
-                  </v-simple-table>
                   
                      <!-- <v-list shaped>
                       <v-subheader>ทักษะด้านในต่าง ๆ </v-subheader>
@@ -416,26 +397,24 @@
                    <div class="mr-2" v-for="(item, index) in applicant.job_skill" :key="index">
                     <v-checkbox v-model="item.checked" :label="item.name" ></v-checkbox>
                     </div> -->
-                    <!-- <v-select
-                      v-model="applicant.job_skill.test1"
-                      :items="data_level"
+                    <v-select
+                      v-model="applicant.job_skill"
+                      :items="data_skill"
                       label="ทักษะด้านในต่างๆ"
                       multiple
                       chips
-                      :rules="[(v1) => !!v1 || 'Please Select Level']"
                     >
-                    </v-select> -->
+                    </v-select>
                   </v-col>
                 
                   <v-col class="d-flex" xl="6" lg="6" md="5" sm="12" cols="12">
                       <v-textarea
-                      label="ประสบการณ์การทำงาน""
+                      label="ประสบการณ์การทํางาน"
                       auto-grow
                       outlined
                       rows="3"
                       row-height="25"
-                      v-model="applicant.eng_address"
-                      :rules="[(v1) => !!v1 || 'โปรดใส่ที่อยู่อาศัยปัจจุบัน']"
+                      v-model="applicant.job_exp"
                       shaped
                     ></v-textarea>
                   </v-col>
@@ -601,31 +580,8 @@ export default {
       age: "",
       imageURL: null,
       resumeURL: null,
-      // job_skill: {
-      //   skill_1: false, 
-      //   skill_2: false,
-      //   skill_3: false, 
-      //   skill_4: false,
-      //   skill_5: false, 
-      //   skill_6: false,
-      //   skill_7: false,
-      //   skill_8: false,
-      //   skill_9: false,
-      //   skill_10: false,
-      // },
-      job_skill:
-      [
-        { name: 'ทักษะการประกอบ', checked: false },
-        { name: 'ทักษะการตรวจสอบคุณภาพ', checked: false },
-        { name: 'ทักษะการยิงสกรู', checked: false },
-        { name: 'ทักษะการควบคุมเครื่องจักร ( เครื่องกลึง, เครื่องกัด, เครื่องเจียร เป็นต้น)', checked: false },
-        { name: 'ทักษะการปั๊มขึ้นรูปชิ้นงาน', checked: false },
-        { name: 'ทักษะการฉีดขึ้นรูปชิ้นงาน', checked: false },
-        { name: 'ทักษะการขับโฟล์คลิฟ', checked: false },
-        { name: 'ทักษะการใช้เครื่องมือวัด (เวอร์เนีย, ไมโคร เป็นต้น)', checked: false },
-        { name: 'ทักษะการใช้คอมพิวเตอร์', checked: false },
-        { name: 'ทักษะการควบคุมสต็อกวัตถุดิบ', checked: false },
-      ],
+      job_skill:"",
+      job_exp:"",
       job_position: "",
       job_salary: "", 
       degree_education:"",
@@ -638,14 +594,7 @@ export default {
     data_th_prefix: ["นาย", "นาง", "นางสาว"],
     data_eng_prefix: ["Mr", "Mrs", "Miss"],
     degree_item: ["มัธยมศึกษาตอนต้น (ม.3)", "มัธยมศึกษาตอนปลาย (ม.6)" ,"ประกาศนียบัตรวิชาชีพ (ปวช)","ประกาศนียบัตรวิชาชีพชั้นสูง (ปวส)","ระดับปริญญาตรี","ปริญญาโท","ปริญญาเอก"],
-    data_Relationship: [
-      "Father",
-      "Mother",
-      "Grandfather",
-      "Grandmather",
-      "Other",
-    ],
-    data_level: ["ทักษะการประกอบ", "ทักษะการตรวจสอบคุณภาพ","ทักษะการยิงสกรู","ทักษะการควบคุมเครื่องจักร ( เครื่องกลึง, เครื่องกัด, เครื่องเจียร เป็นต้น)","ทักษะการปั๊มขึ้นรูปชิ้นงาน","ทักษะการฉีดขึ้นรูปชิ้นงาน","ทักษะการขับโฟล์คลิฟ","ทักษะการใช้เครื่องมือวัด (เวอร์เนีย, ไมโคร เป็นต้น)","ทักษะการใช้คอมพิวเตอร์","ทักษะการควบคุมสต็อกวัตถุดิบ"],
+    data_skill: ["ทักษะการประกอบ","ทักษะการตรวจสอบคุณภาพ","ทักษะการยิงสกรู","ทักษะการควบคุมเครื่องจักร(เครื่องกลึง,เครื่องกัด,เครื่องเจียร เป็นต้น)","ทักษะการปั๊มขึ้นรูปชิ้นงาน","ทักษะการฉีดขึ้นรูปชิ้นงาน","ทักษะการขับโฟล์คลิฟ","ทักษะการใช้เครื่องมือวัด(เวอร์เนีย,ไมโคร เป็นต้น)","ทักษะการใช้คอมพิวเตอร์","ทักษะการควบคุมสต็อกวัตถุดิบ"],
     data_position: ["Developer", "Data Analysis"],
     show_password: true,
     show_password_con: true,
@@ -786,7 +735,7 @@ export default {
       }
     },
     async submit() {
-          
+  
       var check;
       var chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
       var string = '';
@@ -808,13 +757,12 @@ export default {
         
         let formData = new FormData();
 
-        
         Object.keys(this.applicant).forEach((key) =>
            formData.append(key, this.applicant[key])
         );
 
-      
-         this.dialog_load.status = true;
+
+          this.dialog_load.status = true;
         if (await api.register(formData)) {
           this.dialog_load.status = false;
           this.dialog_messenger.text = "Complete GO Login";

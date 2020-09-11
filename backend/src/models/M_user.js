@@ -75,7 +75,6 @@ const userSchema = new mongoose.Schema({
     },
     age:{
         type: String,
-        default: 0
     },
     imageURL:{
     },
@@ -84,7 +83,8 @@ const userSchema = new mongoose.Schema({
     job_level:{
         type: String 
     },
-    job_skill:{type: Array},
+    job_skill:{},
+    job_exp:{type: String},
     job_position:{
         type: String
     },  
