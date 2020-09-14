@@ -142,15 +142,19 @@ router.get('/report/count_all_user_by_role', async (req, res) => {
 //get json export production // 
 router.post('/report/get_json_export/production', async (req, res) => {
  let result = req.body
- let data_th_prefix = req.body.gender
+ let data_gender = req.body.gender
  let date_start = req.body.date_start
  let date_end = req.body.date_end
+ var R_date_start = new Date(date_start); 
+ var R_date_stop = new Date(date_end); 
 
- if(data_th_prefix != ""){
-  var filter_data = {$and:[{role:'Production'},{th_prefix:data_th_prefix}]}
+ if (data_gender != null && date_start != null && date_end != null){
+    var filter_data = {$and:[{role:'Production'},{gender:data_gender},{reg_date: { $gte: R_date_start, $lte: R_date_stop}}]}
+ }else if (data_gender == null && date_start != null && date_end != null){
+    var filter_data = {$and:[{role:'Production'},{reg_date: { $gte: R_date_start, $lte: R_date_stop}}]}
+ }else {
+    var filter_data = {$and:[{role:'Production'}]}
  }
- 
-
 
  var data = await User.aggregate([
   { $match: filter_data},
@@ -170,41 +174,108 @@ router.post('/report/get_json_export/production', async (req, res) => {
     majoy_education:"$majoy_education",
     gpa:"$gpa",
     createdDate: "$createdAt",
-    date_birthday:"$date_birthday",
     }}
   ]);
 
- console.log(data)
-//   const filed_allowed = [];
-//   for (var i = 0; i < Object.keys(result).length-5 ; i++ ) {
-//     filed_allowed.push(result[i].filed);
-//   }
+  const filed_allowed = [];
+  for (var i = 0; i < Object.keys(result).length-4 ; i++ ) {
+    filed_allowed.push(result[i].filed);
+  }//for
 
-  //console.log(filed_allowed)
+  //get name off fild in obj//
+  if(data.length != 0){
 
-//   //get name off fild in obj//
-//   var data_check = Object.getOwnPropertyNames(data[0])
+  var data_check = Object.getOwnPropertyNames(data[0])
 
-//   const index = 1;
-//   for (var i = 0; i < filed_allowed.length; i++ ) {
-//     for (var j = 0; j < data_check.length; j++ ){
-//      if(filed_allowed[i] == data_check[j]) {
-//        // delete this element //
-//        const index = data_check.indexOf(data_check[j])
-//        data_check.splice(index);
-//       }
-//     }
-//   }
+  const index = 1;
+  for (var i = 0; i < filed_allowed.length; i++ ) {
+    for (var j = 0; j < data_check.length; j++ ){
+     if(filed_allowed[i] == data_check[j]) {
+       // delete this element //
+       const index = data_check.indexOf(data_check[j])
+       data_check.splice(index);
+      }
+    }
+  }//for
   
-//   for (var j = 0; j < data.length; j++ ) {
-//     for (var k = 0; k < data_check.length; k++ ){
-//           var val = data_check[k]
-//           delete data[j][val]
-//     }
-//   }
+  for (var j = 0; j < data.length; j++ ) {
+    for (var k = 0; k < data_check.length; k++ ){
+          var val = data_check[k]
+          delete data[j][val]
+    }
+  }//for
 
-//   res.json(data)
+  }/// if end//////
+  res.json(data)
 })
+
+
+//get json export engineer // 
+router.post('/report/get_json_export/engineer', async (req, res) => {
+  let result = req.body
+  let date_start = req.body.date_start
+  let date_end = req.body.date_end
+
+  var R_date_start = new Date(date_start); 
+  var R_date_stop = new Date(date_end); 
+ 
+  var filter_data = {$and:[{role:'Engineer'},{reg_date: { $gte: R_date_start, $lte: R_date_stop}}]}
+
+  var data = await User.aggregate([
+   { $match: filter_data},
+   { $project: { 
+     _id : "$_id",
+     th_prefix : "$th_prefix",
+     fullnameTH: { $concat: ["$th_firstname", " ", "$th_lastname" ] } ,
+     eng_prefix : "$eng_prefix",
+     fullnameENG: { $concat:["$eng_firstname", " ", "$eng_lastname" ] } ,
+     nationality: "$nationality",
+     phone_number: "$phone_number",
+     phone_number_famaily: "$phone_number_famaily",
+     person_relationship:"$person_relationship",
+     eng_address:"$eng_address",
+     age:"$age",
+     job_level:"$job_level",
+     job_salary:"$job_salary",
+     job_position:'$job_position',
+     degree_education:"$degree_education",
+     education:"$education",
+     majoy_education:"$majoy_education",
+     gpa:"$gpa",
+     createdDate: "$createdAt",
+     }}
+   ]);
+ 
+   const filed_allowed = [];
+   for (var i = 0; i < Object.keys(result).length-5 ; i++ ) {
+     filed_allowed.push(result[i].filed);
+   }//for
+ 
+   //get name off fild in obj//
+   if(data.length != 0){
+   var data_check = Object.getOwnPropertyNames(data[0])
+ 
+   const index = 1;
+   for (var i = 0; i < filed_allowed.length; i++ ) {
+     for (var j = 0; j < data_check.length; j++ ){
+      if(filed_allowed[i] == data_check[j]) {
+        // delete this element //
+        const index = data_check.indexOf(data_check[j])
+        data_check.splice(index);
+       }
+     }
+   }//for
+   
+   for (var j = 0; j < data.length; j++ ) {
+     for (var k = 0; k < data_check.length; k++ ){
+           var val = data_check[k]
+           delete data[j][val]
+     }
+   }//for
+ 
+   }/// if end//////
+   res.json(data)
+ })
 
 
 

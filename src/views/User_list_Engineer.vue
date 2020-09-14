@@ -231,6 +231,7 @@
           <v-col cols="12" xl="12" lg="12" sm="12" md="4" >
           <v-btn x-small @click="selectAll" class="mb-2">Select all</v-btn>
           <!-- {{field_selected}} -->
+          
           <v-select
             multiple
             chips
@@ -249,6 +250,49 @@
             </template>
              -->
           </v-select>
+
+                <v-menu
+                  v-model="export_filter.menu_start"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="export_filter.date_start"
+                      label="Select Date Start"
+                      prepend-icon="event"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker v-model="export_filter.date_start" @input="export_filter.menu_start = false"></v-date-picker>
+              </v-menu>
+
+                <v-menu
+                  v-model="export_filter.menu_end"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="export_filter.date_end"
+                      label="Select Date End"
+                      prepend-icon="event"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker v-model="export_filter.date_end" @input="export_filter.menu_end = false"></v-date-picker>
+                </v-menu>
+
 
             <!-- <v-combobox
               v-model="field_data_export.select_item"
@@ -412,6 +456,12 @@ export default {
         {filed: 'createdDate', name: 'Reg Date'},
       ],
       field_selected:[],
+      export_filter:{
+        date_start: null,
+        date_end: null,
+        menu_start: false,
+        menu_end: false,
+      },
       json_export:null        
     };
    },
@@ -567,7 +617,8 @@ export default {
       },
       async getDataExport(){
         let field = this.field_selected
-        let data =  await api.getJSON_Export(field);
+        let merged = {...field, ...this.export_filter};
+        let data =  await api.getJSON_Export_Engineer(merged);
         this.json_export = data
         const dataWS = XLSX.utils.json_to_sheet(this.json_export)
         const wb = XLSX.utils.book_new()

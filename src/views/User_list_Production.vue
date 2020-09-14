@@ -221,8 +221,8 @@
       </template>
       <v-card>
         <v-card-title>
-          {{json_export}}
-          {{export_filter}}
+          <!-- {{json_export}}
+          {{export_filter}} -->
           <span class="headline">Export  Data</span>
         </v-card-title>
         <v-card-text>
@@ -231,7 +231,26 @@
         <v-row>
           <v-col cols="12" xl="12" lg="12" sm="12" md="4" >
           <v-btn x-small @click="selectAll" class="mb-2">Select all</v-btn>
-              
+    
+          <v-select
+            multiple
+            chips
+            label='Select Filed'
+            v-model='field_selected'
+            :items='field_data_export'
+            item-value='id'
+            item-text='name'
+            :menu-props="{ maxHeight: '400' }"
+            persistent-hint
+            return-object
+          >
+
+            <!-- <template slot='item' slot-scope='{ item }'>
+              {{ item.name }}
+            </template>
+             -->
+          </v-select>
+
               <v-menu
                   v-model="export_filter.menu_start"
                   :close-on-content-click="false"
@@ -276,28 +295,10 @@
 
               <v-select
               v-model="export_filter.gender"
-              :items="['นาย','นาง']"
-              label="Select"
+              :items="['Male','Female']"
+              label="Select Gender"
               ></v-select>
 
-          <v-select
-            multiple
-            chips
-            label='Select Filed'
-            v-model='field_selected'
-            :items='field_data_export'
-            item-value='id'
-            item-text='name'
-            :menu-props="{ maxHeight: '400' }"
-            persistent-hint
-            return-object
-          >
-
-            <!-- <template slot='item' slot-scope='{ item }'>
-              {{ item.name }}
-            </template>
-             -->
-          </v-select>
 
             <!-- <v-combobox
               v-model="field_data_export.select_item"
@@ -351,6 +352,7 @@
             <td>{{item.majoy_education}}</td>
             <td>{{item.gpa}}</td>
             <td>{{item.createdAt | formatDate}}</td>
+            <td>{{item.reg_status}}</td>
             <td>
             <v-btn color="primary" @click="show_Profile(item)" fab x-small dark>
               <v-icon>mdi-card-account-phone-outline</v-icon>
@@ -423,7 +425,8 @@ export default {
           { text: 'Degree' , value:'degree_education'},
           { text: 'Major'  , value:'majoy_education'},
           { text: 'GPA'  , value:'gpa'},
-          { text: 'Reg.Date' , value:'createdAt'},
+          { text: 'Reg. Date' , value:'createdAt'},
+          { text: 'Reg. Status' , value:'reg_status'},
           { text: 'Action', value:'_id'},
         ],
       data_dateTemplete: {
@@ -448,7 +451,6 @@ export default {
         {filed: 'phone_number_famaily',  name: 'Phone Number Family'},
         {filed: 'person_relationship',  name: 'Family Relationship'},
         {filed: 'eng_address',  name: 'Address'},
-        {filed: 'date_birthday',  name: 'Birth Day'},
         {filed: 'age', name: 'Age'},
         {filed: 'degree_education', name: 'Degree Education'},
         {filed: 'majoy_education', name: 'Major'},
@@ -458,8 +460,8 @@ export default {
       field_selected:[],
       export_filter:{
         gender :null,
-        date_start: "",
-        date_end: "",
+        date_start: null,
+        date_end: null,
         menu_start: false,
         menu_end: false,
       },
@@ -618,7 +620,6 @@ export default {
       },
       async getDataExport()  {
         let field = this.field_selected
-
         let merged = {...field, ...this.export_filter};
         let data =  await api.getJSON_Export_Production(merged);
         this.json_export = data

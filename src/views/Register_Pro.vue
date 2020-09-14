@@ -85,12 +85,13 @@
                   <!-- TH prefix  -->
                   <v-col class="d-flex" xl="2" lg="3" md="3" sm="12" cols="12">
                     <v-select
+                      v-on:change="onGetGender()"
                       :items="data_th_prefix"
                       v-model="applicant.th_prefix"
                       label="คำนำหน้า ( ภาษาไทย )"
                       :rules="[(v1) => !!v1 || 'โปรดเลือกคำนำหน้า']"
                       outlined
-                    >
+                    >   
                     </v-select>
                   </v-col>
 
@@ -282,16 +283,9 @@
 
                   <!-- upload img file input and resume -->
                   <v-col class="d-flex" xl="5" lg="6" md="6" sm="12" cols="12">
-                    <v-card outlined>
-                      <v-list-item>
-                        <v-list-item-content>
-                          <v-list-item-title class="headline mb-6"
-                            >อัพโหลดรูปภาพ</v-list-item-title
-                          >
-                          <v-list-item-subtitle>
-                            <!--btn upload profile picture-->
-                            <v-btn
-                              class="mt-1 mr-2"
+                     <div>
+                       <v-btn
+                              class="mt-2 mr-2"
                               color="#"
                               @click="$refs.inputUpload_img.click()"
                               v-model="message_filename_pic"
@@ -322,13 +316,7 @@
                               @change="onFile_img"
                               :rules="[(v1) => !!v1 || 'Please Upload Picture']"
                             />
-
-
-
-                          </v-list-item-subtitle>
-                        </v-list-item-content>
-                      </v-list-item>
-                    </v-card>
+                     </div>
                   </v-col>
                 </v-row>
 
@@ -575,6 +563,7 @@ export default {
       phone_number: "",
       phone_number_famaily: "",
       person_relationship: "",
+      gender:"",
       eng_address: "",
       date_birthday: null,
       age: "",
@@ -734,6 +723,16 @@ export default {
         this.$router.push(link).catch((err) => {});
       }
     },
+    onGetGender(){
+      var pre_th = this.applicant.th_prefix
+      if(pre_th == 'นาย'){
+        this.applicant.gender = 'Male'
+      }else if (pre_th == 'นาง'){
+        this.applicant.gender = 'Female'
+      }else if(pre_th == 'นางสาว'){
+       this.applicant.gender = 'Female'
+      }
+    },
     async submit() {
   
       var check;
@@ -744,24 +743,17 @@ export default {
       }
 
       this.applicant.email = string+'@domain.com';
-
       if (this.applicant.imageURL == null) {
         check = false;
       } else {
         check = true;
       }
-
       check = this.$refs.form.validate();
-
       if (check) {
-        
         let formData = new FormData();
-
         Object.keys(this.applicant).forEach((key) =>
            formData.append(key, this.applicant[key])
         );
-
-
           this.dialog_load.status = true;
         if (await api.register(formData)) {
           this.dialog_load.status = false;

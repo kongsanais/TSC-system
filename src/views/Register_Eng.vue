@@ -279,18 +279,9 @@
                     />
                   </v-card>
                   </v-col>
-
-                  <!-- upload img file input and resume -->
-                  <v-col class="d-flex" xl="5" lg="6" md="6" sm="12" cols="12">
-                    <v-card outlined>
-                      <v-list-item>
-                        <v-list-item-content>
-                          <v-list-item-title class="headline mb-6"
-                            >Upload Document</v-list-item-title
-                          >
-                          <v-list-item-subtitle>
-                            <!--btn upload profile picture-->
-                            <v-btn
+                 <v-col class="d-flex" xl="5" lg="6" md="6" sm="12" cols="12">
+                     <div>
+                       <v-btn
                               class="mt-1 mr-2"
                               color="#"
                               @click="$refs.inputUpload_img.click()"
@@ -359,12 +350,13 @@
                                 (v1) => !!v1 || 'Please Upload Resume / CV',
                               ]"
                             />
-                          </v-list-item-subtitle>
-                        </v-list-item-content>
-                      </v-list-item>
-                    </v-card>
+                     </div>
                   </v-col>
                 </v-row>
+
+
+
+
 
 
                  <v-row>

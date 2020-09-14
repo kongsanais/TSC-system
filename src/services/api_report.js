@@ -67,7 +67,12 @@ export const getReportCountRole = async () => {
 }
 
 
-export const getJSON_Export_Production  =  async (values1,values2,values3) => {
-    let result  =  await httpClient.post(report.COUNT_GET_JSON_EXPORT_PRODUCTION,values1,values2,values3);
+export const getJSON_Export_Production  =  async values  => {
+    let result  =  await httpClient.post(report.COUNT_GET_JSON_EXPORT_PRODUCTION,values);
+    return result.data;
+}
+
+export const getJSON_Export_Engineer =  async values  => {
+    let result  =  await httpClient.post(report.COUNT_GET_JSON_EXPORT_ENGINEER,values);
     return result.data;
 }

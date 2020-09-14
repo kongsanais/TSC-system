@@ -9,7 +9,7 @@
       <v-img
       @click="onClickGoHome"
         max-height="145"
-        max-width="200"
+        max-width="170"
          src="@/assets/samsung-icon.png"
         contain
       >
@@ -51,11 +51,11 @@
       </router-link>
 
       <v-list >
-        <v-list-item-group v-model="selectedMenu" mandatory color="primary" >
+        <v-list-item-group v-model="selectedMenu" mandatory color="primary" v-if="$store.state.isLogged && ($store.state.role != 'Admin')" >
           <v-subheader>MENUS</v-subheader>
           <v-list-item
             class="tile"
-            v-for="([icon, title, route], index) in menus"
+            v-for="([icon, title, route], index) in menus_user"
             :key="index"
             @click="onClickMenu(route)"
           >
@@ -67,9 +67,32 @@
               <v-list-item-title>{{ title }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+
+
+        </v-list-item-group>
+
+        <v-list-item-group v-else >
+          <v-subheader>MENUS ADMIN</v-subheader>
+          <v-list-item
+            class="tile"
+            v-for="([icon, title, route], index) in menus_admin"
+            :key="index"
+            @click="onClickMenu(route)"
+          >
+            <v-list-item-icon>
+              <v-icon>{{ icon }}</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title>{{ title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
+
   </div>
 </template>
 <script>
@@ -79,10 +102,14 @@ export default {
     drawer: false,
     group: null,
     selectedMenu: 0,
-    menus: [
-      ["mdi-apps-box", "Home", "/stock"],
+    menus_user: [
+      ["mdi-apps-box", "Home", "/home"],
       ["mdi-chart-areaspline", "Job Openings", "/job"],
+      ["mdi-login-variant", "Login", "/login"],
       ["mdi-file-table-box-multiple-outline", "About", "/about"],
+    ],
+    menus_admin: [
+      ["mdi-apps-box", "Admin Home", "/home"],
     ],
     top_right_menu: [
       ["Home", "/stock"],

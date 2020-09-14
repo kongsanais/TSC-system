@@ -51,7 +51,8 @@ export const report = {
   COUNT_REG_12_MONTH_PRODUCTION : 'api/report/count_reg_year/production',
   COUNT_ALL_USER : 'api/report/count_all_user',
   COUNT_ALL_USER_BY_ROLE : 'api/report/count_all_user_by_role',
-  COUNT_GET_JSON_EXPORT_PRODUCTION : 'api/report/get_json_export/production'
+  COUNT_GET_JSON_EXPORT_PRODUCTION : 'api/report/get_json_export/production',
+  COUNT_GET_JSON_EXPORT_ENGINEER : 'api/report/get_json_export/engineer'
 }
 
 

@@ -66,6 +66,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         trim:true
     },
+    gender: {
+        type: String,
+        trim:true
+    },
     eng_address: {
         type: String,
         trim:true
