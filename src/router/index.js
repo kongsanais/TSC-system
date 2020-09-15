@@ -16,6 +16,7 @@ import Profile_show_engineer from "@/views/Profile_show_engineer.vue"
 import Profile_show_production from "@/views/Profile_show_production.vue"
 import Admin_login from "@/views/admin/loginAdmin.vue"
 import Admin_home from "@/views/admin/homeAdmin.vue"
+import onlineTestAdmin from "@/views/admin/onlineTestAdmin.vue"
 Vue.use(VueRouter);
 const routes = [
   {
@@ -93,6 +94,11 @@ const routes = [
     path: "/admin_home",
     name: "admin_home",
     component: Admin_home 
+  },
+  {
+    path : "/onlinetest_admin",
+    name : "onlinetest_admin",
+    component: onlineTestAdmin 
   },
   {
     path: "/test",

@@ -3,13 +3,14 @@
     <v-app-bar color="#ffff" light app>
       <v-app-bar-nav-icon
         @click.stop="drawer = !drawer"
-        class="d-xl-none"
+        
       ></v-app-bar-nav-icon>
 
       <v-img
-      @click="onClickGoHome"
+        class="pa-1"
+        @click="onClickGoHome"
         max-height="145"
-        max-width="170"
+        max-width="130"
          src="@/assets/samsung-icon.png"
         contain
       >

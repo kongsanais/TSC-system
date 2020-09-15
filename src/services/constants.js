@@ -4,11 +4,9 @@ export const NETWORK_TIMEOUT_MESSAGE = "A network timeout has occurred, Please t
 export const UPLOAD_PHOTO_FAIL_MESSAGE = "An error has occurred. The photo was unable to upload.";
 export const NOT_CONNECT_NETWORK = "NOT_CONNECT_NETWORK";
 
-
 export const apiUrl = "http://localhost:3000";
 export const imageUrl = "http://localhost:3000/images";
 export const resumeUrl = "http://localhost:3000/resume"
-
 
 export const server = {
   LOGIN_URL: `api/users/login`,

@@ -1,15 +1,17 @@
 const mongoose = require('mongoose')
 
 
-const userSchema = new mongoose.Schema({
+const depSchema = new mongoose.Schema({
     dep_name:{
-        type: String 
+        type: String,
+        unique: true,
+        trim: true,
     },
 },{
     timestamps: true
 })
  
 
-const Dep = mongoose.model('Dep', userSchema ,'Deps')
+const Dep = mongoose.model('Dep', depSchema ,'Deps')
 
 module.exports = Dep

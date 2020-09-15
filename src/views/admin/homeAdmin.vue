@@ -2,11 +2,27 @@
 <template>
   <v-card
     max-width="1000"
-    class="mx-auto ma-8"
+    class="mx-auto ma-7"
   >
+    <v-container class="pa-1">
+    <v-row  class="mt-1" dense>
+    <v-alert
+      class="mt-3 ml-2 mr-2"
+      border="left"
+      colored-border
+      color="primary"
+      elevation="2"
+    >
+    <v-btn class="ma-2" tile  color="success" @click="onClickMenu('/onlinetest_admin')">
+      <v-icon left>mdi-pencil</v-icon> Management Online Test
+    </v-btn>
+
+    </v-alert>
+      </v-row>
+    </v-container>
+
     <v-container>
       <v-row dense>
-		
         <v-col cols="12">
           <v-card
             color="#0D47A1"
@@ -36,7 +52,7 @@
           <v-card
             :color="item.color"
             dark
-			@click="onClickMenu(item.link)"
+		      	@click="onClickMenu(item.link)"
           >
             <div class="d-flex flex-no-wrap justify-space-between">
               <div>

@@ -12,17 +12,17 @@ router.post('/admin/register', async (req, res) => {
     try{
       const form = new formaidable.IncomingForm()
       form.parse(req, async (error,fields,files) =>
-      {   
-          
+      {       
           const admin  = new Admin(fields)
           await Admin.find({email : admin.email}, async function (err, docs) 
             {
-            if (docs.length == 1) {
-                 res.json({ result: false, message: JSON.stringify(error) }); 
+            if(docs.length == 1) {
+                 res.json({ result: false, message: JSON.stringify(error)}); 
             }else{               
                   let result =  await admin.save();
                   res.json({result: true , message: JSON.stringify(result)})
             }
+            
           });
       })
     }catch(error){
