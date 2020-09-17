@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-
+const Schema = mongoose.Schema; 
 
 const quizSchema = new mongoose.Schema({
     quiz_name:{
@@ -13,12 +13,12 @@ const quizSchema = new mongoose.Schema({
     },
     quiz_time:{
         type: Number
-    }
+    }, 
+    quiz_question: [{ type: Schema.Types.ObjectId, ref: 'Question' }]
 },{
     timestamps: true
 })
  
 
 const Quiz = mongoose.model('Quiz', quizSchema ,'Quizs')
-
 module.exports = Quiz

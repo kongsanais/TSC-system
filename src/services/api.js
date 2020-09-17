@@ -2,6 +2,8 @@ import httpClient from "@/services/httpClient";
 import { server } from "@/services/constants";
 import * as apiAdmin from "@/services/api_admin.js"
 import * as apiReport  from "@/services/api_report.js"
+import * as apiQuiz  from "@/services/api_quiz.js"
+
 import router from "@/router";
 
 const isLoggedIn = () => {
@@ -116,5 +118,6 @@ export default {
   getAllApplicantByDate,
   updateRegStatus,
   ...apiAdmin,
-  ...apiReport
+  ...apiReport,
+  ...apiQuiz
 };

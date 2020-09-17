@@ -8,33 +8,12 @@ export const apiUrl = "http://localhost:3000";
 export const imageUrl = "http://localhost:3000/images";
 export const resumeUrl = "http://localhost:3000/resume"
 
-export const server = {
-  LOGIN_URL: `api/users/login`,
-  REGISTER_URL: `api/users`,
-  USER_PROFILE: `api/users/profile`,
-  LOGOUT_URL: `api/users/logout`,
-  UPDATE_PROFILE: `api/users/update`, 
-  GET_ALL_APP: `api/users/all/engineer`, 
-  GET_ALL_APP_BY_DATE: 'api/users/allByDate',
-  GET_ONE_APP: 'api/users/get_appProfile',
-  GET_STATUS_DATA : 'api/users/count_status',
-  GET_STATUS_DATA_REG_YEAR : 'api/users/count_reg_year',
-  GET_DATA_EXPORT_EXCEL: 'api/users/get_json_export',
-  UPDATE_REG_STATUS : 'api/users/update_reg_status',
-  ROLE:'role',
-  TRANSACTION_URL: `transaction`,
-  TOKEN_KEY: `token`,
-  USERNAME: `username`
-};
 
-export const admin = {
-  REGISTER_URL : 'api/admin/register',
-  LOGIN_URL : 'api/admin/login',
-  LOGOUT_URL : 'api/admin/logout',
-  TOKEN_KEY: `token`,
-  USERNAME: `username`,
-  ROLE:'role'
+
+export const quiz = {
+  ADD_QUIZ : 'api/quiz/add'
 }
+
 
 export const report = {
   USER_LIST : 'api/report/alluser',
@@ -53,5 +32,34 @@ export const report = {
   COUNT_GET_JSON_EXPORT_ENGINEER : 'api/report/get_json_export/engineer'
 }
 
+
+export const admin = {
+  REGISTER_URL : 'api/admin/register',
+  LOGIN_URL : 'api/admin/login',
+  LOGOUT_URL : 'api/admin/logout',
+  TOKEN_KEY: `token`,
+  USERNAME: `username`,
+  ROLE:'role'
+}
+
+
+export const server = {
+  LOGIN_URL: `api/users/login`,
+  REGISTER_URL: `api/users`,
+  USER_PROFILE: `api/users/profile`,
+  LOGOUT_URL: `api/users/logout`,
+  UPDATE_PROFILE: `api/users/update`, 
+  GET_ALL_APP: `api/users/all/engineer`, 
+  GET_ALL_APP_BY_DATE: 'api/users/allByDate',
+  GET_ONE_APP: 'api/users/get_appProfile',
+  GET_STATUS_DATA : 'api/users/count_status',
+  GET_STATUS_DATA_REG_YEAR : 'api/users/count_reg_year',
+  GET_DATA_EXPORT_EXCEL: 'api/users/get_json_export',
+  UPDATE_REG_STATUS : 'api/users/update_reg_status',
+  ROLE:'role',
+  TRANSACTION_URL: `transaction`,
+  TOKEN_KEY: `token`,
+  USERNAME: `username`
+};
 
 

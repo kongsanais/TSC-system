@@ -22,6 +22,16 @@
           >
             <v-icon left>mdi-pencil</v-icon> Examination
           </v-btn>
+
+         <v-btn
+            class="ma-2"
+            tile
+            outlined
+            color="#232F3E"
+            @click="onClickMenu('/')"
+          >
+            <v-icon left>mdi-pencil</v-icon> Add Quiz
+          </v-btn>
         </v-alert>
       </v-row>
     </v-container>
@@ -30,42 +40,6 @@
       <v-form @submit.prevent="saveQuiz" ref="form">
       <!-- {{ quiz }}
       {{ question_array }} -->
-      <v-row>
-        <v-progress-linear
-          color="black darken-1"
-          rounded
-          value="0"
-        ></v-progress-linear>
-        {{quiz}}
-        <v-col class="d-flex" xl="12" lg="12" md="12" sm="12" cols="12">
-          <b class="mt-5">Quiz Add</b>
-          <v-spacer></v-spacer>
-              <v-btn @click="saveQuiz()" class="ma-2" tile outlined color="success"><v-icon left>mdi-pencil</v-icon> SAVE </v-btn>
-        </v-col>
-        <v-col class="d-flex" xl="6" lg="6" md="6" sm="12" cols="12">
-          <v-text-field v-model="quiz.quiz_name" label="Quiz Name" clearable>
-          </v-text-field>
-        </v-col>
-        <v-col class="d-flex" xl="6" lg="6" md="6" sm="12" cols="12">
-          <v-select
-            v-model="quiz.quiz_type"
-            :items="['English', 'Specific']"
-            menu-props="auto"
-            label="Select Quiz Type"
-            hide-details
-            prepend-icon="mdi-format-list-bulleted-type"
-            single-line
-          ></v-select>
-        </v-col>
-        <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
-          <v-text-field
-            v-model="quiz.quiz_time"
-            prepend-icon="mdi-clock-time-ten-outline"
-            label="Time/Minute"
-            type="text"
-          ></v-text-field>
-        </v-col>
-      </v-row>
       <v-row>
         <v-spacer></v-spacer>
 
@@ -79,81 +53,7 @@
       <v-row>
         <!-- <v-btn @click="addDataOK">click</v-btn> -->
         <v-col class="d-flex" xl="12" lg="12" md="12" sm="12" cols="12">
-          <b class="mt-3">Question Add </b>
-    <v-dialog v-model="dialog" persistent max-width="600px">
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          class="ml-2"
-          color="primary"
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
-          <v-icon>mdi-plus-box-multiple</v-icon>
-           Add Question
-        </v-btn>
-      </template>
-      <v-card>
-        <v-card-title>
-          {{question_array}}
-          <span class="headline">Qustion Add</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-        <v-col class="d-flex" xl="12" lg="12" md="12" sm="12" cols="12">
-          <v-textarea
-            v-model="question_insert"
-            outlined
-            rows="5"
-            name="input-7-4"
-            label="Enter Question"
-          ></v-textarea>
-        </v-col>
-
-        <v-col class="d-flex" xl="12" lg="12" md="12" sm="12" cols="12">
-          <!-- <div><v-spacer></v-spacer><v-btn color="success" @click="newQ()">add</v-btn></div> -->
-          <!-- <v-btn color="success" @click="newQ()">add</v-btn> -->
-
-          <table width="100%">
-            <tr>
-
-             {{array_img}}
-                <td>
-                
-                <input type="file" @change="onFileSelected" />
-                
-
-                </td>
-              <td><v-btn  class="ma-1" color="success" @click="addAns()">add</v-btn></td>
-              </tr>
-            <tr v-for="(fund, index) in defaultFunds" :key="index"> 
-              <td>{{index+1}}) </td>
-              <td>
-                <v-text-field
-                  v-model="newEntries[index].ans"
-                  name="entryFund"
-                  type="text"
-                />
-              </td>
-              <td>
-                <v-checkbox v-model="newEntries[index].correct"></v-checkbox>
-              </td>
-              <td>
-                <v-btn @click="deleteRow(index)" color="error">delelte</v-btn>
-              </td>
-            </tr>
-          </table>
-
-        </v-col>
-      </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-          <v-btn color="success" type="submit" @click="submitQues()">Confirm</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog> 
+          <b class="mt-3">Question List </b>
   </v-col>
 </v-row>
 
@@ -204,7 +104,7 @@ export default {
     question_insert:"",
     newEntries: [{}],
     headers: [
-          { text: 'Question', value: '' },
+          { text: 'Quiz', value: '' },
           { text: 'Ans', value: '' },
     ],
     dialog: false,
