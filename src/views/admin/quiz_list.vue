@@ -18,17 +18,17 @@
             tile
             outlined
             color="#232F3E"
-            @click="onClickMenu('/')"
+            @click="onClickMenu('/admin_home')"
           >
-            <v-icon left>mdi-pencil</v-icon> Examination
+            <v-icon left>mdi-pencil</v-icon> Admin
           </v-btn>
 
-         <v-btn
+          <v-btn
             class="ma-2"
             tile
             outlined
             color="#232F3E"
-            @click="onClickMenu('/')"
+            @click="onClickMenu('/quiz_add')"
           >
             <v-icon left>mdi-pencil</v-icon> Add Quiz
           </v-btn>
@@ -38,45 +38,60 @@
 
     <v-container>
       <v-form @submit.prevent="saveQuiz" ref="form">
-      <!-- {{ quiz }}
-      {{ question_array }} -->
-      <v-row>
-        <v-spacer></v-spacer>
+        <v-card>
+          <v-card-title>
+            Quiz List
+            <v-spacer></v-spacer>
+            <v-text-field
+              v-model="search"
+              append-icon="mdi-magnify"
+              label="Search"
+              single-line
+              hide-details
+            ></v-text-field>
+          </v-card-title>
+          <v-data-table :search="search" :headers="headers" :items="item_quiz">
+            <template v-slot:item="{ item }">
+              <tr class="mb-2">
+                <td>{{ item.quiz_name }}</td>
+                <td>{{ item.quiz_type }}</td>
+                <td>{{ item.quiz_time }}</td>
+                <td>
 
-        <v-progress-linear
-          color="black darken-2"
-          rounded
-          value="0"
-        ></v-progress-linear>
-      </v-row>
+            <v-btn color="info" class="mr-1"  @click="onClickReviewTest(item._id)" fab x-small>
+              <v-icon>mdi-view-day-outline</v-icon>
+            </v-btn>
+            
+            <v-btn color="warning" class="mr-1" fab x-small>
+              <v-icon>mdi-playlist-edit</v-icon>
+            </v-btn>
 
-      <v-row>
-        <!-- <v-btn @click="addDataOK">click</v-btn> -->
-        <v-col class="d-flex" xl="12" lg="12" md="12" sm="12" cols="12">
-          <b class="mt-3">Question List </b>
-  </v-col>
-</v-row>
+            <v-btn color="error" class="mr-1" fab x-small>
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
 
-        
-            <v-data-table
-            max-width="100%"
-            :headers="headers"
-            class="elevation-2"
-          >
+                </td>
+              </tr>
+            </template>
           </v-data-table>
-
-        
-
-      <v-progress-linear color="black darken-2" rounded value="0">
-      </v-progress-linear>
-      <!-- <v-row>
-        <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
-          <v-alert border="top" color="blue lighten-2" dark>
-            Question Add
-          </v-alert>
-        </v-col> 
-    </v-row> -->
-    </v-form>
+        </v-card>
+        <v-progress-linear color="black darken-2" rounded value="0">
+        </v-progress-linear>
+      </v-form>
+    <v-dialog v-model="dialog_review_test" persistent max-width="600px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">Review Quiz</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+              <v-col cols="12" sm="6" md="4">
+                 test
+              </v-col>
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     </v-container>
   </v-card>
 </template>
@@ -85,94 +100,30 @@
 import api from "@/services/api";
 
 export default {
-  async mounted() {},
+  async mounted() {
+    const data = await api.getAllQuizlist();
+    console.log(data);
+    this.item_quiz = data;
+  },
   data: () => ({
-    quiz: {
-      quiz_name: null,
-      quiz_type: null,
-      quiz_time: null,
-    },
-    question_array: [],
-    ans_array: [],
-    defaultFunds: [
-      {
-        img: null,
-        ans: null,
-        correct: "",
-      },
-    ],
-    question_insert:"",
-    newEntries: [{}],
     headers: [
-          { text: 'Quiz', value: '' },
-          { text: 'Ans', value: '' },
+      { text: "Quiz Name", value: "quiz_name" },
+      { text: "Quiz Type", value: "quiz_type" },
+      { text: "Quiz Time", value: "quiz_time" },
+      { text: "Action", value: "" },
     ],
-    dialog: false,
-    imageURL: null,
-    image:null,
-    array_img:[]
+    item_quiz: [],
+    search: "",
+    dialog_review_test:false
   }),
   methods: {
-    onFileSelected(event) {
-
-      const reader = new FileReader();
-
-      reader.onload = event => {
-        this.imageURL = event.target.result;
-      };
-
-      reader.readAsDataURL(event.target.files[0]);
-      this.image = event.target.files[0];
-
-    },
-    addAns: function() {
-      this.newEntries.push({});
-      this.defaultFunds.push({ question: null, correct: "" });
-    },    
-    submitQues: function() {
-      var ansArray = []    
-      var tarndata;
-      
-      for(var i = 0 ; i < this.newEntries.length ; i++)
-      {
-        tarndata = { ans:this.newEntries[i].ans , correct:this.newEntries[i].correct }
-        console.log(this.newEntries[i].ans)
-        console.log(this.newEntries[i].correct)
-        ansArray.push(tarndata)
-      }
-
-      var json_data = {question : this.question_insert, ans:ansArray}
-      this.question_array.push(json_data)
-      this.array_img.push(this.image)
-      
-        
-    },
-     async saveQuiz(){
-
-        let formData = new FormData();
-        const { quiz_name, quiz_type, quiz_time } = this.quiz;
-        formData.append("quiz_name", quiz_name);
-        formData.append("quiz_type", quiz_type);
-        formData.append("quiz_time", quiz_time);
-        formData.append("ques",JSON.stringify(this.question_array)) 
-        
-        for (const i of Object.keys(this.array_img)) {
-            formData.append('files', this.array_img[i])
-        }
-        //for single//
-        // formData.append('file',this.array_img);
-        
-        await api.getReportAllAppbyDate(formData);
-        // var ques_ans = this.question_array;
-        // const data = await api.getReportAllAppbyDate(ques_ans)
-    },
     onClickMenu(link) {
       this.$router.push(link).catch((err) => {});
     },
-    deleteRow(index) {
-      this.defaultFunds.splice(index, 1);
-      this.newEntries.splice(index, 1);
-    },
+    onClickReviewTest(quiz_id){
+      alert(quiz_id)
+      this.dialog_review_test = true
+    }
   },
 };
 </script>

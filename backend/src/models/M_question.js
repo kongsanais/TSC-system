@@ -9,7 +9,10 @@ const questionSchema = new mongoose.Schema({
     ans: {
         type: Array
     },
-    quiz: { type: Schema.Types.ObjectId, ref: 'Quizs' },
+    img:{
+        type: String
+    },
+    Idquiz: { type: Schema.Types.ObjectId, ref: 'Quiz' },
 },)
  
 

@@ -13,7 +13,7 @@
       color="primary"
       elevation="2"
     >
-    <v-btn class="ma-2" tile  color="success" @click="onClickMenu('/onlinetest_admin')">
+    <v-btn class="ma-2" tile  color="success" @click="onClickMenu('/quiz_list')">
       <v-icon left>mdi-pencil</v-icon> Management Online Test
     </v-btn>
 

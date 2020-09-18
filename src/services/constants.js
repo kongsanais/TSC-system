@@ -11,7 +11,8 @@ export const resumeUrl = "http://localhost:3000/resume"
 
 
 export const quiz = {
-  ADD_QUIZ : 'api/quiz/add'
+  ADD_QUIZ : 'api/quiz/add',
+  QUIZ_LIST : 'api/quiz/quiz_list'
 }
 
 

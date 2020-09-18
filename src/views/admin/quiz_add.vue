@@ -36,9 +36,8 @@
           rounded
           value="0"
         ></v-progress-linear>
-        {{quiz}}
         <v-col class="d-flex" xl="12" lg="12" md="12" sm="12" cols="12">
-          <b class="mt-5">Quiz Add</b>
+          <b class="mt-5" ><h3>Quiz Add</h3></b>
           <v-spacer></v-spacer>
               <v-btn @click="saveQuiz()" class="ma-2" tile outlined color="success"><v-icon left>mdi-pencil</v-icon> SAVE </v-btn>
         </v-col>
@@ -76,11 +75,12 @@
         ></v-progress-linear>
       </v-row>
 
-      <v-row>
-        <!-- <v-btn @click="addDataOK">click</v-btn> -->
-        <v-col class="d-flex" xl="12" lg="12" md="12" sm="12" cols="12">
-          <b class="mt-3">Question Add </b>
-    <v-dialog v-model="dialog" persistent max-width="600px">
+
+        <v-card class="ma-2 ">
+          <v-card-title>
+            Quiz List
+            <v-spacer></v-spacer>
+      <v-dialog v-model="dialog" persistent max-width="600px">
       <template v-slot:activator="{ on, attrs }">
         <v-btn
           class="ml-2"
@@ -95,11 +95,10 @@
       </template>
       <v-card>
         <v-card-title>
-          {{question_array}}
           <span class="headline">Qustion Add</span>
         </v-card-title>
         <v-card-text>
-          <v-container>
+        <v-container>
         <v-col class="d-flex" xl="12" lg="12" md="12" sm="12" cols="12">
           <v-textarea
             v-model="question_insert"
@@ -109,23 +108,24 @@
             label="Enter Question"
           ></v-textarea>
         </v-col>
+                
+        <v-col>
+        <v-progress-linear
+          color="black darken-2"
+          rounded
+          value="0"
+        ></v-progress-linear></v-col>
+        <v-col class="d-flex" xl="12" lg="12" md="12" sm="12" cols="12">
+         Images : <input  class="ml-1" type="file" ref="fileupload" @change="onFileSelected" />
+        </v-col>
+
+        <v-col class="d-flex" xl="5" lg="5" md="6" sm="6" cols="12">
+        <v-btn color="success" @click="addAns()" class="mr-1"  x-small>add question</v-btn>
+        </v-col>
+        
 
         <v-col class="d-flex" xl="12" lg="12" md="12" sm="12" cols="12">
-          <!-- <div><v-spacer></v-spacer><v-btn color="success" @click="newQ()">add</v-btn></div> -->
-          <!-- <v-btn color="success" @click="newQ()">add</v-btn> -->
-
           <table width="100%">
-            <tr>
-
-             {{array_img}}
-                <td>
-                
-                <input type="file" @change="onFileSelected" />
-                
-
-                </td>
-              <td><v-btn  class="ma-1" color="success" @click="addAns()">add</v-btn></td>
-              </tr>
             <tr v-for="(fund, index) in defaultFunds" :key="index"> 
               <td>{{index+1}}) </td>
               <td>
@@ -139,36 +139,79 @@
                 <v-checkbox v-model="newEntries[index].correct"></v-checkbox>
               </td>
               <td>
-                <v-btn @click="deleteRow(index)" color="error">delelte</v-btn>
+               <v-btn  @click="deleteRow(index)" color="error" class="mr-1" fab x-small>
+                 <v-icon>mdi-delete</v-icon>
+               </v-btn>
               </td>
             </tr>
           </table>
-
         </v-col>
       </v-container>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
+           <v-btn color="error" @click="dialog = false"  dark>CLOSE</v-btn>
           <v-btn color="success" type="submit" @click="submitQues()">Confirm</v-btn>
         </v-card-actions>
       </v-card>
-    </v-dialog> 
-  </v-col>
-</v-row>
-
-        
-            <v-data-table
-            max-width="100%"
-            :headers="headers"
-            class="elevation-2"
-          >
+    </v-dialog>
+    </v-card-title>
+        <!-- {{question_array}}<br>
+        {{array_img}}<br>
+        ---------------<br>
+        {{newEntries}}<br>
+        {{defaultFunds}} -->
+          <v-data-table  :headers="headers" :items="itemsWithIndex" >
+            <template v-slot:item="{ item }">
+              <tr class="mb-2">
+                <td>{{item.index+1}} </td>
+                <td>
+                  <img
+                      @click="showZoomin(array_imageURL[item.index])"
+                      v-if="array_imageURL[item.index]"
+                      :src="array_imageURL[item.index]"
+                      style="height: 50px; width: 50px;"
+                    />
+                </td>
+                <td>
+                {{item.question}}
+                </td>
+                <td>
+                  <ul id="example-1">
+                  <li v-for="(item,index) in item.ans" :key="index">
+                    {{index+1}} ) {{ item.ans }}
+                  </li>
+                  </ul>
+                </td>
+                <td>
+                  <v-btn color="error" @click="deleteQuiz(item.index)" fab x-small dark>
+                    <v-icon>mdi-card-account-phone-outline</v-icon>
+                  </v-btn>
+                </td>
+              </tr>
+            </template>
           </v-data-table>
+        </v-card>
 
+    <v-dialog v-model="show_big_img" persistent max-width="600px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">View</span>
+        </v-card-title>
+        <v-card-text>
+            <v-row>
+              <v-col class="d-flex" xl="12" lg="12" md="12" sm="12" cols="12">
+               <v-img  style="height: 100%; width: 100%;"  :src="img_ondialog"></v-img>
+              </v-col>
+            </v-row>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="show_big_img = false">Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
         
-
-      <v-progress-linear color="black darken-2" rounded value="0">
-      </v-progress-linear>
       <!-- <v-row>
         <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
           <v-alert border="top" color="blue lighten-2" dark>
@@ -204,11 +247,17 @@ export default {
     question_insert:"",
     newEntries: [{}],
     headers: [
-          { text: 'Question', value: '' },
-          { text: 'Ans', value: '' },
+          { text: 'Index', value: 'index' },
+          { text: 'Images', value: 'index' },
+          { text: 'Question', value: 'question' },
+          { text: 'Ans' , value: ''},
+          { text: 'Action',value:'index'}
     ],
     dialog: false,
-    imageURL: null,
+    show_big_img:false,
+    img_ondialog:null,
+    imageURL: [],
+    array_imageURL:[],
     image:null,
     array_img:[]
   }),
@@ -218,7 +267,7 @@ export default {
       const reader = new FileReader();
 
       reader.onload = event => {
-        this.imageURL = event.target.result;
+        this.imageURL =  event.target.result ;
       };
 
       reader.readAsDataURL(event.target.files[0]);
@@ -232,20 +281,22 @@ export default {
     submitQues: function() {
       var ansArray = []    
       var tarndata;
-      
       for(var i = 0 ; i < this.newEntries.length ; i++)
       {
         tarndata = { ans:this.newEntries[i].ans , correct:this.newEntries[i].correct }
-        console.log(this.newEntries[i].ans)
-        console.log(this.newEntries[i].correct)
         ansArray.push(tarndata)
       }
 
       var json_data = {question : this.question_insert, ans:ansArray}
       this.question_array.push(json_data)
       this.array_img.push(this.image)
+      this.array_imageURL.push(this.imageURL)
       
-        
+      this.question_insert = null
+      this.defaultFunds = [ { "img": null, "ans": null, "correct": "" } ]
+      this.newEntries = [ {} ]
+      this.$refs.fileupload.value=null;
+      this.dialog = false
     },
      async saveQuiz(){
 
@@ -256,15 +307,19 @@ export default {
         formData.append("quiz_time", quiz_time);
         formData.append("ques",JSON.stringify(this.question_array)) 
         
-        for (const i of Object.keys(this.array_img)) {
+        for (const i of Object.keys(this.array_img)) 
+        {
             formData.append('files', this.array_img[i])
         }
         //for single//
         // formData.append('file',this.array_img);
-        
-        await api.getReportAllAppbyDate(formData);
+        await api.addQuiz(formData);
         // var ques_ans = this.question_array;
         // const data = await api.getReportAllAppbyDate(ques_ans)
+    },
+    showZoomin(img){
+     this.show_big_img = true;
+     this.img_ondialog = img
     },
     onClickMenu(link) {
       this.$router.push(link).catch((err) => {});
@@ -273,6 +328,20 @@ export default {
       this.defaultFunds.splice(index, 1);
       this.newEntries.splice(index, 1);
     },
-  },
+    deleteQuiz(index){
+      this.question_array.splice(index, 1); 
+      this.array_img.splice(index,1)   
+      this.array_imageURL.splice(index,1)  
+    }
+  }, 
+  computed: {
+    itemsWithIndex() {
+      return this.question_array.map(
+        (items, index) => ({
+          ...items,
+          index: index
+        }))
+    }
+  }
 };
 </script>

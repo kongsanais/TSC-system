@@ -14,7 +14,10 @@ const quizSchema = new mongoose.Schema({
     quiz_time:{
         type: Number
     }, 
-    quiz_question: [{ type: Schema.Types.ObjectId, ref: 'Question' }]
+    quiz_question: [{ 
+        type: Schema.Types.ObjectId, 
+        ref: 'Question' 
+    }]
 },{
     timestamps: true
 })
