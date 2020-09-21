@@ -71,11 +71,7 @@ router.post('/quiz/add', upload.array('files',10), async (req,res)=>{
       });
       console.log(result_qes)
     }
-
-     
     res.send(result_qes)
-
-
 })
 
 
@@ -85,20 +81,26 @@ router.get('/quiz/quiz_list', async (req,res)=>{
 })
 
 
-router.get('/quiz/show', async (req,res)=>{
+router.post('/quiz/show', async (req,res)=>{
+  let q_id = req.body.q_id;
+  Quiz.findOne()
+  .populate('quiz_question')
+  .where('_id').equals(q_id)
+  .exec(function (err, show_quiz) {
+    if (err) return handleError(err);
+    console.log(show_quiz)
+    res.json({show_quiz})
+  });
 
-  // Quiz.find().populate('quiz_question').sort({createdAt: -1}).exec(function (err, data) {
+  // Question.find()
+  // .populate('quiz')
+  // .where('Idquiz').equals(q_id)
+  // .exec(function (err, show_quiz) {
   //   if (err) return handleError(err);
-  //   console.log(data);
-  //   res.send(data)
+  //   console.log(show_quiz);
+  //   res.send({show_quiz})
   // });
 
-  Question.find().populate('quiz').
-  exec(function (err, data) {
-    if (err) return handleError(err);
-    console.log(data);
-    res.send(data)
-  });
 
 })
 

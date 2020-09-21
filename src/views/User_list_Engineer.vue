@@ -625,7 +625,7 @@ export default {
         XLSX.utils.book_append_sheet(wb, dataWS)
         XLSX.writeFile(wb,'export.xlsx')
        },
-      async selectAll(){
+       async selectAll(){
         this.field_selected = this.field_data_export
        }
     }

@@ -6,16 +6,19 @@
 
 	<!--questionBox-->
 	<div class="questionBox" id="app">
-
-			<!--qusetionContainer-->
+    
+	   <!--qusetionContainer-->
       <v-card>
          <!-- {{quiz.questions.length}}
          {{questionIndex}}
          {{quiz.questions.length}} -->
         <div >
-          Total score: {{ score() }} / {{ quiz.questions.length }}
-          {{questionIndex}} : {{quiz.questions.length}} 
-          <v-alert>Complete Quiz</v-alert>
+          <!-- Total score: {{ score() }} / {{ quiz.questions.length }} -->
+          
+          <!-- <v-alert>Complete Quiz</v-alert> -->
+          {{title_quiz.quiz_name}}
+          {{title_quiz.quiz_type}}
+          {{title_quiz.quiz_time}}
         </div>
 
 			<div v-if="questionIndex<quiz.questions.length" v-bind:key="questionIndex">
@@ -23,15 +26,14 @@
 				<header>
 					<!--progress-->
 					<div>
-            <h1 class="title is-6">Quiz</h1>
-						<progress class="progress is-info is-small" :value="(questionIndex/quiz.questions.length)*100" max="100">{{(questionIndex/quiz.questions.length)*100}}%</progress>
-						<p>{{(questionIndex/quiz.questions.length)*100}}% complete</p>
+            <h1 class="title is-6">Quiz ({{questionIndex}} / {{quiz.questions.length}})</h1>
+
+	  <progress class="progress is-info is-small" :value="(questionIndex/quiz.questions.length)*100" 
+      max="100">{{(questionIndex/quiz.questions.length)*100}}%</progress>
+						<!-- <p>{{(questionIndex/quiz.questions.length)*100}}% complete</p> -->
 					</div>
 					<!--/progress-->
 				</header>
-
-            {{quiz.questions.length}}
-            {{quiz}}
 		<!-- questionTitle -->
      <v-alert
       class="ma-2"
@@ -77,17 +79,37 @@
 import api from "@/services/api";
 
 export default {
+ 
  async  mounted () {
-    var quiz_data_id =  this.quizdata;
-    this.quizdata = await api.getquizShow({quiz_data_id}); 
 
-    this.quiz = {
-      questions: this.quizdata
+   if(temp_id == null){
+       let   q_id = localStorage.getItem("quiz_id");
+       this.quizdata = await api.getquizShow({q_id});    
+   }else{
+       var temp_id = this.quiz_id;
+       localStorage.setItem("quiz_id",temp_id);
+       let   q_id = localStorage.getItem("quiz_id");
+       this.quizdata = await api.getquizShow({q_id});
+   }
+
+   this.title_quiz.quiz_name = this.quizdata.quiz_name
+   this.title_quiz.quiz_type = this.quizdata.quiz_type
+   this.title_quiz.quiz_time = this.quizdata.quiz_time
+
+   this.quiz = {
+      questions: this.quizdata.quiz_question
    },
+
    this.userResponses = Array(this.quiz.questions.length).fill(null);
-  },  
+  },
+  props: ['quiz_id'],
   data() {
     return {
+      title_quiz: {
+        quiz_name:"",
+        quiz_type:"",
+        quiz_time:""  
+      },
       quiz: null,
       questionIndex: 0,
       userResponses: "",
@@ -124,7 +146,8 @@ export default {
                   this.userResponses[i]
                ] !== "undefined" &&
                this.quiz.questions[i].ans[this.userResponses[i]].correct
-            ) {
+            ) 
+            {
                score = score + 1;
             }
          }

@@ -18,8 +18,23 @@ import Admin_login from "@/views/admin/loginAdmin.vue"
 import Admin_home from "@/views/admin/homeAdmin.vue"
 import quiz_add from "@/views/admin/quiz_add.vue"
 import quiz_list  from "@/views/admin/quiz_list.vue"
+import quiz_show  from "@/views/admin/quiz_show.vue"
+import page1  from "@/views/test/page1.vue"
+import page2  from "@/views/test/page2.vue"
 Vue.use(VueRouter);
 const routes = [
+  {
+    path: "/page1",
+    name: "page1",
+    component: page1,
+    props: true
+  },
+  {
+    path: "/page2",
+    name: "page2",
+    component: page2,
+    props: true
+  },
   {
     path: "/home",
     name: "home",
@@ -79,7 +94,7 @@ const routes = [
   {   
     path: "/profile_show_engineer/:_id",
     name: "profile_show_engineer",
-    component:Profile_show_engineer
+    component:Profile_show_engineer,
   },
   {   
     path: "/profile_show_production/:_id",
@@ -104,7 +119,14 @@ const routes = [
   {
     path : "/quiz_list",
     name : "quiz_list",
-    component: quiz_list 
+    component: quiz_list,
+    props: true
+  },
+  {
+    path : "/quiz_show",
+    name : "quiz_show",
+    component : quiz_show,
+    props :true 
   },
   {
     path: "/test",

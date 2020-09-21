@@ -78,20 +78,6 @@
         <v-progress-linear color="black darken-2" rounded value="0">
         </v-progress-linear>
       </v-form>
-    <v-dialog v-model="dialog_review_test" persistent max-width="600px">
-      <v-card>
-        <v-card-title>
-          <span class="headline">Review Quiz</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-              <v-col cols="12" sm="6" md="4">
-                 test
-              </v-col>
-          </v-container>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
     </v-container>
   </v-card>
 </template>
@@ -121,8 +107,7 @@ export default {
       this.$router.push(link).catch((err) => {});
     },
     onClickReviewTest(quiz_id){
-      alert(quiz_id)
-      this.dialog_review_test = true
+      this.$router.push({ name: 'quiz_show', params: {quiz_id:quiz_id}})
     }
   },
 };
