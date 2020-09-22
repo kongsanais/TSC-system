@@ -52,7 +52,8 @@
       </router-link>
 
       <v-list >
-        <v-list-item-group v-model="selectedMenu" mandatory color="primary" v-if="$store.state.isLogged && ($store.state.role != 'Admin')" >
+         <!-- v-if="$store.state.isLogged && ($store.state.role != 'Admin')" -->
+        <v-list-item-group v-model="selectedMenu" mandatory color="primary" >
           <v-subheader>MENUS</v-subheader>
           <v-list-item
             class="tile"
@@ -72,7 +73,7 @@
 
         </v-list-item-group>
 
-        <v-list-item-group v-else >
+        <!-- <v-list-item-group v-else >
           <v-subheader>MENUS ADMIN</v-subheader>
           <v-list-item
             class="tile"
@@ -90,7 +91,7 @@
           </v-list-item>
 
 
-        </v-list-item-group>
+        </v-list-item-group> -->
       </v-list>
     </v-navigation-drawer>
 

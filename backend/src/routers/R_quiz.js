@@ -36,9 +36,9 @@ var upload = multer({
 });
 
 router.post('/quiz/add', upload.array('files',10), async (req,res)=>{
-    
-   const obj = JSON.parse(JSON.stringify(req.body));
-   
+    try {
+
+    const obj = JSON.parse(JSON.stringify(req.body));
     //insert quiz//
     const quiz  = new Quiz(obj)
     var result_q =  await quiz.save();
@@ -47,21 +47,24 @@ router.post('/quiz/add', upload.array('files',10), async (req,res)=>{
 
     // only record quiz//
     const reqFiles = []
-    const url = req.protocol + '://' + req.get('host')
+
     for (var i = 0; i < req.files.length; i++) {
-      reqFiles.push(url + '/quiz/' + req.files[i].filename)
+      reqFiles.push(req.files[i].filename)
     }
-    
+
     // insert question //
     const ques_obj  =  JSON.parse(obj.ques);//convert to obj
+
     for(var i = 0 ; i < ques_obj.length ; i++)
     {
+      
       const ques  = new Question({...ques_obj[i],Idquiz:my_quiz_id,img:reqFiles[i]})
       var result_qes =  await ques.save();
       let my_ques_id = result_qes._id
+
       Quiz.findOneAndUpdate(
         { _id: my_quiz_id }, 
-        { $push: {quiz_question:my_ques_id } },
+        { $push: {quiz_question:my_ques_id }},
        function (error, success) {
           if (error) {
              console.log(error);
@@ -69,9 +72,15 @@ router.post('/quiz/add', upload.array('files',10), async (req,res)=>{
             console.log(success);
           }
       });
-      console.log(result_qes)
+
     }
-    res.send(result_qes)
+    res.send({ result: true, message: JSON.stringify(result_qes)}) 
+  }
+  catch(error){
+    console.log(error)
+    res.json({ result: false, message: JSON.stringify(error)});
+  }
+
 })
 
 

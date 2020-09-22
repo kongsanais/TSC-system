@@ -4,7 +4,7 @@ import router from "@/router";
 
 export const addQuiz = async values => {
     let result  =  await  httpClient.post(quiz.ADD_QUIZ,values);
-    return result;
+    return result.data.result;
 }
 
 export const getAllQuizlist  = async () => {

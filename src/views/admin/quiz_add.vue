@@ -12,15 +12,14 @@
           <!-- <v-btn class="ma-2" tile outlined color="info" @click="onClickMenu('/')">
       <v-icon left>mdi-pencil</v-icon> Department
     </v-btn> -->
-
           <v-btn
             class="ma-2"
             tile
             outlined
             color="#232F3E"
-            @click="onClickMenu('/')"
+            @click="onClickMenu('/quiz_list')"
           >
-            <v-icon left>mdi-pencil</v-icon> Examination
+            <v-icon left>mdi-pencil</v-icon> Quiz List
           </v-btn>
         </v-alert>
       </v-row>
@@ -61,7 +60,7 @@
             v-model="quiz.quiz_time"
             prepend-icon="mdi-clock-time-ten-outline"
             label="Time/Minute"
-            type="text"
+            type="number"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -211,6 +210,45 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+        <v-dialog v-model="dialog_messenger.status" persistent max-width="480">
+      <v-card>
+        <v-card-title class="headline grey lighten-2">
+          {{ dialog_messenger.title }}
+          <v-icon color="warning" class="mdi mdi-36px ml-2">
+            mdi-alert-circle-outline
+          </v-icon>
+        </v-card-title>
+
+        <v-card-text class="mt-3 pd-0">
+          <h2 class="mb-3">{{ dialog_messenger.text }}</h2>
+          <h3>
+            <p><span v-html="dialog_messenger.sub_text"></span></p>
+          </h3>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <!-- <v-btn
+            color="green darken-1"
+            text
+            @click="dialog_messenger.status = false"
+          >
+            Disagree
+          </v-btn> -->
+
+          <v-btn
+            class="primary"
+            light
+            text
+            @click="onClickMenu(dialog_messenger.router)"
+          >
+            Agree
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
         
       <!-- <v-row>
         <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
@@ -259,7 +297,14 @@ export default {
     imageURL: [],
     array_imageURL:[],
     image:null,
-    array_img:[]
+    array_img:[],
+   dialog_messenger: {
+      status: false,
+      title: "Message",
+      text: "",
+      sub_text: "",
+      router: "",
+    },
   }),
   methods: {
     onFileSelected(event) {
@@ -311,18 +356,27 @@ export default {
         {
             formData.append('files', this.array_img[i])
         }
-        //for single//
-        // formData.append('file',this.array_img);
-        await api.addQuiz(formData);
-        // var ques_ans = this.question_array;
-        // const data = await api.getReportAllAppbyDate(ques_ans)
+        const result =  await api.addQuiz(formData);
+        if(result){
+          this.dialog_messenger.text = "Add Quiz Success";
+          this.dialog_messenger.sub_text = "";
+          this.dialog_messenger.status = true;
+          this.dialog_messenger.router = "/quiz_list";
+        }else{
+          this.dialog_messenger.text = "Check your Information";
+          this.dialog_messenger.sub_text = "";
+          this.dialog_messenger.status = true;
+        }
     },
     showZoomin(img){
      this.show_big_img = true;
      this.img_ondialog = img
     },
     onClickMenu(link) {
-      this.$router.push(link).catch((err) => {});
+    this.dialog_messenger.status = false;
+      if (link == "/quiz_list") {
+        this.$router.push(link).catch((err) => {});
+      }
     },
     deleteRow(index) {
       this.defaultFunds.splice(index, 1);
