@@ -1,5 +1,6 @@
 <template>
-  <v-card max-width="1000" class="mx-auto ma-7">
+ <v-container>
+   <v-card>
     <v-container class="pa-1">
       <v-row class="mt-1" dense>
         <v-alert
@@ -9,29 +10,27 @@
           color="primary"
           elevation="2"
         >
-          <!-- <v-btn class="ma-2" tile outlined color="info" @click="onClickMenu('/')">
-      <v-icon left>mdi-pencil</v-icon> Department
-    </v-btn> -->
 
-          <v-btn
+           <v-btn
             class="ma-2"
             tile
             outlined
-            color="#232F3E"
+            color="#6D8764"
             @click="onClickMenu('/admin_home')"
           >
-            <v-icon left>mdi-pencil</v-icon> Admin
+             <v-icon left>mdi-shield-account</v-icon> Admin
           </v-btn>
 
           <v-btn
             class="ma-2"
             tile
             outlined
-            color="#232F3E"
+            color="primary"
             @click="onClickMenu('/quiz_add')"
           >
-            <v-icon left>mdi-pencil</v-icon> Add Quiz
+            <v-icon left>mdi-folder-multiple-plus-outline</v-icon> Add Quiz
           </v-btn>
+
         </v-alert>
       </v-row>
     </v-container>
@@ -50,9 +49,11 @@
               hide-details
             ></v-text-field>
           </v-card-title>
-          <v-data-table :search="search" :headers="headers" :items="item_quiz">
+          
+          <v-data-table :search="search" :headers="headers" :items="itemsWithIndex">
             <template v-slot:item="{ item }">
               <tr class="mb-2">
+                <td>{{ item.index + 1}}</td>
                 <td>{{ item.quiz_name }}</td>
                 <td>{{ item.quiz_type }}</td>
                 <td>{{ item.quiz_time }}</td>
@@ -62,11 +63,11 @@
               <v-icon>mdi-view-day-outline</v-icon>
             </v-btn>
             
-            <v-btn color="warning" class="mr-1" fab x-small>
+            <v-btn color="warning" class="mr-1"  @click="onClickEditQuiz(item._id)" fab  x-small>
               <v-icon>mdi-playlist-edit</v-icon>
             </v-btn>
 
-            <v-btn color="error" class="mr-1" fab x-small>
+            <v-btn color="error" class="mr-1" @click="dialog_messenger.status = true,qq_id=item._id" fab x-small>
               <v-icon>mdi-delete</v-icon>
             </v-btn>
 
@@ -75,24 +76,63 @@
             </template>
           </v-data-table>
         </v-card>
-        <v-progress-linear color="black darken-2" rounded value="0">
-        </v-progress-linear>
       </v-form>
+
     </v-container>
+    
+    
+    <v-dialog v-model="dialog_messenger.status" persistent max-width="480">
+      <v-card>
+        <v-card-title class="headline grey lighten-2">
+          {{ dialog_messenger.title }}
+          <v-icon color="warning" class="mdi mdi-36px ml-2">
+            mdi-alert-circle-outline
+          </v-icon>
+        </v-card-title>
+
+        <v-card-text class="mt-3 pd-0">
+          <h2 class="mb-3">{{ dialog_messenger.text }}</h2>
+          <h3>
+            <p><span v-html="dialog_messenger.sub_text"></span></p>
+          </h3>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn
+            color="error"
+            @click="dialog_messenger.status = false"
+          >
+            close
+          </v-btn>
+
+          <v-btn
+            class="primary"
+            light
+            text
+            @click="onClickRemoveQuiz(qq_id)"
+          >
+            Agree
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
+  </v-container>
 </template>
 
 <script>
 import api from "@/services/api";
-
 export default {
   async mounted() {
     const data = await api.getAllQuizlist();
-    console.log(data);
     this.item_quiz = data;
   },
   data: () => ({
+    qq_id:"",
     headers: [
+      { text: "Index", value: "index" },
       { text: "Quiz Name", value: "quiz_name" },
       { text: "Quiz Type", value: "quiz_type" },
       { text: "Quiz Time", value: "quiz_time" },
@@ -100,7 +140,14 @@ export default {
     ],
     item_quiz: [],
     search: "",
-    dialog_review_test:false
+    dialog_review_test:false,
+    dialog_messenger: {
+      status: false,
+      title: "Message",
+      text: "Are you sure delete this quiz ?",
+      sub_text: "",
+      router: "",
+    },
   }),
   methods: {
     onClickMenu(link) {
@@ -108,7 +155,27 @@ export default {
     },
     onClickReviewTest(quiz_id){
       this.$router.push({ name: 'quiz_show', params: {quiz_id:quiz_id}})
-    }
+    },
+    onClickEditQuiz(quiz_id){
+      this.$router.push({ name: 'quiz_edit', params: {quiz_id:quiz_id}})
+    },
+    async onClickRemoveQuiz(quiz_id){
+      const data = await api.removeQuiz({quiz_id})
+      if(data.result === true ){
+        this.dialog_messenger.status  =  false 
+        const data = await api.getAllQuizlist();
+        this.item_quiz = data;
+      }
+    }///remove quiz
   },
+  computed: {
+    itemsWithIndex() {
+      return this.item_quiz.map(
+        (items, index) => ({
+          ...items,
+          index: index
+        }))
+    }
+  }
 };
 </script>

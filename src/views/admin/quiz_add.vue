@@ -19,7 +19,7 @@
             color="#232F3E"
             @click="onClickMenu('/quiz_list')"
           >
-            <v-icon left>mdi-pencil</v-icon> Quiz List
+            <v-icon left>mdi-order-bool-descending</v-icon> Quiz List
           </v-btn>
         </v-alert>
       </v-row>
@@ -41,15 +41,20 @@
               <v-btn @click="saveQuiz()" class="ma-2" tile outlined color="success"><v-icon left>mdi-pencil</v-icon> SAVE </v-btn>
         </v-col>
         <v-col class="d-flex" xl="6" lg="6" md="6" sm="12" cols="12">
-          <v-text-field v-model="quiz.quiz_name" label="Quiz Name" clearable>
+          <v-text-field 
+          v-model="quiz.quiz_name" 
+          label="Quiz Name" 
+          :rules="[(v1) => !!v1 || 'Please Enter Quiz Name']"
+          clearable>
           </v-text-field>
         </v-col>
         <v-col class="d-flex" xl="6" lg="6" md="6" sm="12" cols="12">
           <v-select
             v-model="quiz.quiz_type"
-            :items="['English', 'Specific']"
+            :items="['English', 'Specific','Management']"
             menu-props="auto"
             label="Select Quiz Type"
+            :rules="[(v1) => !!v1 || 'Please Select Quiz Type']"
             hide-details
             prepend-icon="mdi-format-list-bulleted-type"
             single-line
@@ -61,6 +66,7 @@
             prepend-icon="mdi-clock-time-ten-outline"
             label="Time/Minute"
             type="number"
+            :rules="[(v1) => !!v1 || 'Please Enter Time / Minute']"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -79,6 +85,7 @@
           <v-card-title>
             Quiz List
             <v-spacer></v-spacer>
+            
       <v-dialog v-model="dialog" persistent max-width="600px">
       <template v-slot:activator="{ on, attrs }">
         <v-btn
@@ -105,6 +112,7 @@
             rows="5"
             name="input-7-4"
             label="Enter Question"
+            :rules="[(v1) => !!v1 || 'Please Enter Question']"
           ></v-textarea>
         </v-col>
                 
@@ -184,7 +192,7 @@
                 </td>
                 <td>
                   <v-btn color="error" @click="deleteQuiz(item.index)" fab x-small dark>
-                    <v-icon>mdi-card-account-phone-outline</v-icon>
+                    <v-icon>mdi-delete</v-icon>
                   </v-btn>
                 </td>
               </tr>
@@ -211,7 +219,7 @@
       </v-card>
     </v-dialog>
 
-        <v-dialog v-model="dialog_messenger.status" persistent max-width="480">
+    <v-dialog v-model="dialog_messenger.status" persistent max-width="480">
       <v-card>
         <v-card-title class="headline grey lighten-2">
           {{ dialog_messenger.title }}
@@ -298,7 +306,7 @@ export default {
     array_imageURL:[],
     image:null,
     array_img:[],
-   dialog_messenger: {
+    dialog_messenger: {
       status: false,
       title: "Message",
       text: "",
@@ -308,16 +316,12 @@ export default {
   }),
   methods: {
     onFileSelected(event) {
-
       const reader = new FileReader();
-
       reader.onload = event => {
         this.imageURL =  event.target.result ;
       };
-
       reader.readAsDataURL(event.target.files[0]);
       this.image = event.target.files[0];
-
     },
     addAns: function() {
       this.newEntries.push({});
@@ -344,14 +348,13 @@ export default {
       this.dialog = false
     },
      async saveQuiz(){
-
         let formData = new FormData();
         const { quiz_name, quiz_type, quiz_time } = this.quiz;
         formData.append("quiz_name", quiz_name);
         formData.append("quiz_type", quiz_type);
         formData.append("quiz_time", quiz_time);
         formData.append("ques",JSON.stringify(this.question_array)) 
-        
+
         for (const i of Object.keys(this.array_img)) 
         {
             formData.append('files', this.array_img[i])

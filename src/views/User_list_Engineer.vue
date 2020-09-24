@@ -136,7 +136,7 @@
             </v-spacer>
             
     <v-dialog v-model="data_dateTemplete.date_dialog" hide-overlay persistent max-width="600px">
-      <template v-slot:activator="{ on, attrs }">
+     <template v-slot:activator="{ on, attrs }">
      <v-btn color="indigo" dark class="mb-4 mr-2" v-bind="attrs"  v-on="on">
               <v-icon left>mdi-account-search-outline</v-icon>
               <span>Filter</span>
@@ -384,9 +384,9 @@ export default {
     LineChart
   },
  async  mounted () {
-        await this.loadApplicant();
+        await this.loadApplicant()
         await this.getCardData()
-        await this.fillData();
+        await this.fillData()
   },
   data() {
     return {

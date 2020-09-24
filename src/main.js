@@ -8,10 +8,8 @@ Vue.config.productionTip = false
 import Vue2Filters from "vue2-filters";
 import { imageUrl } from "@/services/constants";
 import { resumeUrl} from "@/services/constants";
+import { quizImgUrl} from "@/services/constants";
 import moment from "moment";
-
-Vue.use(Vue2Filters);
-Vue.use(require('vue-moment'));
 
 new Vue({
   router,
@@ -20,8 +18,10 @@ new Vue({
   render: h => h(App)
 }).$mount('#app')
 
-import VueFriendlyIframe from 'vue-friendly-iframe';
-Vue.use(VueFriendlyIframe);
+
+
+Vue.use(Vue2Filters);
+Vue.use(require('vue-moment'));
 
 
 Vue.filter("formatDate", function(value) {
@@ -39,3 +39,7 @@ Vue.filter("resumeUrl", function(resume) {
   return `${resumeUrl}/${resume}`;
 });
 
+
+Vue.filter("quizImgUrl", function(quiz_img) {
+  return `${quizImgUrl}/${quiz_img}`;
+});

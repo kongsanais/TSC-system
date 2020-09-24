@@ -19,6 +19,8 @@ import Admin_home from "@/views/admin/homeAdmin.vue"
 import quiz_add from "@/views/admin/quiz_add.vue"
 import quiz_list  from "@/views/admin/quiz_list.vue"
 import quiz_show  from "@/views/admin/quiz_show.vue"
+import quiz_edit  from "@/views/admin/quiz_edit.vue" 
+import depart_list from "@/views/admin/depart_list.vue"
 import page1  from "@/views/test/page1.vue"
 import page2  from "@/views/test/page2.vue"
 Vue.use(VueRouter);
@@ -129,9 +131,20 @@ const routes = [
     props :true 
   },
   {
+    path : "/quiz_edit",
+    name : "quiz_edit",
+    component : quiz_edit,
+    props :true 
+  },
+  {
     path: "/test",
     name: "test",
     component: Test
+  },
+  {
+    path: "/depart_list",
+    name: "depart_list",
+    component : depart_list
   },
   {
     path: "/",

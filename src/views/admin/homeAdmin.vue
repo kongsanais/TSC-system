@@ -13,9 +13,19 @@
       color="primary"
       elevation="2"
     >
+    
     <v-btn class="ma-2" tile  color="success" @click="onClickMenu('/quiz_list')">
-      <v-icon left>mdi-pencil</v-icon> Management Online Test
+      <v-icon left>mdi-checkbox-multiple-blank</v-icon> Management Online Test
     </v-btn>
+    
+    <v-btn 
+          class="ma-2" 
+          tile 
+          color="#5D83B2" 
+          dark
+          @click="onClickMenu('/depart_list')">
+           <v-icon left>mdi-pencil</v-icon> Department
+   </v-btn>
 
     </v-alert>
       </v-row>

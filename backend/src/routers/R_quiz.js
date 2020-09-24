@@ -7,7 +7,6 @@ const formaidable  = require("formidable")
 const path = require("path")
 const fs  = require("fs-extra")
 const multer = require('multer')
-
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.resolve("./uploaded/quiz/"));
@@ -47,7 +46,6 @@ router.post('/quiz/add', upload.array('files',10), async (req,res)=>{
 
     // only record quiz//
     const reqFiles = []
-
     for (var i = 0; i < req.files.length; i++) {
       reqFiles.push(req.files[i].filename)
     }
@@ -80,7 +78,20 @@ router.post('/quiz/add', upload.array('files',10), async (req,res)=>{
     console.log(error)
     res.json({ result: false, message: JSON.stringify(error)});
   }
+})
 
+
+
+
+router.post('/quiz/remove', async (req, res) => {
+  try {
+      let q_id = req.body.quiz_id
+      const quiz = await Quiz.findOneAndDelete({ _id: q_id})
+      const question  = await Question.deleteMany({ Idquiz: q_id}) 
+      res.json({ quiz: quiz, question: question,result: true});
+  } catch (e) {
+      res.status(500).send(e)
+  }
 })
 
 
@@ -97,30 +108,82 @@ router.post('/quiz/show', async (req,res)=>{
   .where('_id').equals(q_id)
   .exec(function (err, show_quiz) {
     if (err) return handleError(err);
-    console.log(show_quiz)
+    //console.log(show_quiz)
     res.json({show_quiz})
   });
-
-  // Question.find()
-  // .populate('quiz')
-  // .where('Idquiz').equals(q_id)
-  // .exec(function (err, show_quiz) {
-  //   if (err) return handleError(err);
-  //   console.log(show_quiz);
-  //   res.send({show_quiz})
-  // });
+})
 
 
+router.post('/quiz/edit_question', upload.single('file'), async (req,res)=>{
+  try {
+    let temp_file
+    temp_file = req.file == undefined || req.file == null ? temp_file = null : temp_file = req.file.filename
+    const obj = JSON.parse(JSON.stringify(req.body));
+    const ans_array = JSON.parse(obj.ans)
+    const filter = { _id: req.body.question_id};
+
+    var update; 
+
+    if(temp_file == null){
+      update = { question: req.body.ques ,ans:ans_array}
+    }else{
+      update = { question: req.body.ques ,ans:ans_array,img:temp_file}
+    }
+  
+    let data = await Question.findOneAndUpdate(filter, update,{new: true});
+    res.send({ result: true, message: JSON.stringify(data)}) 
+  }
+  catch(error){
+    console.log(error)
+    res.json({ result: false, message: JSON.stringify(error)});
+  }
+})
+
+
+router.post('/quiz/add_question', upload.single('file'), async (req, res) => {
+  try {
+    let temp_file
+    temp_file = req.file === undefined ? temp_file = null : temp_file = req.file.filename;
+    
+    const obj = JSON.parse(JSON.stringify(req.body));
+    const ans_array = JSON.parse(obj.ans)
+    const ques  = new Question({question:obj.question,ans:ans_array,img:temp_file,Idquiz:obj.quiz_id})
+        
+    Quiz.findOneAndUpdate({ _id: obj.quiz_id },{ $push: {quiz_question:ques._id }},
+     function (error, success) {
+        if (error) {
+           console.log(error);
+        } else {
+          console.log(success);
+        }
+    });
+
+    var result_qes =  await ques.save();
+    res.send({ result: true, message: JSON.stringify(result_qes)}) 
+  } catch (e)
+  {
+     console.log(e)
+     res.status(500).send(e)
+  }
 })
 
 
 
-// router.post('/quiz/upload', upload.single('upload'), async (req, res) => {
-//     const data  = req.file.buffer
-//     res.send(data)
-// }, (error, req, res, next) => {
-//     res.status(400).send({ error: error.message })
-// })
+router.post('/quiz/remove_question', async (req, res) => {
+  try {
+      let quiz_id = req.body.quiz_id
+      let ques_id = req.body.ques_id
+      //for delete id in [quiz] //
+      const quiz = await Quiz.updateOne({ "_id": quiz_id },{ "$pull": { "quiz_question": ques_id } })
+      const question  = await Question.deleteOne({ _id: ques_id}) 
+      res.json({result: true});
+
+  } catch (e) {
+    console.log(e)
+      res.status(500).send(e)
+  }
+})
+
 
 
 

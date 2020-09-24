@@ -7,11 +7,15 @@ export const NOT_CONNECT_NETWORK = "NOT_CONNECT_NETWORK";
 export const apiUrl = "http://localhost:3000";
 export const imageUrl = "http://localhost:3000/images";
 export const resumeUrl = "http://localhost:3000/resume"
-
+export const quizImgUrl = "http://localhost:3000/quiz"
 
 
 export const quiz = {
   ADD_QUIZ : 'api/quiz/add',
+  REMOVE_QUIZ : 'api/quiz/remove',
+  EDIT_QUIZ : 'api/quiz/edit_question',
+  REMOVE_QUESTION : 'api/quiz/remove_question',
+  ADD_QUESTION : 'api/quiz/add_question',
   QUIZ_LIST : 'api/quiz/quiz_list',
   QUIZ_SHOW : 'api/quiz/show'
 }

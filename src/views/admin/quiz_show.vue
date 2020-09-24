@@ -5,27 +5,33 @@
     <v-container color="primary">
      <v-row>
       <v-col>
-        <v-card max-width="450" class="ma-3">
+        <v-card max-width="600" class="ma-3">
         <v-list-item three-line>
-          <v-list-item-content>
-            <div class="overline mb-4">
-              <b>quiz type ({{ title_quiz.quiz_type }}) </b>
-            </div>
-            <v-list-item-title class="headline mb-1">
-              {{ title_quiz.quiz_name }}</v-list-item-title
-            >
-            <v-list-item-subtitle
-              ><b>{{ title_quiz.quiz_time }} Minute</b></v-list-item-subtitle
-            >
-          </v-list-item-content>
+          <v-row>
+            <v-col>
+                <div class="ma-3" >
+                  <h2><b>{{ title_quiz.quiz_name }}</b></h2>
+                </div>
 
-          <v-list-item-avatar src="" tile size="140" color="grey">
-            <v-img 
-            src="https://www.flaticon.com/svg/static/icons/svg/2367/2367217.svg"
-            outline>
-            </v-img>
-          </v-list-item-avatar>
-        </v-list-item>
+                <div class="ma-3">
+                   <h2>{{ title_quiz.quiz_time }} Minute</h2>
+                </div>
+
+                <div class="ma-3">
+                  <h3>Quiz Type( {{ title_quiz.quiz_type }} )</h3>
+                </div>
+             </v-col>
+            <v-col>
+              <v-list-item-avatar src="" tile size="200" color="grey">
+                  <v-img 
+                  src="https://www.flaticon.com/svg/static/icons/svg/2367/2367217.svg"
+                  style="border-style: groove;"
+                  outline>
+                  </v-img>
+           </v-list-item-avatar>
+         </v-col>
+       </v-row>
+    </v-list-item>
 
         <v-card-actions>
           <v-btn color="primary" @click="start_quiz_changed()" >START</v-btn>
@@ -60,6 +66,8 @@
             <h1 class="title is-6">
               Quiz ({{ questionIndex }} / {{ quiz.questions.length }})
             </h1>
+              
+
             
             <progress
               class="progress is-info is-small"
@@ -75,21 +83,29 @@
         <v-alert class="ma-1" border="right" color="blue-grey" dark>
           <h2 class="titleContainer title">
             {{ questionIndex + 1 }})  {{ quiz.questions[questionIndex].question }}
+            
           </h2>
         </v-alert>
-        <!-- {{quiz.questions[0].ans[0]}} -->
+
+              <v-img 
+                style="border-style: groove;"
+                class="ma-1"
+                v-if="quiz.questions[questionIndex].img != null"
+                :src="quiz.questions[questionIndex].img | quizImgUrl"
+                aspect-ratio="1"
+                max-width="250"
+                max-height="250"
+              ></v-img>
 
         <div class="optionContainer">
           <div
-            class="ma-3"
+            class="ma-2 font"
             v-for="(ans, index) in quiz.questions[questionIndex].ans"
             @click="selectOption(index)"
             :key="index"
           >  
-
-            <v-btn  :class="{'green': userResponses[questionIndex] == index }"   small>{{ index | charIndex }}. {{ ans.ans }} </v-btn>
-            <!-- {{userResponses[questionIndex] == index }} -->
-            <br>
+            <v-btn  :class="{'green': userResponses[questionIndex] == index}"   small>{{ index | charIndex }}. {{ ans.ans }}  </v-btn>
+            <v-icon v-if="ans.correct == true">mdi-check </v-icon>
           </div>
         </div>
 
@@ -170,7 +186,6 @@ export default {
   },
   methods: {
     start_quiz_changed: function(){
-       alert("test")
        this.start_quiz = false; 
     },
     restart: function() {
@@ -205,8 +220,11 @@ export default {
 };
 </script>
 
-<style>
-.is-selected {
-  color: #4caf50;
+<style scoped>
+.font{
+  text-transform: none !important;
+}
+.v-btn{
+  text-transform: none !important;
 }
 </style>
