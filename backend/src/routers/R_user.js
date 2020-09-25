@@ -47,7 +47,7 @@ router.post('/users', async (req, res) => {
       const form = new formaidable.IncomingForm()
       form.parse(req, async (error,fields,files) =>
       {   
-          
+          console.log(fields)
           const user  = new User(fields)
           const user_file  = files ; 
 
@@ -175,7 +175,7 @@ router.get('/users/all/engineer',auth_admin ,async (req, res) => {
 
 
 router.get('/users/get_appProfile/:_id', async (req, res) => {
-  let one_user = await User.findOne({_id:req.params._id});
+  let one_user = await User.findOne({_id:req.params._id}).populate('job_position')
   res.send({one_user})
 })
 

@@ -10,6 +10,14 @@ export const resumeUrl = "http://localhost:3000/resume"
 export const quizImgUrl = "http://localhost:3000/quiz"
 
 
+export const department = {
+  DEPARTMENT_LIST : 'api/department/department_list',
+  DEPARTMENT_ONLY : 'api/department/get_only_depart',
+  ADD_DEPART : 'api/department/add',
+  GET_DOING_QUIZ : 'api/department/department_list_withquiz',
+  REMOVE_DEPART : 'api/department/remove',
+}
+
 export const quiz = {
   ADD_QUIZ : 'api/quiz/add',
   REMOVE_QUIZ : 'api/quiz/remove',

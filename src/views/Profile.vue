@@ -2,16 +2,26 @@
   <v-container grid-list-xs>
     <v-card class="mb-1">
       <v-row>
-        <v-col class="d-flex" xl="10" lg="10" md="9" sm="12" cols="12">
+        <v-col class="d-flex" xl="9" lg="8" md="7" sm="12" cols="12">
             <h1 class="ml-6" ><v-icon large  class="mb-2">mdi-file-account-outline</v-icon>Information Profile</h1>
         </v-col>
-        <v-col class="d-flex" xl="2" lg="2" md="2" sm="12" cols="12">
+        <v-col  class="d-flex"  xl="2" lg="2" md="2" sm="12" cols="12">
                 <v-btn
                   color="warning"
                   class="white--text ma-1"
                   @click="go_update"
                 >
                   Update FORM
+                  <v-icon right dark>mdi-file-document</v-icon>
+
+                </v-btn> 
+
+                  <v-btn
+                  color="info"
+                  class="white--text ma-1"
+                  @click="go_quiz"
+                >
+                  QUIZ
                   <v-icon right dark>mdi-file-document</v-icon>
                 </v-btn> 
         </v-col>
@@ -281,7 +291,7 @@ export default {
     },
     getLevelandPosition() {
       let level_position =
-        this.applicant.job_level + " : " + this.applicant.job_position;
+        this.applicant.job_level + " : " + this.applicant.job_position.dep_name;
       return level_position;
     },
     getEducation(){
@@ -294,6 +304,10 @@ export default {
     },
      go_update() {
       this.$router.push('/profile_update');
+    },
+     go_quiz() {
+       let position_id = this.applicant.job_position._id;
+       this.$router.push(`/user_doing_list/${position_id}`); 
     },
   },
 };

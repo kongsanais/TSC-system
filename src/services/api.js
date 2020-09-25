@@ -3,6 +3,7 @@ import { server } from "@/services/constants";
 import * as apiAdmin from "@/services/api_admin.js"
 import * as apiReport  from "@/services/api_report.js"
 import * as apiQuiz  from "@/services/api_quiz.js"
+import * as apiDepart  from "@/services/api_department.js"
 
 import router from "@/router";
 
@@ -119,5 +120,6 @@ export default {
   updateRegStatus,
   ...apiAdmin,
   ...apiReport,
-  ...apiQuiz
+  ...apiQuiz,
+  ...apiDepart
 };

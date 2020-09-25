@@ -571,7 +571,7 @@ export default {
       resumeURL: null,
       job_skill:"",
       job_exp:"",
-      job_position: "",
+      // job_position: "",
       job_salary: "", 
       degree_education:"",
       education:"",

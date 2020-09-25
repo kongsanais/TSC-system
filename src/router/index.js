@@ -21,6 +21,8 @@ import quiz_list  from "@/views/admin/quiz_list.vue"
 import quiz_show  from "@/views/admin/quiz_show.vue"
 import quiz_edit  from "@/views/admin/quiz_edit.vue" 
 import depart_list from "@/views/admin/depart_list.vue"
+import user_doing_list from "@/views/user_quiz/user_doing_list.vue"
+
 import page1  from "@/views/test/page1.vue"
 import page2  from "@/views/test/page2.vue"
 Vue.use(VueRouter);
@@ -145,6 +147,11 @@ const routes = [
     path: "/depart_list",
     name: "depart_list",
     component : depart_list
+  },
+  {
+    path: "/user_doing_list/:_id",
+    name: "user_doing_list",
+    component : user_doing_list
   },
   {
     path: "/",

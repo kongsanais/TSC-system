@@ -345,6 +345,7 @@ export default {
       this.defaultFunds = [ { "img": null, "ans": null, "correct": "" } ]
       this.newEntries = [ {} ]
       this.$refs.fileupload.value=null;
+      this.imageURL = null
       this.dialog = false
     },
      async saveQuiz(){

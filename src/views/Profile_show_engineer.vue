@@ -307,7 +307,7 @@ export default {
       return phone_fmaliy;
     },
     getLevelandPosition() {
-      let level_position = this.applicant.job_level + " : " + this.applicant.job_position;
+      let level_position = this.applicant.job_level + " : " + this.applicant.job_position.dep_name;
       return level_position;
     },
     getEducation() {

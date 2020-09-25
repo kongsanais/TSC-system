@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const Schema = mongoose.Schema; 
 
 const userSchema = new mongoose.Schema({
     email: {
@@ -90,7 +91,8 @@ const userSchema = new mongoose.Schema({
     job_skill:{},
     job_exp:{type: String},
     job_position:{
-        type: String
+        type: Schema.Types.ObjectId, 
+        ref: 'Dep' 
     },  
     job_salary:{
         type: String 

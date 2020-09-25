@@ -35,22 +35,28 @@
       </v-row>
     </v-container>
 
-    <v-container>
-      <v-form @submit.prevent="saveQuiz" ref="form">
+    <v-container> 
         <v-card>
-          <v-card-title>
-            Quiz List
-            <v-spacer></v-spacer>
+        <v-data-table :search="search" :headers="headers" :items="itemsWithIndex">
+        <!-- table top section -->
+        <template v-slot:top>
+          <v-toolbar-title><v-icon> mdi-format-list-checkbox </v-icon> Quiz List</v-toolbar-title>
+          <v-toolbar flat color="white">
+            <v-divider class="mx-4" inset vertical></v-divider>
             <v-text-field
               v-model="search"
-              append-icon="mdi-magnify"
+              append-icon="search"
               label="Search"
               single-line
               hide-details
-            ></v-text-field>
-          </v-card-title>
-          
-          <v-data-table :search="search" :headers="headers" :items="itemsWithIndex">
+            >
+            </v-text-field>
+            <v-spacer></v-spacer>
+            <v-spacer></v-spacer>
+            <v-spacer></v-spacer>
+          </v-toolbar>
+        </template>
+        <!-- table tr section -->
             <template v-slot:item="{ item }">
               <tr class="mb-2">
                 <td>{{ item.index + 1}}</td>
@@ -74,13 +80,10 @@
                 </td>
               </tr>
             </template>
-          </v-data-table>
-        </v-card>
-      </v-form>
-
+      </v-data-table>
+      </v-card>
     </v-container>
-    
-    
+
     <v-dialog v-model="dialog_messenger.status" persistent max-width="480">
       <v-card>
         <v-card-title class="headline grey lighten-2">
@@ -119,6 +122,7 @@
       </v-card>
     </v-dialog>
   </v-card>
+  
   </v-container>
 </template>
 

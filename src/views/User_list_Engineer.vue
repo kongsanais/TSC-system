@@ -340,7 +340,6 @@
               ></v-img>
             </td>
             <td>{{ item.eng_prefix + " " + item.eng_firstname  + " " + item.eng_lastname | capitalize  }}</td>
-            <td>{{ item.nationality | capitalize }}</td>
             <td>{{ item.age}}</td>
             <td>{{ item.degree_education}}</td>
             <td>{{ item.education}}</td>
@@ -414,7 +413,6 @@ export default {
       headers: [
           { text: 'Picture', value: "email"},
           { text: 'Name', value: 'th_firstname' },
-          { text: 'Nationality', value: 'Nationality'},
           { text: 'Age' , value:'age'},
           { text: 'Degree' , value:'degree_education'},
           { text: 'Education' , value:'education'},

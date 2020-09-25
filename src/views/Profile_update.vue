@@ -1,5 +1,6 @@
 <template>
   <v-container grid-list-xs>
+    {{applicant}}
     <v-form @submit.prevent="submit" ref="form" v-model="valid" lazy-validation>
       <v-card>
         <v-toolbar flat color="primary" dark>
@@ -86,7 +87,7 @@
                   </v-col>
 
                   <!-- Nationality -->
-                  <v-col class="d-flex" xl="3" lg="3" md="6" sm="3" cols="12">
+                  <!-- <v-col class="d-flex" xl="3" lg="3" md="6" sm="3" cols="12">
                     <v-text-field
                       v-model="applicant.nationality"
                       :items="CountryList"
@@ -95,7 +96,7 @@
                         (v1) => !!v1 || 'Please Select Your Nationality',
                       ]"
                     ></v-text-field>
-                  </v-col>
+                  </v-col> -->
 
                   <!-- Phone number -->
                   <v-col class="d-flex" xl="3" lg="3" md="6" sm="3" cols="12">
@@ -373,8 +374,10 @@
                     <!-- Position -->
                   <v-col class="d-flex" xl="3" lg="4" md="4" sm="12" cols="12">
                     <v-select
-                      v-model="applicant.job_position"
-                      :items="data_position"
+                       v-model="applicant.job_position"
+                       :items="data_position"
+                       item-text="dep_name"
+                       item-value="_id"
                       label="Position"
                       :rules="[(v1) => !!v1 || 'Please Select Position']"
                     >
@@ -469,7 +472,9 @@ import moment from "moment";
 export default {
   data: () => ({
     date_temp: null,
-    applicant: { imageURL: "samsung-icon.png" },
+    applicant: { 
+    imageURL: "samsung-icon.png",
+    },
     checked_ac: false,
     data_th_prefix: ["นาย", "นาง", "นางสาว"],
     data_eng_prefix: ["Mr", "Mrs", "Miss"],
@@ -482,7 +487,7 @@ export default {
     ],
     degree_item: ["Bachelor Degrees", "Master Degrees" ,"Doctor Degrees"],
     data_level: ["Office/Engineer", "Management"],
-    data_position: ["Developer", "Data Analysis"],
+    data_position: [],
     show_password: true,
     show_password_con: true,
     valid: true,
@@ -528,7 +533,10 @@ export default {
     }
     let result = await api.readProfile();
     this.applicant = result;
-
+    this.applicant.job_position =  result.job_position._id
+    const depart_list =  await api.getOnlydepart();
+    this.data_position = depart_list
+    
     //set date
     var date = new Date(this.applicant.date_birthday);
     this.applicant.date_birthday = date.toISOString().substring(0, 10);

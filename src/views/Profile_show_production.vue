@@ -245,7 +245,7 @@ export default {
       imageURL: "samsung-icon.png",
       resumeURL: null,
       job_level: null,
-      job_position: "",
+      job_position: null,
       job_salary: "",
       education: "",
       degree_education: "",

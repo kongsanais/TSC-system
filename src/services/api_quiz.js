@@ -18,6 +18,7 @@ export const addQuestion = async values => {
     return result.data
 }  
 
+
 export const removeQuiz = async values => {
     let result  =  await httpClient.post(quiz.REMOVE_QUIZ,values);
     return result.data

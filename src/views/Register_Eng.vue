@@ -148,14 +148,14 @@
                   </v-col>
 
                   <!-- Nationality -->
-                  <v-col class="d-flex" xl="3" lg="6" md="6" sm="3" cols="12">
+                  <!-- <v-col class="d-flex" xl="3" lg="6" md="6" sm="3" cols="12">
                       <v-text-field
                       v-model="applicant.nationality"
                       label="Nationality "
                       :rules="[(v1) => !!v1 || 'Please Select Your Nationality']"
                     >
                     </v-text-field>
-                  </v-col>
+                  </v-col> -->
 
                   <!-- Phone number -->
                   <v-col class="d-flex" xl="3" lg="6" md="6" sm="3" cols="12">
@@ -355,13 +355,7 @@
                 </v-row>
 
 
-
-
-
-
                  <v-row>
-                   
-
                   <!-- Degree -->
                   <v-col class="d-flex" xl="3" lg="3" md="6" sm="12" cols="12">
                     <v-select
@@ -421,12 +415,13 @@
                     >
                     </v-select>
                   </v-col>
-                  
                   <!-- Position -->
                   <v-col class="d-flex" xl="3" lg="4" md="4" sm="12" cols="12">
                     <v-select
                       v-model="applicant.job_position"
                       :items="data_position"
+                      item-text="dep_name"
+                      item-value="_id"
                       label="Position"
                       :rules="[(v1) => !!v1 || 'Please Select Position']"
                     >
@@ -622,7 +617,7 @@ export default {
     data_eng_prefix: ["Mr", "Mrs", "Miss"],
     degree_item: ["Bachelor Degrees", "Master Degrees" ,"Doctor Degrees"],
     data_level: ["Office/Engineer", "Management"],
-    data_position: ["Developer", "Data Analysis"],
+    data_position: [],
     show_password: true,
     show_password_con: true,
     valid: true,
@@ -668,6 +663,10 @@ export default {
       router: "",
     },
   }),
+  async mounted(){
+    const depart_list =  await api.getOnlydepart();
+    this.data_position = depart_list
+  },
   methods: {
     DateToAge: function(bdate) {
       var today = new Date();

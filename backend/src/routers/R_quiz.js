@@ -81,8 +81,6 @@ router.post('/quiz/add', upload.array('files',10), async (req,res)=>{
 })
 
 
-
-
 router.post('/quiz/remove', async (req, res) => {
   try {
       let q_id = req.body.quiz_id
@@ -99,6 +97,7 @@ router.get('/quiz/quiz_list', async (req,res)=>{
   let quiz_list  = await Quiz.find({}).sort({createdAt: -1})
   res.send({quiz_list})
 })
+
 
 
 router.post('/quiz/show', async (req,res)=>{
