@@ -51,7 +51,7 @@
         <v-col class="d-flex" xl="6" lg="6" md="6" sm="12" cols="12">
           <v-select
             v-model="quiz.quiz_type"
-            :items="['English', 'Specific','Management']"
+            :items="['English', 'Specific','Management','Attitude ']"
             menu-props="auto"
             label="Select Quiz Type"
             :rules="[(v1) => !!v1 || 'Please Select Quiz Type']"

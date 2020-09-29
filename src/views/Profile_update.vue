@@ -1,6 +1,5 @@
 <template>
   <v-container grid-list-xs>
-    {{applicant}}
     <v-form @submit.prevent="submit" ref="form" v-model="valid" lazy-validation>
       <v-card>
         <v-toolbar flat color="primary" dark>
@@ -380,6 +379,7 @@
                        item-value="_id"
                       label="Position"
                       :rules="[(v1) => !!v1 || 'Please Select Position']"
+                      disabled
                     >
                     </v-select>
                   </v-col>

@@ -1,12 +1,16 @@
 const express = require('express')
 const Quiz = require('../models/M_quiz.js')
 const Question = require('../models/M_question.js')
-//const auth = require('../middleware/admin_auth.js')
+const Score = require('../models/M_score.js')
+const User = require('../models/M_user')
+const auth = require('../middleware/auth.js')
 const router = new express.Router()
 const formaidable  = require("formidable")
 const path = require("path")
 const fs  = require("fs-extra")
 const multer = require('multer')
+
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.resolve("./uploaded/quiz/"));
@@ -22,6 +26,7 @@ const storage = multer.diskStorage({
   }
 });
 
+
 var upload = multer({
   storage: storage,
   fileFilter: (req, file, cb) => {
@@ -33,6 +38,7 @@ var upload = multer({
     }
   }
 });
+
 
 router.post('/quiz/add', upload.array('files',10), async (req,res)=>{
     try {
@@ -81,6 +87,7 @@ router.post('/quiz/add', upload.array('files',10), async (req,res)=>{
 })
 
 
+
 router.post('/quiz/remove', async (req, res) => {
   try {
       let q_id = req.body.quiz_id
@@ -91,6 +98,7 @@ router.post('/quiz/remove', async (req, res) => {
       res.status(500).send(e)
   }
 })
+
 
 
 router.get('/quiz/quiz_list', async (req,res)=>{
@@ -107,13 +115,12 @@ router.post('/quiz/show', async (req,res)=>{
   .where('_id').equals(q_id)
   .exec(function (err, show_quiz) {
     if (err) return handleError(err);
-    //console.log(show_quiz)
     res.json({show_quiz})
   });
 })
 
 
-router.post('/quiz/edit_question', upload.single('file'), async (req,res)=>{
+router.post('/quiz/edit_question', upload.single('file'), async (req,res) => {
   try {
     let temp_file
     temp_file = req.file == undefined || req.file == null ? temp_file = null : temp_file = req.file.filename
@@ -148,7 +155,9 @@ router.post('/quiz/add_question', upload.single('file'), async (req, res) => {
     const ans_array = JSON.parse(obj.ans)
     const ques  = new Question({question:obj.question,ans:ans_array,img:temp_file,Idquiz:obj.quiz_id})
         
-    Quiz.findOneAndUpdate({ _id: obj.quiz_id },{ $push: {quiz_question:ques._id }},
+    Quiz.findOneAndUpdate(
+      { _id: obj.quiz_id },
+      { $push: {quiz_question:ques._id }},
      function (error, success) {
         if (error) {
            console.log(error);
@@ -183,6 +192,48 @@ router.post('/quiz/remove_question', async (req, res) => {
   }
 })
 
+
+router.post('/quiz/save_score',  auth , async (req, res) => {
+  try{
+    const  data = new Score({score_data: req.body.score , user_id : req.user._id , quiz_id : req.body.quiz_id})
+    const  value = await data.save(); 
+    
+    User.findOneAndUpdate(
+      { _id: req.user._id },
+      { $push: {score_quiz :value._id }},
+     function (error, success) {
+        if (error) {
+           console.log(error);
+        } else {
+          console.log(success);
+        }
+    });  
+
+
+    res.json({result: true , message: JSON.stringify(value)})
+  }catch(error)
+  {
+   res.json({ result: false, message: JSON.stringify(error) });
+  }
+})
+
+
+
+router.post('/quiz/get_all_score', async (req, res) => {
+  let user_id =  req.body
+  let Score_list  = await Score.find({})
+  // .populate('quiz')
+  // .where('user_id').equals("5f71633886680958609dcbesss8")
+  .sort({createdAt: -1})
+   var res_data = Score_list;
+   res.json({res_data})
+
+})
+
+router.post('/quiz/test_list2', async (req, res) => {
+  let one_user = await Score.find({}).populate('quiz_id')
+  res.send({one_user})
+})
 
 
 

@@ -1,4 +1,5 @@
 const express = require('express')
+const moment  = require('moment')
 const User = require('../models/M_user')
 const auth = require('../middleware/auth')
 const auth_admin = require('../middleware/admin_auth')
@@ -166,14 +167,6 @@ router.get('/users/profile', auth, async (req, res) => {
 })
 
 
-router.get('/users/all/engineer',auth_admin ,async (req, res) => {
-  let all_user = await User.find({})
-                      // .where('role').equals('Engineer')
-                      .sort({createdAt: -1})
-  res.send({all_user})
-})
-
-
 router.get('/users/get_appProfile/:_id', async (req, res) => {
   let one_user = await User.findOne({_id:req.params._id}).populate('job_position')
   res.send({one_user})
@@ -223,7 +216,8 @@ router.get('/users/count_reg_year', async (req, res) => {
     let result = req.body;
 
    var data = await User.aggregate([
-    { $project: { 
+    { 
+      $project: { 
       email: "$email"  ,
       fullnameTH: { $concat: [ "$th_prefix"," ","$th_firstname", " ", "$th_lastname" ] } ,
       fullnameENG: { $concat:[ "$eng_prefix"," ","$eng_firstname", " ", "$eng_lastname" ] } ,
@@ -242,9 +236,9 @@ router.get('/users/count_reg_year', async (req, res) => {
       majoy_education:"$majoy_education",
       gpa:"$gpa",
       createdDate: "$createdAt"
-      }}
+      }
+    }
     ]);
-
 
     var data_check = ['email','fullnameTH','fullnameENG','nationality','phone_number',
     'phone_number_famaily','person_relationship','eng_address','date_birthday','age',
@@ -253,6 +247,7 @@ router.get('/users/count_reg_year', async (req, res) => {
 
     const index = 1;
    
+
     for (var i = 0; i < result.length; i++ ) {
       for (var j = 0; j < data_check.length; j++ ){
        if(result[i].filed == data_check[j]){
@@ -261,7 +256,6 @@ router.get('/users/count_reg_year', async (req, res) => {
        }
      }
     }
-
 
     for (var j = 0; j < data.length; j++ ) {
       for (var k = 0; k < data_check.length; k++ ){
@@ -274,7 +268,61 @@ router.get('/users/count_reg_year', async (req, res) => {
 
 
 
- 
+ router.get ('/report/alluser/test' ,async (req, res) => {
+   
+  let result_user  = await User.find({})
+                      .populate({ 
+                          path: 'score_quiz',
+                          select : 'score_data -_id',
+                       populate: { 
+                          path: 'quiz_id', 
+                          select  : 'quiz_name quiz_type -_id' }
+                      })
+                      .populate({
+                          path: 'job_position',
+                          select: '-dep_quiz -_id -createdAt -updatedAt -__v',
+                            populate : { 
+                            path: 'dep_quiz',
+                          },
+                      })
+                      .where('role').equals('Engineer')
+                      .sort({createdAt: -1})
+   
+
+  var export_data = [];
+  Object.keys(obj).forEach(function(key) {
+
+    console.log(key, obj[key]);
+  
+  });
+
+  // for(var i = 0 ; i < result_user.length ; i++)
+  // { 
+  // export_data.push(
+  //  {
+  //   email:result_user[i].email,
+  //   th_prefix:result_user[i].th_prefix,
+  //   th_fullname:result_user[i].th_firstname+" "+result_user[i].th_lastname,
+  //   eng_prefix:result_user[i].eng_prefix,
+  //   eng_fullname:result_user[i].eng_firstname+" "+result_user[i].eng_lastname,
+  //   phone_number:result_user[i].phone_number,
+  //   phone_famaily:result_user[i].phone_number_famaily + " " + "("+  result_user[i].person_relationship + ")",
+  //   address:result_user[i].eng_address, 
+  //   date_birthday: moment(result_user[i].date_birthday).format("ddd, ll"),
+  //   age: result_user[i].age,
+  //   job_level:   
+  //  }
+  // )         
+  // }
+  // console.log(export_data)
+
+
+  res.send({result_user})
+})
+
+
+
+
 // db.getCollection('Users').aggregate([
 //   { $match: { reg_status: "Waitting" } },
 //   { $group: { _id : { month: { $month: "$createdAt" } }, count: { $sum: 1 } } }

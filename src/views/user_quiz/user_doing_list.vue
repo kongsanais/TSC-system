@@ -10,7 +10,7 @@
       <template v-slot:header>
         <v-toolbar
           class="mb-2"
-          color="indigo darken-5"
+          color="primary"
           dark
           flat
         >
@@ -50,7 +50,7 @@
                 <v-list-item>
                   <v-list-item-content>
                       
-                     <v-btn color="success">
+                     <v-btn color="success" @click="onClickStartquiz(item._id)">
                        START
                       </v-btn>
                   
@@ -88,8 +88,8 @@ export default {
     onClickMenu(link) {
       this.$router.push(link).catch((err) => {});
     },
-    onClickReviewTest(quiz_id){
-      this.$router.push({ name: 'quiz_show', params: {quiz_id:quiz_id}})
+    onClickStartquiz(quiz_id){
+      this.$router.push({ name: 'user_start_quiz', params: {quiz_id:quiz_id}})
     },
     onClickEditQuiz(quiz_id){
       this.$router.push({ name: 'quiz_edit', params: {quiz_id:quiz_id}})

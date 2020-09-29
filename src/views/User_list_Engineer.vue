@@ -119,7 +119,7 @@
   </v-card>
   
    <v-card  >
-      <v-data-table :search="search" :headers="headers" :items="mDataArray">
+      <v-data-table :search="search" :headers="headers" :items="itemsWithIndex " exportable>
         <!-- table top section -->
         <template v-slot:top>
           <v-toolbar flat color="white">
@@ -345,6 +345,13 @@
             <td>{{ item.education}}</td>
             <td>{{item.majoy_education}}</td>
             <td>{{item.gpa}}</td>
+            <td>                
+              <ul id="example-1">
+                    <li v-for="(item,index) in item.score_quiz" :key="index">
+                      {{index+1}} )  {{ item.quiz_id.quiz_name }} : {{ item.score_data }} 
+                    </li>
+              </ul>
+            </td>
             <td>{{item.createdAt | formatDate}}</td>
             <td>
             <v-btn color="primary" @click="show_Profile(item)" fab x-small dark>
@@ -418,6 +425,7 @@ export default {
           { text: 'Education' , value:'education'},
           { text: 'Major'  , value:'majoy_education'},
           { text: 'GPA'  , value:'gpa'},
+          {  text: 'Score Quiz' , value: 'score_quiz'},
           { text: 'Reg.Date' , value:'createdAt'},
           { text: 'Action', value:'_id'},
         ],
@@ -626,6 +634,15 @@ export default {
        async selectAll(){
         this.field_selected = this.field_data_export
        }
+    },
+    computed: {
+    itemsWithIndex() {
+      return this.mDataArray.map(
+        (items, index) => ({
+          ...items,
+          index: index
+        }))
     }
+   }
 };
 </script>

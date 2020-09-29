@@ -42,7 +42,8 @@ export const getquizShow = async values => {
     return result.data.show_quiz;
 } 
 
-
-
-
+export const saveScore = async values => {
+    let result  =  await  httpClient.post(quiz.QUIZ_SAVE_SCORE,values);
+    return result.data;
+}
 

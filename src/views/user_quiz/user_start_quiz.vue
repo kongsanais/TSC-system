@@ -2,6 +2,7 @@
   <v-container>
    <!-- {{start_quiz}} -->
    <v-card class="ma-1" v-if="start_quiz">
+    
     <v-container color="primary">
      <v-row>
       <v-col xl="4" lg="6" md="8" sm="12">
@@ -45,16 +46,29 @@
 
 
    <v-card v-if="!start_quiz">
+     {{quiz.questions}}
+     -----------------
+     {{userResponses}}
    <v-container>
       <!-- <v-btn class="is-selected">click</v-btn> -->
     <v-card class="ma-3" >
       <!-- {{quiz.questions.length}}
          {{questionIndex}}
          {{quiz.questions.length}} -->
-      <!-- Total score: {{ score() }} / {{ quiz.questions.length }} -->
+     
 
-      <v-alert v-if="questionIndex == quiz.questions.length " >Complete Quiz</v-alert>
+      <v-alert v-if="questionIndex == quiz.questions.length " >
+         Total score: {{score()}} / {{ quiz.questions.length }}
+                      
+        <v-alert type="success">
+          Complete Quiz
+        </v-alert>
 
+      <v-btn class="ma-2" color="warning" v-on:click="review()" :disabled="questionIndex < 1" >Review Quiz</v-btn>
+      <v-btn class="ma-2" color="primary" v-on:click="done_quiz()" >Finish Quiz</v-btn>
+
+      </v-alert>
+      
       <v-row></v-row>
       <div
         v-if="questionIndex < quiz.questions.length"
@@ -98,14 +112,14 @@
               ></v-img>
 
         <div class="optionContainer">
-          <div
+           <div
             class="ma-2 font"
             v-for="(ans, index) in quiz.questions[questionIndex].ans"
             @click="selectOption(index)"
             :key="index"
-          >  
+           >  
             <v-btn  :class="{'green': userResponses[questionIndex] == index}"   small>{{ index | charIndex }}. {{ ans.ans }}  </v-btn>
-            <v-icon v-if="ans.correct == true">mdi-check </v-icon>
+            <!-- <v-icon v-if="ans.correct == true">mdi-check </v-icon> -->
           </div>
         </div>
 
@@ -146,10 +160,12 @@ export default {
 
     if (temp_id  === undefined || temp_id == null) {
       let q_id = localStorage.getItem("quiz_id");
+      this.main_id  = q_id
       this.quizdata = await api.getquizShow({ q_id });
     } else {
       localStorage.setItem("quiz_id", temp_id);
       let q_id = localStorage.getItem("quiz_id");
+      this.main_id  = q_id
       this.quizdata = await api.getquizShow({ q_id });
     }
 
@@ -165,6 +181,8 @@ export default {
   props: ["quiz_id"],
   data() {
     return {
+      main_id:"",
+      score_data:"",
       title_quiz: {
         quiz_name: "",
         quiz_type: "",
@@ -193,13 +211,20 @@ export default {
     },
     selectOption: function(index) {
       this.$set(this.userResponses, this.questionIndex, index);
-      //console.log(this.userResponses);
     },
     next: function() {
       if (this.questionIndex < this.quiz.questions.length) this.questionIndex++;
     },
     prev: function() {
       if (this.quiz.questions.length > 0) this.questionIndex--;
+    },
+    review: function() {
+      if (this.quiz.questions.length > 0) this.questionIndex = 0;
+    },
+    async done_quiz () {
+      let score = this.score_data
+      let quiz_id = this.main_id
+      var result = await api.saveScore({score,quiz_id})
     },
     score: function() {
       var score = 0;
@@ -212,6 +237,7 @@ export default {
           score = score + 1;
         }
       }
+      this.score_data = score 
       return score;
       //return this.userResponses.filter(function(val) { return val }).length;
     },

@@ -9,7 +9,7 @@ const depSchema = new mongoose.Schema({
     },
     dep_quiz: [{ 
         type: Schema.Types.ObjectId, 
-        ref: 'Quiz' 
+        ref: 'Quiz',
     }]
 },{
     timestamps: true

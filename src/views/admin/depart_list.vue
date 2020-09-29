@@ -222,6 +222,14 @@ export default {
        let depart_name = this.depart_name
        let select_quiz=  this.select_quiz 
        const data = await api.addDepart({depart_name,select_quiz})
+       this.dialog_addDepart = false
+
+    const depart_list =  await api.getDepartlist();
+    this.depart_list = depart_list 
+
+    const data_real = await api.getAllQuizlist();
+    this.item_quiz = data_real
+
       }
   },
   computed: {

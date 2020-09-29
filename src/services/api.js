@@ -35,9 +35,12 @@ const login = async values =>
     localStorage.setItem(server.ROLE, result.data.user.role)
     let role =  result.data.user.role;
 
-    if(role == "Engineer" || role == "Production"){
+    if(role == "Engineer" || role == "Production")
+    {
       router.push("/profile");
-    }else if (role == "Admin"){
+    }
+    else if (role == "Admin")
+    {
       router.push("/user_list")
     }
 

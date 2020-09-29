@@ -40,6 +40,7 @@ export default new Vuex.Store({
     async doLogin({ commit, dispatch }, { email, password }) 
     {
       let result = await api.login({ email, password });
+
       if (result == true) {
         commit("SET_LOGGED_IN");
         let username = localStorage.getItem(server.USERNAME);
@@ -47,6 +48,7 @@ export default new Vuex.Store({
         let role = localStorage.getItem(server.ROLE);
         commit("SET_ROLE",role)
       } 
+      
     },
     async doLogout({ commit }) {
       await api.logoff();

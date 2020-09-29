@@ -20,6 +20,11 @@ router.get('/report/alluser' ,async (req, res) => {
 //get all engineer user
 router.get('/report/alluser/engineer' ,async (req, res) => {
   let all_user = await User.find({})
+                      .populate({ 
+                        path: 'score_quiz',
+                        populate: { path: 'quiz_id' , 
+                        select  : 'quiz_name quiz_type' }
+                      })
                       .where('role').equals('Engineer')
                       .sort({createdAt: -1})
   res.send({all_user})
@@ -243,9 +248,10 @@ router.post('/report/get_json_export/engineer', async (req, res) => {
      majoy_education:"$majoy_education",
      gpa:"$gpa",
      createdDate: "$createdAt",
-     }}
+     }
+  }
    ]);
- 
+
    const filed_allowed = [];
    for (var i = 0; i < Object.keys(result).length-5 ; i++ ) {
      filed_allowed.push(result[i].filed);

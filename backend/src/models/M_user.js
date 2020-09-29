@@ -94,6 +94,10 @@ const userSchema = new mongoose.Schema({
         type: Schema.Types.ObjectId, 
         ref: 'Dep' 
     },  
+    score_quiz :[{ 
+        type: Schema.Types.ObjectId, 
+        ref: 'Score' 
+    }],
     job_salary:{
         type: String 
     },
@@ -178,6 +182,9 @@ userSchema.pre('save', async function (next) {
 
     next()
 })
+
+
+
 
 
 const User = mongoose.model('User', userSchema ,'Users')
