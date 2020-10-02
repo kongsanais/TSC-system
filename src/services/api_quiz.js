@@ -7,7 +7,6 @@ export const addQuiz = async values => {
     return result.data.result;
 }
 
-
 export const editQuiz = async values => {
     let result  =  await  httpClient.post(quiz.EDIT_QUIZ,values);
     return result.data.result;

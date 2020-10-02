@@ -50,6 +50,7 @@
         </v-col>
         <v-col class="d-flex" xl="6" lg="6" md="6" sm="12" cols="12">
           <v-select
+            @change="setupQuiz_Seq"
             v-model="quiz.quiz_type"
             :items="['English', 'Specific','Management','Attitude ']"
             menu-props="auto"
@@ -126,9 +127,23 @@
          Images : <input  class="ml-1" type="file" ref="fileupload" @change="onFileSelected" />
         </v-col>
 
+        <!-- <v-col class="d-flex" xl="5" lg="5" md="6" sm="6" cols="12">
+        <v-select
+          :items="['Choice','Text']"
+          label="Solo Type"
+          dense
+          solo
+          x-small
+        >
+        </v-select>
+        </v-col> -->
+
+
         <v-col class="d-flex" xl="5" lg="5" md="6" sm="6" cols="12">
         <v-btn color="success" @click="addAns()" class="mr-1"  x-small>add question</v-btn>
         </v-col>
+
+
         
 
         <v-col class="d-flex" xl="12" lg="12" md="12" sm="12" cols="12">
@@ -257,7 +272,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-        
       <!-- <v-row>
         <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
           <v-alert border="top" color="blue lighten-2" dark>
@@ -279,6 +293,7 @@ export default {
     quiz: {
       quiz_name: null,
       quiz_type: null,
+      quiz_sequence :null,
       quiz_time: null,
     },
     question_array: [],
@@ -315,6 +330,7 @@ export default {
     },
   }),
   methods: {
+  
     onFileSelected(event) {
       const reader = new FileReader();
       reader.onload = event => {
@@ -322,6 +338,17 @@ export default {
       };
       reader.readAsDataURL(event.target.files[0]);
       this.image = event.target.files[0];
+    },
+    setupQuiz_Seq(){
+      if(this.quiz.quiz_type == "English"){
+         this.quiz.quiz_sequence = '1'
+      }else if(this.quiz.quiz_type == "Specific"){
+         this.quiz.quiz_sequence = '2'
+      }else if(this.quiz.quiz_type == "Management"){
+         this.quiz.quiz_sequence = '3'
+      }else if(this.quiz.quiz_type == "Attitude"){
+         this.quiz.quiz_sequence = '4'
+      }
     },
     addAns: function() {
       this.newEntries.push({});
@@ -349,17 +376,20 @@ export default {
       this.dialog = false
     },
      async saveQuiz(){
+       
         let formData = new FormData();
-        const { quiz_name, quiz_type, quiz_time } = this.quiz;
+        const { quiz_name, quiz_type, quiz_time ,quiz_sequence } = this.quiz;
         formData.append("quiz_name", quiz_name);
         formData.append("quiz_type", quiz_type);
         formData.append("quiz_time", quiz_time);
+        formData.append("quiz_sequence", quiz_sequence);
         formData.append("ques",JSON.stringify(this.question_array)) 
 
         for (const i of Object.keys(this.array_img)) 
         {
             formData.append('files', this.array_img[i])
         }
+
         const result =  await api.addQuiz(formData);
         if(result){
           this.dialog_messenger.text = "Add Quiz Success";

@@ -1,4 +1,5 @@
 const express = require('express')
+const moment  = require('moment')
 const User = require('../models/M_user')
 const auth_user = require('../middleware/auth')
 const auth_admin = require('../middleware/admin_auth')
@@ -27,6 +28,8 @@ router.get('/report/alluser/engineer' ,async (req, res) => {
                       })
                       .where('role').equals('Engineer')
                       .sort({createdAt: -1})
+
+                      
   res.send({all_user})
 })
 
@@ -146,10 +149,11 @@ router.get('/report/count_all_user_by_role', async (req, res) => {
 
 //get json export production // 
 router.post('/report/get_json_export/production', async (req, res) => {
- let result = req.body
- let data_gender = req.body.gender
- let date_start = req.body.date_start
- let date_end = req.body.date_end
+  
+ let field = req.body.field
+ let data_gender = req.body.filter_data.gender
+ let date_start = req.body.filter_data.date_start
+ let date_end = req.body.filter_data.date_end
  var R_date_start = new Date(date_start); 
  var R_date_stop = new Date(date_end); 
 
@@ -164,12 +168,10 @@ router.post('/report/get_json_export/production', async (req, res) => {
  var data = await User.aggregate([
   { $match: filter_data},
   { $project: { 
-    _id : "$_id",
     th_prefix : "$th_prefix",
     fullnameTH: { $concat: ["$th_firstname", " ", "$th_lastname" ] } ,
     eng_prefix : "$eng_prefix",
     fullnameENG: { $concat:["$eng_firstname", " ", "$eng_lastname" ] } ,
-    nationality: "$nationality",
     phone_number: "$phone_number",
     phone_number_famaily: "$phone_number_famaily",
     person_relationship:"$person_relationship",
@@ -178,110 +180,149 @@ router.post('/report/get_json_export/production', async (req, res) => {
     degree_education:"$degree_education",
     majoy_education:"$majoy_education",
     gpa:"$gpa",
-    createdDate: "$createdAt",
+    job_skill:"$job_skill",
+    reg_date: "$reg_date",
     }}
   ]);
 
-  const filed_allowed = [];
-  for (var i = 0; i < Object.keys(result).length-4 ; i++ ) {
-    filed_allowed.push(result[i].filed);
-  }//for
 
-  //get name off fild in obj//
-  if(data.length != 0){
+  var filter_array  =  []
+  for(var i = 0 ; i < field.length ;i++ )
+  {
+    filter_array.push(field[i].filed)
+  }
 
-  var data_check = Object.getOwnPropertyNames(data[0])
 
-  const index = 1;
-  for (var i = 0; i < filed_allowed.length; i++ ) {
-    for (var j = 0; j < data_check.length; j++ ){
-     if(filed_allowed[i] == data_check[j]) {
-       // delete this element //
-       const index = data_check.indexOf(data_check[j])
-       data_check.splice(index);
-      }
-    }
-  }//for
+  var real_data = []
+  for(var i = 0 ; i < data.length ; i++)
+  {
+  var  filtered =  Object.keys(data[i]).filter(key => filter_array.includes(key))
+  .reduce((obj, key) => {
+    obj[key] = data[i][key];
+    return obj;
+  }, {});
+      real_data.push(filtered)
+  }/// for filter data
+
+//  console.log(filter_array)
+ res.send({real_data})
   
-  for (var j = 0; j < data.length; j++ ) {
-    for (var k = 0; k < data_check.length; k++ ){
-          var val = data_check[k]
-          delete data[j][val]
-    }
-  }//for
+})
 
-  }/// if end//////
-  res.json(data)
+//get json export engineer // 
+router.post('/report/get_json_export/engineer', async (req, res) => 
+{
+  let field  =  req.body.field
+  let date_start = req.body.date_filter.date_start
+  let date_end = req.body.date_filter.date_end
+  var R_date_start = new Date(date_start); 
+  var R_date_stop = new Date(date_end);
+
+  let result_user  = await User.find({reg_date: { $gte: R_date_start, $lte: R_date_stop}})
+    .populate({ 
+        path: 'score_quiz',
+        select : 'score_data -_id',
+    populate: { 
+        path: 'quiz_id', 
+        select  : 'quiz_name quiz_type -_id' }
+    })
+    .populate({
+        path: 'job_position',
+        select: '-dep_quiz -_id -createdAt -updatedAt -__v',
+          populate : { 
+          path: 'dep_quiz',
+        },
+    })
+    .where('role').equals('Engineer')
+    .sort({createdAt: -1})
+    
+    var export_data = [];
+    for(var i = 0 ; i < result_user.length ; i++) { 
+    var  score_text =  ""
+    for(var j = 0 ; j < result_user[i].score_quiz.length ; j++)
+    {
+    score_text  +=  j +1 + ")" + " "+ result_user[i].score_quiz[j].quiz_id.quiz_name + " " + "(" +result_user[i].score_quiz[j].score_data +")" + "\r\n"
+    }
+
+    export_data.push({
+    email:result_user[i].email,
+    th_prefix:result_user[i].th_prefix,
+    th_fullname:result_user[i].th_firstname+" "+result_user[i].th_lastname,
+    eng_prefix:result_user[i].eng_prefix,
+    eng_fullname:result_user[i].eng_firstname+" "+result_user[i].eng_lastname,
+    phone_number:result_user[i].phone_number,
+    phone_famaily:result_user[i].phone_number_famaily + " " + "("+  result_user[i].person_relationship + ")",
+    address:result_user[i].eng_address, 
+    date_birthday: moment(result_user[i].date_birthday).format("ddd, ll"),
+    age: result_user[i].age,
+    job_level:result_user[i].job_level,
+    job_position:result_user[i].job_position.dep_name,
+    job_salary:result_user[i].job_salary,
+    degree_education:result_user[i].degree_education,
+    education:result_user[i].education,
+    majoy_education:result_user[i].majoy_education,
+    gpa: result_user[i].gpa,
+    score_quiz: score_text,
+    reg_date:moment(result_user[i].reg_date).format("ddd, ll"),
+    })////obj push
+    }///for 
+
+    var filter_array  =  []
+    for(var i = 0 ; i < field.length ;i++ )
+    {
+      filter_array.push(field[i].filed)
+    }
+
+    var real_data = []
+
+    for(var i = 0 ; i < result_user.length ; i++)
+    {
+    var  filtered =  
+    Object.keys(export_data[i]).filter(key => filter_array.includes(key))
+    .reduce((obj, key) => {
+      obj[key] = export_data[i][key];
+      return obj;
+    }, {});
+        real_data.push(filtered)
+    }/// for filter data
+
+    res.send({real_data})
+
+})
+
+router.post('/report/allByDateEng', async (req, res) => {
+  try {
+     let all_user_bydate = await User.find({ reg_date: { $gte: req.body.date_start , $lte:req.body.date_end } })
+     .populate({ 
+      path: 'score_quiz',
+      populate: { path: 'quiz_id' , 
+      select  : 'quiz_name quiz_type' }
+    })
+    .where('role').equals('Engineer')
+    .sort({ createdAt: -1})
+     res.send({all_user_bydate})
+  } catch (e) {
+     res.send({result:false})
+  }
 })
 
 
-//get json export engineer // 
-router.post('/report/get_json_export/engineer', async (req, res) => {
-  let result = req.body
-  let date_start = req.body.date_start
-  let date_end = req.body.date_end
-
-  var R_date_start = new Date(date_start); 
-  var R_date_stop = new Date(date_end); 
- 
-  var filter_data = {$and:[{role:'Engineer'},{reg_date: { $gte: R_date_start, $lte: R_date_stop}}]}
-
-  var data = await User.aggregate([
-   { $match: filter_data},
-   { $project: { 
-     _id : "$_id",
-     th_prefix : "$th_prefix",
-     fullnameTH: { $concat: ["$th_firstname", " ", "$th_lastname" ] } ,
-     eng_prefix : "$eng_prefix",
-     fullnameENG: { $concat:["$eng_firstname", " ", "$eng_lastname" ] } ,
-     nationality: "$nationality",
-     phone_number: "$phone_number",
-     phone_number_famaily: "$phone_number_famaily",
-     person_relationship:"$person_relationship",
-     eng_address:"$eng_address",
-     age:"$age",
-     job_level:"$job_level",
-     job_salary:"$job_salary",
-     job_position:'$job_position',
-     degree_education:"$degree_education",
-     education:"$education",
-     majoy_education:"$majoy_education",
-     gpa:"$gpa",
-     createdDate: "$createdAt",
-     }
+router.post('/report/allByDatePro', async (req, res) => {
+  try {
+     let all_user_bydate = await User.find({ reg_date: { $gte: req.body.date_start , $lte:req.body.date_end } })
+     .populate({ 
+      path: 'score_quiz',
+      populate: { path: 'quiz_id' , 
+      select  : 'quiz_name quiz_type' }
+    })
+    .where('role').equals('Production')
+    .sort({ createdAt: -1})
+     res.send({all_user_bydate})
+  } catch (e) {
+     res.send({result:false})
   }
-   ]);
+})
 
-   const filed_allowed = [];
-   for (var i = 0; i < Object.keys(result).length-5 ; i++ ) {
-     filed_allowed.push(result[i].filed);
-   }//for
- 
-   //get name off fild in obj//
-   if(data.length != 0){
-   var data_check = Object.getOwnPropertyNames(data[0])
- 
-   const index = 1;
-   for (var i = 0; i < filed_allowed.length; i++ ) {
-     for (var j = 0; j < data_check.length; j++ ){
-      if(filed_allowed[i] == data_check[j]) {
-        // delete this element //
-        const index = data_check.indexOf(data_check[j])
-        data_check.splice(index);
-       }
-     }
-   }//for
-   
-   for (var j = 0; j < data.length; j++ ) {
-     for (var k = 0; k < data_check.length; k++ ){
-           var val = data_check[k]
-           delete data[j][val]
-     }
-   }//for
- 
-   }/// if end//////
-   res.json(data)
- })
 
 
 

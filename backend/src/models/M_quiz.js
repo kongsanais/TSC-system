@@ -12,8 +12,11 @@ const quizSchema = new mongoose.Schema({
         trim: true
     },
     quiz_time:{
-        type: Number
+        type: String 
     }, 
+    quiz_sequence:{
+        type: String
+    },
     quiz_question: [{ 
         type: Schema.Types.ObjectId, 
         ref: 'Question' 

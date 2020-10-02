@@ -44,6 +44,7 @@ router.post('/quiz/add', upload.array('files',10), async (req,res)=>{
     try {
 
     const obj = JSON.parse(JSON.stringify(req.body));
+
     //insert quiz//
     const quiz  = new Quiz(obj)
     var result_q =  await quiz.save();
@@ -195,9 +196,9 @@ router.post('/quiz/remove_question', async (req, res) => {
 
 router.post('/quiz/save_score',  auth , async (req, res) => {
   try{
-    const  data = new Score({score_data: req.body.score , user_id : req.user._id , quiz_id : req.body.quiz_id})
+    const  data = new Score({score_data: req.body.score ,score_full: req.body.score_full , user_id : req.user._id , quiz_id : req.body.quiz_id})
     const  value = await data.save(); 
-    
+      
     User.findOneAndUpdate(
       { _id: req.user._id },
       { $push: {score_quiz :value._id }},
@@ -208,8 +209,6 @@ router.post('/quiz/save_score',  auth , async (req, res) => {
           console.log(success);
         }
     });  
-
-
     res.json({result: true , message: JSON.stringify(value)})
   }catch(error)
   {

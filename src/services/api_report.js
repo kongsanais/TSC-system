@@ -76,3 +76,15 @@ export const getJSON_Export_Engineer =  async values  => {
     let result  =  await httpClient.post(report.COUNT_GET_JSON_EXPORT_ENGINEER,values);
     return result.data;
 }
+
+/*find user list with date (engineer) */
+export const getAllApplicantByDate_Engineer = async values => {
+    let result  =  await  httpClient.post(report.GET_USER_LIST_BY_DATE_ENGINEER,values);
+    return result.data.all_user_bydate;
+}
+
+/*find user list with date (production) */
+export const getAllApplicantByDate_Production = async values => {
+    let result  =  await  httpClient.post(report.GET_USER_LIST_BY_DATE_PRODUCTION,values);
+    return result.data.all_user_bydate;
+}

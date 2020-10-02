@@ -1,17 +1,42 @@
 const express = require('express')
 const Dep = require('../models/M_department')
-const auth = require('../middleware/admin_auth.js')
+const User = require('../models/M_user')
+const auth = require('../middleware/auth.js')
 const router = new express.Router()
 
 
-router.get('/department/department_list_withquiz/:_id', async (req, res) => {
+router.get('/department/department_list_withquiz/:_id', auth,async (req, res) => {
+
+    var data_check =  await User.findOne({_id:req.user._id}).select('score_quiz')
+    .populate({ 
+        path: 'score_quiz',
+        select : 'score_data -_id',
+    populate: { 
+        path: 'quiz_id', 
+        select  : 'quiz_name quiz_type' }
+    }) 
+
+    var  check_quiz_arrayId = []
+    for(var i = 0 ; i < data_check.score_quiz.length ;i++)
+    {
+        check_quiz_arrayId.push(data_check.score_quiz[i].quiz_id._id)
+    }
+
     let id = req.params._id;
     let Dep_list  = await Dep.findOne({})
-                   .populate('dep_quiz')
+                   .populate(
+                   {path: 'dep_quiz',
+                     match: {_id: {'$nin': check_quiz_arrayId}}, 
+                    options: { 
+                       sort: { 'quiz_sequence': 1 }, 
+                    } 
+                   })
                    .where('_id').equals(id)
-                   .sort({createdAt: -1})
+                   .sort({createdAt: 1})
     var res_data = Dep_list.dep_quiz;
+
     res.send({res_data})
+
 })
 
 

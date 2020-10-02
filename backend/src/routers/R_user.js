@@ -1,6 +1,7 @@
 const express = require('express')
 const moment  = require('moment')
 const User = require('../models/M_user')
+const Score = require('../models/M_score.js')
 const auth = require('../middleware/auth')
 const auth_admin = require('../middleware/admin_auth')
 const router = new express.Router()
@@ -83,7 +84,6 @@ router.put("/users/update", auth , (req, res)=>{
 
         let result = await User.findOneAndUpdate({ "_id": user._id }, 
         { "$set": { 
-
           "th_prefix"  :  user.th_prefix,
           "th_firstname": user.th_firstname,
           "th_lastname" : user.th_lastname,
@@ -168,18 +168,13 @@ router.get('/users/profile', auth, async (req, res) => {
 
 
 router.get('/users/get_appProfile/:_id', async (req, res) => {
-  let one_user = await User.findOne({_id:req.params._id}).populate('job_position')
+  let one_user = await User.findOne({_id:req.params._id}).populate('job_position').populate({ 
+    path: 'score_quiz',
+    populate: { path: 'quiz_id' , 
+    select  : 'quiz_name quiz_type' }
+  })
+  console.log(one_user)
   res.send({one_user})
-})
-
-
-router.post('/users/allByDate', async (req, res) => {
-  try {
-     let all_user_bydate = await User.find({ reg_date: { $gte: req.body.date_start , $lte:req.body.date_end } }).sort({ createdAt: -1});
-     res.send({all_user_bydate})
-  } catch (e) {
-     res.send({result:false})
-  }
 })
 
 
@@ -196,8 +191,6 @@ router.get('/users/count_status', async (req, res) => {
   res.json(count_status)
 })
 
-
-
 router.get('/users/count_reg_year', async (req, res) => {
   var date = new Date()
   var d_year =  date.getFullYear()
@@ -212,135 +205,17 @@ router.get('/users/count_reg_year', async (req, res) => {
 
 
 
- router.post('/users/get_json_export', async (req, res) => {
-    let result = req.body;
-
-   var data = await User.aggregate([
-    { 
-      $project: { 
-      email: "$email"  ,
-      fullnameTH: { $concat: [ "$th_prefix"," ","$th_firstname", " ", "$th_lastname" ] } ,
-      fullnameENG: { $concat:[ "$eng_prefix"," ","$eng_firstname", " ", "$eng_lastname" ] } ,
-      nationality: "$nationality",
-      phone_number: "$phone_number",
-      phone_number_famaily: "$phone_number_famaily",
-      person_relationship:"$person_relationship",
-      eng_address:"$eng_address",
-      date_birthday:"$date_birthday",
-      age:"$age",
-      job_level:"$job_level",
-      job_position:"$job_position",
-      job_salary:"$job_salary",
-      education:"$education",
-      degree_education:"$degree_education",
-      majoy_education:"$majoy_education",
-      gpa:"$gpa",
-      createdDate: "$createdAt"
-      }
+router.post('/users/delete_user' , async (req, res) => {
+  try {
+    const user = await User.findOneAndDelete({ _id: req.body.id})
+    const clear_score  = await Score.deleteMany({ user_id:req.body.id}) 
+    res.send(user)
+    } catch (e) {
+    res.status(500).send()
     }
-    ]);
-
-    var data_check = ['email','fullnameTH','fullnameENG','nationality','phone_number',
-    'phone_number_famaily','person_relationship','eng_address','date_birthday','age',
-    'job_level','job_position','job_salary','education','degree_education',
-    'majoy_education','gpa','createdDate','_id']
-
-    const index = 1;
-   
-
-    for (var i = 0; i < result.length; i++ ) {
-      for (var j = 0; j < data_check.length; j++ ){
-       if(result[i].filed == data_check[j]){
-         const index = data_check.indexOf(data_check[j])
-         data_check.splice(index,1);
-       }
-     }
-    }
-
-    for (var j = 0; j < data.length; j++ ) {
-      for (var k = 0; k < data_check.length; k++ ){
-            var val = data_check[k]
-            delete data[j][val]
-      }
-    }
-    res.json(data)
- })
-
-
-
- router.get ('/report/alluser/test' ,async (req, res) => {
-   
-  let result_user  = await User.find({})
-                      .populate({ 
-                          path: 'score_quiz',
-                          select : 'score_data -_id',
-                       populate: { 
-                          path: 'quiz_id', 
-                          select  : 'quiz_name quiz_type -_id' }
-                      })
-                      .populate({
-                          path: 'job_position',
-                          select: '-dep_quiz -_id -createdAt -updatedAt -__v',
-                            populate : { 
-                            path: 'dep_quiz',
-                          },
-                      })
-                      .where('role').equals('Engineer')
-                      .sort({createdAt: -1})
-   
-
-  var export_data = [];
-  Object.keys(obj).forEach(function(key) {
-
-    console.log(key, obj[key]);
-  
-  });
-
-  // for(var i = 0 ; i < result_user.length ; i++)
-  // { 
-  // export_data.push(
-  //  {
-  //   email:result_user[i].email,
-  //   th_prefix:result_user[i].th_prefix,
-  //   th_fullname:result_user[i].th_firstname+" "+result_user[i].th_lastname,
-  //   eng_prefix:result_user[i].eng_prefix,
-  //   eng_fullname:result_user[i].eng_firstname+" "+result_user[i].eng_lastname,
-  //   phone_number:result_user[i].phone_number,
-  //   phone_famaily:result_user[i].phone_number_famaily + " " + "("+  result_user[i].person_relationship + ")",
-  //   address:result_user[i].eng_address, 
-  //   date_birthday: moment(result_user[i].date_birthday).format("ddd, ll"),
-  //   age: result_user[i].age,
-  //   job_level:   
-  //  }
-  // )         
-  // }
-  // console.log(export_data)
-
-
-  res.send({result_user})
 })
 
 
 
-
-// db.getCollection('Users').aggregate([
-//   { $match: { reg_status: "Waitting" } },
-//   { $group: { _id : { month: { $month: "$createdAt" } }, count: { $sum: 1 } } }
-// ])
-//{ $match: { reg_date: new Date() } }
-
-
-/*db.getCollection('Users').aggregate([
-   { $match: { reg_status: "Waitting" } },
-   { $group: { _id : { month: { $month: "$createdAt" } }, count: { $sum: 1 } } }
-])*/
-//https://kb.objectrocket.com/mongo-db/mongodb-group-by-date-622#:~:text=A%20string%20containing%20date%20and,is%20a%20bit%20complex%20command.
-
-
-
-// db.getCollection('Users').aggregate([
-//   { $match: { status: "A" } },
-//   { $group: { _id : { month: { $month: "$createdAt" }, year: { $year: new Date() }  }, count: { $sum: 1 } } }
-// ])
-
+ 
 module.exports = router

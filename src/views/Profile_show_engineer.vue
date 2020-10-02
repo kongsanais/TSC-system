@@ -1,5 +1,6 @@
 <template>
   <v-container grid-list-xs>
+
     <v-card class="mb-2">
       <v-row>
         <v-col class="d-flex" xl="9" lg="8" md="7" sm="12" cols="12">
@@ -214,6 +215,19 @@
                   Resume
                   <v-icon right dark>mdi-file-document</v-icon>
                 </v-btn>
+                 
+
+                <div  class="mt-5"  style="color: #212121;"> 
+                <v-icon large left color="black">
+                 mdi-format-float-right
+                </v-icon>Scores Quiz
+                <ul class="mt-2">
+                     <h6><li v-for="(item,index) in applicant.score_quiz" :key="index">
+                    {{ item.quiz_id.quiz_name | capitalize}} : {{ item.score_data }}
+                    </li></h6>
+                </ul>
+                </div>
+
               </v-card-text>
             </v-card>
           </v-col>

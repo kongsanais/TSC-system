@@ -96,7 +96,7 @@
                   </v-col>
 
                   <!-- TH fristname -->
-                  <v-col class="d-flex" xl="5" lg="4" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="5" lg="4" md="4" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.th_firstname"
                       label="ชื่อ ( ภาษาไทย )"
@@ -106,7 +106,7 @@
                   </v-col>
 
                   <!-- TH lastname -->
-                  <v-col class="d-flex" xl="5" lg="4" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="5" lg="4" md="4" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.th_lastname"
                       label="นามสกุล ( ภาษาไทย )"
@@ -116,7 +116,7 @@
                   </v-col>
 
                   <!-- EN prefix -->
-                  <v-col class="d-flex" xl="2" lg="3" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="2" lg="3" md="4" sm="12" cols="12">
                     <v-select
                       label="คำนำหน้า ( ภาษาอังกฤษ )"
                       :items="data_eng_prefix"
@@ -127,7 +127,7 @@
                   </v-col>
 
                   <!-- EN fristname -->
-                  <v-col class="d-flex mb-1" xl="5" lg="4" md="3" sm="12" cols="12">
+                  <v-col class="d-flex mb-1" xl="5" lg="4" md="4" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.eng_firstname"
                       label="ชื่อ ( ภาษาอังกฤษ )"
@@ -147,17 +147,17 @@
                   </v-col>
 
                   <!-- Nationality -->
-                  <v-col class="d-flex" xl="3" lg="6" md="3" sm="3" cols="12">
+                  <!-- <v-col class="d-flex" xl="3" lg="6" md="3" sm="3" cols="12">
                       <v-text-field
                       v-model="applicant.nationality"
                       label="สัญชาติ "
                       :rules="[(v1) => !!v1 || 'โปรดใส่สัญชาติ']"
                     >
                     </v-text-field>
-                  </v-col>
+                  </v-col> -->
 
                   <!-- Phone number -->
-                  <v-col class="d-flex" xl="3" lg="6" md="3" sm="3" cols="12">
+                  <v-col class="d-flex" xl="3" lg="6" md="4" sm="3" cols="12">
                     <v-text-field
                       v-model="applicant.phone_number"
                       label="เบอร์ โทรศัพท์"
@@ -169,7 +169,7 @@
                   </v-col>
 
                   <!-- Phone number  family-->
-                  <v-col class="d-flex" xl="3" lg="6" md="3" sm="3" cols="12">
+                  <v-col class="d-flex" xl="3" lg="6" md="4" sm="3" cols="12">
                     <v-text-field
                       v-model="applicant.phone_number_famaily"
                       label="เบอร์โทรบุลคลที่ติดต่อได้กรณีฉุกเฉิน"
@@ -181,7 +181,7 @@
                   </v-col>
 
                   <!-- Relationship -->
-                  <v-col class="d-flex" xl="3" lg="6" md="2" sm="3" cols="12">
+                  <v-col class="d-flex" xl="3" lg="6" md="4" sm="3" cols="12">
                     <v-text-field
                       v-model="applicant.person_relationship"
                       label="ความสัมพันธ์ เช่น (บิดา, มารดา) "

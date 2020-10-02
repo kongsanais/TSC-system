@@ -1,49 +1,78 @@
 <template>
   <v-container>
    <!-- {{start_quiz}} -->
-   <!-- {{quizdata.quiz_question}} -->
+   {{title_quiz}}
    <br>
-   <!-- {{shuffled}} -->
+   {{quiz}}
+
+   <br>
+  
+   <!-- <v-card class="ma-1" v-if="start_quiz">
+    
+    <v-container color="primary">
+     <v-row>
+      <v-col xl="4" lg="6" md="8" sm="12">
+        <v-card class="ma-3">
+        <v-list-item three-line>
+          <v-row>
+            <v-col>
+                <div class="ma-3" >
+                  <h2><b>{{ title_quiz.quiz_name }}</b></h2>
+                </div>
+
+                <div class="ma-3">
+                   <h2>{{ title_quiz.quiz_time }} Minute</h2>
+                </div>
+
+                <div class="ma-3">
+                  <h3>Type( {{ title_quiz.quiz_type }} )</h3>
+                </div>
+             </v-col>
+            <v-col>
+              <v-list-item-avatar src="" tile size="150" color="grey">
+                  <v-img 
+                  src="https://www.flaticon.com/svg/static/icons/svg/2367/2367217.svg"
+                  style="border-style: groove;"
+                  outline>
+                  </v-img>
+           </v-list-item-avatar>
+         </v-col>
+       </v-row>
+    </v-list-item>
+
+        <v-card-actions>
+          <v-btn color="primary" @click="start_quiz_changed()" >START</v-btn>
+
+        </v-card-actions>
+      </v-card>
+        </v-col>
+     </v-row>
+      </v-container>
+   </v-card> -->
+
+
+   <v-card>
+     <!-- -----------------
+     ans : {{userResponses}} -->
+   <v-container>
+      <!-- <v-btn class="is-selected">click</v-btn> -->
     <v-card class="ma-3" >
+      <!-- {{quiz.questions.length}}
+         {{questionIndex}}
+         {{quiz.questions.length}} -->
      
-          <v-alert
-      color="primary"
-      dark
-      icon="mdi-camera-timer"
-      border="left"
-      prominent
-    >
-       <Counter/>
-            <div class="ma-2">
-            <h1 class="title is-6" >
-              Quiz ({{ questionIndex }} / {{ quiz.questions.length }})
-            </h1>
-          <v-progress-linear
-            striped
-            height="10"
-            color="lime"
-            :value="(questionIndex / quiz.questions.length) * 100"
-             max="100"
-          ></v-progress-linear>
-            <!-- <progress
-            color="yellow darken-2"
-              class="progress is-info is-small"
-              :value="(questionIndex / quiz.questions.length) * 100"
-              max="100"
-              >{{ (questionIndex / quiz.questions.length) * 100 }}%
-            </progress> -->
-            <!-- <p>{{(questionIndex/quiz.questions.length)*100}}% complete</p> -->
-           </div>
-    </v-alert>
+
       <v-alert v-if="questionIndex == quiz.questions.length " >
-        
-        <v-alert type="success" max-width="260px">
+         
+         <div  style="visibility: hidden;">Total score: {{score()}} / {{ quiz.questions.length }}</div>
+                      
+        <v-alert type="success">
           Complete Quiz
-        </v-alert> 
-        
+        </v-alert>
+
       <v-btn class="ma-2" color="warning" v-on:click="review()" :disabled="questionIndex < 1" >Review Quiz</v-btn>
       <v-btn class="ma-2" color="primary" v-on:click="done_quiz()" >Finish Quiz</v-btn>
-      <div  style="visibility: hidden;">Total score: {{score()}} / {{ quiz.questions.length }}</div>  
+
       </v-alert>
       
       <v-row></v-row>
@@ -53,7 +82,21 @@
       >
         <header>
           <!--progress-->
+          <div>
+            <h1 class="title is-6">
+              Quiz ({{ questionIndex }} / {{ quiz.questions.length }})
+            </h1>
+              
 
+            
+            <progress
+              class="progress is-info is-small"
+              :value="(questionIndex / quiz.questions.length) * 100"
+              max="100"
+              >{{ (questionIndex / quiz.questions.length) * 100 }}%</progress
+            >
+            <!-- <p>{{(questionIndex/quiz.questions.length)*100}}% complete</p> -->
+          </div>
           <!--/progress-->
         </header>
         <!-- questionTitle -->
@@ -108,17 +151,19 @@
       </div>
     </v-card>
       </v-container>
+    </v-card>
+
+
+  </v-container>
 </template>
 
 <script>
 import api from "@/services/api";
-import Counter from "@/components/helper/Counter.vue"
+
 export default {
-  components: {
-    Counter
-  },
   async mounted() {
     var temp_id = this.quiz_id; 
+
     if (temp_id  === undefined || temp_id == null) {
       let q_id = localStorage.getItem("quiz_id");
       this.main_id  = q_id
@@ -134,22 +179,14 @@ export default {
     this.title_quiz.quiz_type = this.quizdata.quiz_type;
     this.title_quiz.quiz_time = this.quizdata.quiz_time;
 
-    this.shuffled = this.quizdata.quiz_question
-    .map((a) => ({sort: Math.random(), value: a}))
-    .sort((a, b) => a.sort - b.sort)
-    .map((a) => a.value)
-
-    this.quiz = {
-      questions: this.shuffled,
-    }
-    this.userResponses = Array(this.quiz.questions.length).fill(null);
-
+    (this.quiz = {
+      questions: this.quizdata.quiz_question,
+    }),
+   (this.userResponses = Array(this.quiz.questions.length).fill(null));
   },
   props: ["quiz_id"],
   data() {
     return {
-      data_time_quiz:"",
-      shuffled:"",
       main_id:"",
       score_data:"",
       title_quiz: {
@@ -159,7 +196,6 @@ export default {
       },
       quiz: null,
       questionIndex: 0,
-      questionArrayIndex : [],
       userResponses: "",
       isActive: false,
       quizdata: null,
@@ -193,10 +229,10 @@ export default {
     },
     async done_quiz () {
       let score = this.score_data
+      alert(this.score_data)
       let score_full = this.quiz.questions.length
       let quiz_id = this.main_id
       var result = await api.saveScore({score,score_full,quiz_id})
-      this.$router.back();
     },
     score: function() {
       var score = 0;
@@ -210,6 +246,7 @@ export default {
         }
       }
       this.score_data = score 
+      alert(this.score_data)
       return score;
       //return this.userResponses.filter(function(val) { return val }).length;
     },

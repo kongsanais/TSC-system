@@ -348,19 +348,20 @@
             <td>                
               <ul id="example-1">
                     <li v-for="(item,index) in item.score_quiz" :key="index">
-                      {{index+1}} )  {{ item.quiz_id.quiz_name }} : {{ item.score_data }} 
+                    {{ item.quiz_id.quiz_name  | capitalize}} : {{ item.score_data }} 
                     </li>
               </ul>
             </td>
             <td>{{item.createdAt | formatDate}}</td>
             <td>
-            <v-btn color="primary" @click="show_Profile(item)" fab x-small dark>
+              
+            <v-btn class="mr-1" color="primary" @click="show_Profile(item)" fab x-small dark>
               <v-icon>mdi-card-account-phone-outline</v-icon>
             </v-btn>
-            <!-- <span class="ma-1"></span>
-            <v-btn color="primary" fab x-small dark>
-              <v-icon>mdi-pencil</v-icon>
-            </v-btn> -->
+
+            <v-btn color="error" fab x-small @click="deleteUser(item)"  dark>
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
 
             </td>
           </tr>
@@ -441,25 +442,25 @@ export default {
         data: []
       },
       field_data_export:[
-        {filed: '_id' ,  name: '_id'},
         {filed: 'email',  name: 'Email'},
-        {filed: 'fullnameTH',  name: 'Fullname TH'},
-        {filed: 'fullnameENG',  name: 'Fullname ENG'},
-        {filed: 'nationality',  name: 'Nationality'},
+        {filed: 'th_prefix',  name: 'TH_prefix'},
+        {filed: 'th_fullname',  name: 'TH_fullname'},
+        {filed: 'eng_prefix',  name: 'ENG_prefix'},
+        {filed: 'eng_fullname',  name: 'ENG_fullname'},
         {filed: 'phone_number',  name: 'Phone Number'},
-        {filed: 'phone_number_famaily',  name: 'Phone Number Family'},
-        {filed: 'person_relationship',  name: 'Family Relationship'},
-        {filed: 'eng_address',  name: 'Address'},
+        {filed: 'phone_famaily',  name: 'Phone Famaily'},
+        {filed: 'address',  name: 'Address'},
         {filed: 'date_birthday',  name: 'Birth Day'},
         {filed: 'age', name: 'Age'},
         {filed: 'job_level', name: 'Level'},
         {filed: 'job_position', name: 'Postsition'},
         {filed: 'job_salary', name: 'Salary'},
-        {filed: 'education', name: 'Education Name'},
-        {filed: 'degree_education', name: 'Degree Education'},
+        {filed: 'degree_education', name: 'Education Name'},
+        {filed: 'education', name: 'Degree Education'},
         {filed: 'majoy_education', name: 'Major'},
         {filed: 'gpa', name: 'GPA'},
-        {filed: 'createdDate', name: 'Reg Date'},
+        {filed: 'score_quiz', name: 'Quiz Score'},
+        {filed: 'reg_date', name: 'Reg Date'},
       ],
       field_selected:[],
       export_filter:{
@@ -479,6 +480,11 @@ export default {
      },
      async show_Profile(item) {
        this.$router.push(`/profile_show_engineer/${item._id}`);
+     },
+     async deleteUser(item){
+      var  id  = item._id
+      api.deleteUserData({id})
+      this.mDataArray  = await api.getReportAllEngineer()
      },
      async fillData () {
           this.datacollection_BarChart = {
@@ -618,14 +624,14 @@ export default {
         this.data_dateTemplete.date_dialog = false;
         let date_start = this.data_dateTemplete.date_start;
         let date_end  = this.data_dateTemplete.date_end;
-        let result = await api.getAllApplicantByDate({ date_start, date_end });
+        let result = await api.getAllApplicantByDate_Engineer({ date_start, date_end });
         this.mDataArray = result;
       },
       async getDataExport(){
         let field = this.field_selected
-        let merged = {...field, ...this.export_filter};
-        let data =  await api.getJSON_Export_Engineer(merged);
-        this.json_export = data
+        let date_filter = this.export_filter
+        let data =  await api.getJSON_Export_Engineer({field,date_filter});
+        this.json_export = data.real_data
         const dataWS = XLSX.utils.json_to_sheet(this.json_export)
         const wb = XLSX.utils.book_new()
         XLSX.utils.book_append_sheet(wb, dataWS)

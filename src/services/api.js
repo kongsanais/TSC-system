@@ -71,11 +71,6 @@ const getAllApplicant  = async () => {
   return result.data.all_user;
 }
 
-const getAllApplicantByDate = async values => {
-  let result  =  await  httpClient.post(server.GET_ALL_APP_BY_DATE,values);
-  return result.data.all_user_bydate;
-}
-
 
 const getOneApplicant = async _id  => {
   let result  =  await httpClient.get(server.GET_ONE_APP + "/" +`${_id}`);
@@ -104,6 +99,11 @@ const updateRegStatus = async values => {
 }
 
 
+const deleteUserData = async values =>  {
+  let result  =  await  httpClient.post(server.DELETE_USER,values);
+  return result.data;
+}
+
 
 
 export default {
@@ -119,8 +119,8 @@ export default {
   readProfile,
   updateProfile,
   getAllApplicant,
-  getAllApplicantByDate,
   updateRegStatus,
+  deleteUserData,
   ...apiAdmin,
   ...apiReport,
   ...apiQuiz,

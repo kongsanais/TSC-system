@@ -1,8 +1,14 @@
 <template>
  <v-container>
-   <v-card>
+   <v-card  >
     <v-container>
-            <v-data-iterator
+
+        <v-alert  class="mt-1" v-if="length_quiz == 0"  type="success" max-width="260px">
+          Complete All Quiz
+        </v-alert> 
+
+      <v-data-iterator
+      v-if="length_quiz != 0"
       :items="items"
       :items-per-page.sync="itemsPerPage"
       hide-default-footer
@@ -17,10 +23,11 @@
           <v-toolbar-title>Quiz</v-toolbar-title>
         </v-toolbar>
       </template>
-
+      
       <template v-slot:default="props">
-        <v-row>
+        <v-row  >
           <v-col
+            
             v-for="item in props.items"
             :key="item.quiz_name"
             cols="12"
@@ -28,6 +35,7 @@
             md="4"
             lg="3"
           >
+          
             <v-card>
               <v-card-title class="subheading font-weight-bold">{{ item.quiz_name }}</v-card-title>
 
@@ -56,9 +64,7 @@
                   
                   </v-list-item-content>
                 </v-list-item>
-
                 
-
               </v-list>
             </v-card>
           </v-col>
@@ -78,11 +84,14 @@ export default {
   async mounted() {
     const data = await api.getDoingquiz(this.$route.params._id);
     this.item_quiz = data;
+    // alert(this.item_quiz.res_data.length)
+    this.length_quiz = this.item_quiz.res_data.length
     this.items = this.item_quiz.res_data
   },
   data: () => ({
       itemsPerPage: 10,
-      items: []
+      items: [],    
+      length_quiz: ""
   }),
   methods: {
     onClickMenu(link) {
