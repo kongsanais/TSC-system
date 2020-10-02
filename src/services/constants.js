@@ -26,7 +26,8 @@ export const quiz = {
   ADD_QUESTION : 'api/quiz/add_question',
   QUIZ_LIST : 'api/quiz/quiz_list',
   QUIZ_SHOW : 'api/quiz/show',
-  QUIZ_SAVE_SCORE : 'api/quiz/save_score'
+  QUIZ_SAVE_SCORE : 'api/quiz/save_score',
+  QUIZ_REMOVE_SCORE : 'api/quiz/history_score'
 }
 
 

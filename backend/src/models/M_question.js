@@ -9,6 +9,9 @@ const questionSchema = new mongoose.Schema({
     ans: {
         type: Array
     },
+    ans_type:{
+        type : String 
+    },
     img:{
         type: String
     },

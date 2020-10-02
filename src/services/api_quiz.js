@@ -46,3 +46,8 @@ export const saveScore = async values => {
     return result.data;
 }
 
+
+export const removeScore = async values => {
+    let result  =  await  httpClient.post(quiz.QUIZ_REMOVE_SCORE,values);
+    return result.data;
+}

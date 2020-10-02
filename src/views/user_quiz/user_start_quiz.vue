@@ -6,14 +6,19 @@
    <!-- {{shuffled}} -->
     <v-card class="ma-3" >
      
-          <v-alert
+    <v-alert
       color="primary"
       dark
       icon="mdi-camera-timer"
       border="left"
       prominent
     >
-       <Counter/>
+
+    {{userResponses}}
+
+    {{questionIndex}}
+
+       <Counter :time="title_quiz.quiz_time"/>
             <div class="ma-2">
             <h1 class="title is-6" >
               Quiz ({{ questionIndex }} / {{ quiz.questions.length }})
@@ -25,16 +30,10 @@
             :value="(questionIndex / quiz.questions.length) * 100"
              max="100"
           ></v-progress-linear>
-            <!-- <progress
-            color="yellow darken-2"
-              class="progress is-info is-small"
-              :value="(questionIndex / quiz.questions.length) * 100"
-              max="100"
-              >{{ (questionIndex / quiz.questions.length) * 100 }}%
-            </progress> -->
-            <!-- <p>{{(questionIndex/quiz.questions.length)*100}}% complete</p> -->
            </div>
     </v-alert>
+
+
       <v-alert v-if="questionIndex == quiz.questions.length " >
         
         <v-alert type="success" max-width="260px">
@@ -57,10 +56,12 @@
           <!--/progress-->
         </header>
         <!-- questionTitle -->
+
+        {{quiz.questions[questionIndex]._id}}
         <v-alert class="ma-1" border="right" color="blue-grey" dark>
           <h2 class="titleContainer title">
             {{ questionIndex + 1 }})  {{ quiz.questions[questionIndex].question }}
-            
+            <!-- {{quiz}} -->
           </h2>
         </v-alert>
 
@@ -74,7 +75,7 @@
                 max-height="200"
               ></v-img>
 
-        <div class="optionContainer">
+        <div v-if="quiz.questions[questionIndex].ans_type != 'Choice'"  class="optionContainer">
            <div
             class="ma-2 font"
             v-for="(ans, index) in quiz.questions[questionIndex].ans"
@@ -84,6 +85,16 @@
             <v-btn  :class="{'green': userResponses[questionIndex] == index}"   small>{{ index | charIndex }}. {{ ans.ans }}  </v-btn>
             <!-- <v-icon v-if="ans.correct == true">mdi-check </v-icon> -->
           </div>
+        </div>
+
+        <div v-else>
+              <v-textarea
+                @keyup="with_text()"
+                v-model="userResponses[questionIndex]"
+                outlined
+                name="input-7-4"
+                label="Outlined textarea"
+              ></v-textarea>
         </div>
 
         <!-- quizOptions -->
@@ -163,7 +174,8 @@ export default {
       userResponses: "",
       isActive: false,
       quizdata: null,
-      start_quiz: true
+      start_quiz: true,
+      ans_text : ""
     };
   },
   filters: {
@@ -180,10 +192,16 @@ export default {
       this.userResponses = Array(this.quiz.questions.length).fill(null);
     },
     selectOption: function(index) {
+      alert(index)
       this.$set(this.userResponses, this.questionIndex, index);
     },
+    with_text: function() {
+      this.$set(this.userResponses, this.questionIndex,userResponses[questionIndex]);
+    },
     next: function() {
+
       if (this.questionIndex < this.quiz.questions.length) this.questionIndex++;
+
     },
     prev: function() {
       if (this.quiz.questions.length > 0) this.questionIndex--;

@@ -94,17 +94,25 @@
                 max-height="100px"
               >
               </v-img>
+            
+            <div v-else>
+             -
+            </div>
+
               </td>
               <td> {{ item.question }} </td>  
+              <td> {{ item.ans_type }} </td> 
               <td>
-                  <ul id="example-1">
+                  <ul v-if="item.ans_type == 'Choice'">
                     <li v-for="(item,index) in item.ans" :key="index">
                       {{index+1}} ) {{ item.ans }}
                     </li>
                   </ul>
+                  <div v-else>-</div>
                </td>
                
         <td>
+
         <v-btn
           @click="updateONdialog(item._id,item.index)"
           class="ml-2"
@@ -133,6 +141,7 @@
               </tr>
             </template>
           </v-data-table>
+
           </v-card>
       </v-col>
      </v-row>
@@ -142,7 +151,7 @@
       <v-dialog v-model="dialog" persistent max-width="600px">
       <v-card>
         <v-card-title>
-          <span class="headline">Qustion Add</span>
+          <span class="headline">{{dialog_title}}</span>
         </v-card-title>
         <v-card-text>
         <v-container>
@@ -166,8 +175,25 @@
         <v-col class="d-flex" xl="12" lg="12" md="12" sm="12" cols="12">
          Images : <input  class="ml-1" type="file" ref="fileupload" @change="onFileSelected" />
         </v-col>
+         
+
         <v-col class="d-flex" xl="5" lg="5" md="6" sm="6" cols="12">
-        <v-btn color="success" @click="addAns()" class="mr-1"  x-small>add question</v-btn>
+
+        <v-select
+          @change="select_Type"
+          v-model="ans_type"
+          :items="['Choice','Text']"
+          label="Select Ans Type"
+          dense
+          solo
+          x-small
+        >
+        </v-select>
+        </v-col>
+
+       <div v-if="ans_type == 'Choice'">
+        <v-col class="d-flex" xl="5" lg="5" md="6" sm="6" cols="12">
+        <v-btn color="success" @click="addAns()" class="mr-1"  x-small>Add Ans</v-btn>
         </v-col>
         
 
@@ -193,6 +219,10 @@
             </tr>
           </table>
         </v-col>
+        </div>
+
+
+
       </v-container>
         </v-card-text>
         <v-card-actions>
@@ -244,7 +274,8 @@ export default {
       { text: "No.", value: "index" },
       { text: "Imges", value: "index" },
       { text: "Question", value: "quiz_type" },
-      { text: "Ans", value: "quiz_time" },
+      { text: "Ans Type", value: "ans_type" },
+      { text: "Ans", value: "index" },
       { text: "Action", value: "" },
      ],
     quizdata: null,
@@ -256,8 +287,10 @@ export default {
       },
     ],
     question_insert:"",
+    ans_type :"",
     newEntries: [{}],
     dialog: false,
+    dialog_title : "",
     question_id:null,//for update
     img_review:null,
     imagobj:null
@@ -276,6 +309,7 @@ export default {
          //add   
         formData.append("quiz_id",this.title_quiz.quiz_id)
         formData.append("question",this.question_insert)
+        formData.append("ans_type",this.ans_type)
         formData.append("ans",JSON.stringify(this.newEntries))
         formData.append('file',this.imagobj);
         var  result_add  =  await api.addQuestion(formData);
@@ -283,6 +317,7 @@ export default {
          //edit
         formData.append("question_id",this.question_id)
         formData.append("ques",this.question_insert)
+        formData.append("ans_type",this.ans_type)
         formData.append("ans",JSON.stringify(this.newEntries))
         formData.append('file',this.imagobj);
         var  result_edit =  await api.editQuiz(formData);
@@ -304,6 +339,9 @@ export default {
         this.newEntries = [{}]
         this.defaultFunds = [ { "img": null, "ans": null, "correct": "" } ]
     },
+    select_Type(){
+        //
+    },
     async deleteQuestion(id){
         let quiz_id = this.title_quiz.quiz_id; 
         let ques_id =  id;
@@ -317,10 +355,12 @@ export default {
        if(this.imagobj!=null){
          this.$refs.fileupload.value = null
        }
+
        this.question_id = id
        this.question_insert  = null 
        this.newEntries = [{}]
        this.defaultFunds = [ { "img": null, "ans": null, "correct": "" } ]
+       this.dialog_title = "Question Update"
        this.dialog = true
        this.question_insert = this.quizdata.quiz_question[index].question
        this.newEntries = this.quizdata.quiz_question[index].ans

@@ -474,6 +474,7 @@
                   >
                     ยืนยันการสมัคร
                   </v-btn>
+                  
                 </v-row>
               </v-card-text>
             </v-card>
@@ -501,14 +502,6 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <!-- <v-btn
-            color="green darken-1"
-            text
-            @click="dialog_messenger.status = false"
-          >
-            Disagree
-          </v-btn> -->
-
           <v-btn
             class="primary"
             light
@@ -517,6 +510,7 @@
           >
             Agree
           </v-btn>
+
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -581,7 +575,7 @@ export default {
     },
     checked_ac: false,
     data_th_prefix: ["นาย", "นาง", "นางสาว"],
-    data_eng_prefix: ["Mr", "Mrs", "Miss"],
+    data_eng_prefix: ["Mr.", "Mrs.", "Miss"],
     degree_item: ["มัธยมศึกษาตอนต้น (ม.3)", "มัธยมศึกษาตอนปลาย (ม.6)" ,"ประกาศนียบัตรวิชาชีพ (ปวช)","ประกาศนียบัตรวิชาชีพชั้นสูง (ปวส)","ระดับปริญญาตรี","ปริญญาโท","ปริญญาเอก"],
     data_skill: ["ทักษะการประกอบ","ทักษะการตรวจสอบคุณภาพ","ทักษะการยิงสกรู","ทักษะการควบคุมเครื่องจักร(เครื่องกลึง,เครื่องกัด,เครื่องเจียร เป็นต้น)","ทักษะการปั๊มขึ้นรูปชิ้นงาน","ทักษะการฉีดขึ้นรูปชิ้นงาน","ทักษะการขับโฟล์คลิฟ","ทักษะการใช้เครื่องมือวัด(เวอร์เนีย,ไมโคร เป็นต้น)","ทักษะการใช้คอมพิวเตอร์","ทักษะการควบคุมสต็อกวัตถุดิบ"],
     data_position: ["Developer", "Data Analysis"],
@@ -590,7 +584,7 @@ export default {
     valid: true,
     checkpassword: "tse@2020admin",
     date_menu: false, //for date
-    imageURL: "https://image.flaticon.com/icons/svg/882/882849.svg",
+    imageURL: "https://www.flaticon.com/svg/static/icons/svg/848/848043.svg",
     CountryList: ["Thailand"],
     message_filename_pic: "อัพโหลดรูปภาพของคุณ",
     message_filename_resume: " Upload Resume / CV",

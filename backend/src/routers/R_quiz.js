@@ -123,22 +123,29 @@ router.post('/quiz/show', async (req,res)=>{
 
 router.post('/quiz/edit_question', upload.single('file'), async (req,res) => {
   try {
+    
     let temp_file
     temp_file = req.file == undefined || req.file == null ? temp_file = null : temp_file = req.file.filename
+    
+    console.log(req.body)
+    
     const obj = JSON.parse(JSON.stringify(req.body));
     const ans_array = JSON.parse(obj.ans)
+
     const filter = { _id: req.body.question_id};
 
     var update; 
 
     if(temp_file == null){
-      update = { question: req.body.ques ,ans:ans_array}
+      update = { question: req.body.ques,ans_type: obj.ans_type ,ans:ans_array}
     }else{
-      update = { question: req.body.ques ,ans:ans_array,img:temp_file}
+      update = { question: req.body.ques,ans_type: obj.ans_type ,ans:ans_array,img:temp_file}
     }
-  
-    let data = await Question.findOneAndUpdate(filter, update,{new: true});
+
+    let data = await Question.findOneAndUpdate(filter, update,{new: true})
+
     res.send({ result: true, message: JSON.stringify(data)}) 
+
   }
   catch(error){
     console.log(error)
@@ -154,7 +161,8 @@ router.post('/quiz/add_question', upload.single('file'), async (req, res) => {
     
     const obj = JSON.parse(JSON.stringify(req.body));
     const ans_array = JSON.parse(obj.ans)
-    const ques  = new Question({question:obj.question,ans:ans_array,img:temp_file,Idquiz:obj.quiz_id})
+
+    const ques  = new Question({question:obj.question,ans_type:obj.ans_type,ans:ans_array,img:temp_file,Idquiz:obj.quiz_id})
         
     Quiz.findOneAndUpdate(
       { _id: obj.quiz_id },
@@ -217,6 +225,13 @@ router.post('/quiz/save_score',  auth , async (req, res) => {
 })
 
 
+router.post('/quiz/history_score', async (req, res) => {
+  let user_id = req.body.id
+  const result   = await Score.deleteMany({ user_id: user_id}) 
+  res.json({result})
+
+})
+
 
 router.post('/quiz/get_all_score', async (req, res) => {
   let user_id =  req.body
@@ -229,10 +244,6 @@ router.post('/quiz/get_all_score', async (req, res) => {
 
 })
 
-router.post('/quiz/test_list2', async (req, res) => {
-  let one_user = await Score.find({}).populate('quiz_id')
-  res.send({one_user})
-})
 
 
 

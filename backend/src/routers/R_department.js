@@ -15,6 +15,8 @@ router.get('/department/department_list_withquiz/:_id', auth,async (req, res) =>
         path: 'quiz_id', 
         select  : 'quiz_name quiz_type' }
     }) 
+    
+    // console.log(data_check)
 
     var  check_quiz_arrayId = []
     for(var i = 0 ; i < data_check.score_quiz.length ;i++)

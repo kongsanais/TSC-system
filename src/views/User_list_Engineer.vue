@@ -333,7 +333,7 @@
             <td >
             <v-img
                 :src="item.imageURL | imageUrl"
-                lazy-src="@/assets/samsung-icon.png"
+                lazy-src="@/assets/no_img_icon.png"
                 aspect-ratio="1"
                 max-width="100"
                 max-height="100"
@@ -346,17 +346,22 @@
             <td>{{item.majoy_education}}</td>
             <td>{{item.gpa}}</td>
             <td>                
-              <ul id="example-1">
+              <ul v-if="item.score_quiz != ''">
                     <li v-for="(item,index) in item.score_quiz" :key="index">
-                    {{ item.quiz_id.quiz_name  | capitalize}} : {{ item.score_data }} 
+                    {{ item.quiz_id.quiz_name  | capitalize}} : ({{ item.score_data }} / {{item.score_full}})
                     </li>
               </ul>
+               <div v-else>-</div>
             </td>
             <td>{{item.createdAt | formatDate}}</td>
             <td>
               
             <v-btn class="mr-1" color="primary" @click="show_Profile(item)" fab x-small dark>
               <v-icon>mdi-card-account-phone-outline</v-icon>
+            </v-btn>
+
+            <v-btn class="mr-1" color="success" @click="deleteScoreHistory(item)" fab x-small dark>
+              <v-icon>mdi-reload</v-icon>
             </v-btn>
 
             <v-btn color="error" fab x-small @click="deleteUser(item)"  dark>
@@ -484,6 +489,11 @@ export default {
      async deleteUser(item){
       var  id  = item._id
       api.deleteUserData({id})
+      this.mDataArray  = await api.getReportAllEngineer()
+     },
+     async deleteScoreHistory(item){
+      var  id  = item._id
+      api.removeScore({id})
       this.mDataArray  = await api.getReportAllEngineer()
      },
      async fillData () {

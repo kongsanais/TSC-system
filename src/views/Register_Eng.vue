@@ -193,7 +193,7 @@
                   <!-- Address -->
                   <v-col cols="12" md="6">
                     <v-textarea
-                      label="Address / ที่อยู่อาศัย"
+                      label="Cerrently Address / ที่อยู่อาศัยปัจจุบัน"
                       auto-grow
                       outlined
                       rows="3"
@@ -614,8 +614,8 @@ export default {
     },
     checked_ac: false,
     data_th_prefix: ["นาย", "นาง", "นางสาว"],
-    data_eng_prefix: ["Mr", "Mrs", "Miss"],
-    degree_item: ["Bachelor Degrees", "Master Degrees" ,"Doctor Degrees"],
+    data_eng_prefix: ["Mr.", "Mrs.", "Miss"],
+    degree_item: ["Bachelor Degree", "Master Degree" ,"Doctor Degree"],
     data_level: ["Office/Engineer", "Management"],
     data_position: [],
     show_password: true,
@@ -623,9 +623,9 @@ export default {
     valid: true,
     checkpassword: "",
     date_menu: false, //for date
-    imageURL: "https://image.flaticon.com/icons/svg/882/882849.svg",
+    imageURL: "https://www.flaticon.com/svg/static/icons/svg/848/848043.svg",
     CountryList: ["Thailand"],
-    message_filename_pic: "Upload Profile Picture",
+    message_filename_pic: "Upload Picture",
     message_filename_resume: " Upload Resume / CV",
     tab: "tab-1",
     tabs: [

@@ -6,6 +6,7 @@
 
 <script>
 export default {
+props: ['time'],
 data() {
     return {
         temp_time: null,
@@ -14,10 +15,9 @@ data() {
     }
 },
 mounted() {
-    this.countdown(50,0)
+    this.countdown(this.time,0)
 },
 methods: {
-    
 countdown(minutes,seconds)
   {
     this.endTime = (+new Date) + 1000 * (60*minutes + seconds) + 500;

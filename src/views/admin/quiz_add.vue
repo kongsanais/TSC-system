@@ -127,24 +127,25 @@
          Images : <input  class="ml-1" type="file" ref="fileupload" @change="onFileSelected" />
         </v-col>
 
-        <!-- <v-col class="d-flex" xl="5" lg="5" md="6" sm="6" cols="12">
+        <v-col class="d-flex" xl="5" lg="5" md="6" sm="6" cols="12">
+
         <v-select
+          @change="select_Type"
+          v-model="ans_type"
           :items="['Choice','Text']"
-          label="Solo Type"
+          label="Select Ans Type"
           dense
           solo
           x-small
         >
         </v-select>
-        </v-col> -->
-
-
-        <v-col class="d-flex" xl="5" lg="5" md="6" sm="6" cols="12">
-        <v-btn color="success" @click="addAns()" class="mr-1"  x-small>add question</v-btn>
         </v-col>
 
+        <div v-if="ans_type == 'Choice'">
 
-        
+        <v-col class="d-flex" xl="5" lg="5" md="6" sm="6" cols="12">
+             <v-btn color="success" @click="addAns()" class="mr-1"  x-small>Add Ans</v-btn>
+        </v-col>
 
         <v-col class="d-flex" xl="12" lg="12" md="12" sm="12" cols="12">
           <table width="100%">
@@ -168,6 +169,10 @@
             </tr>
           </table>
         </v-col>
+        </div>
+
+
+
       </v-container>
         </v-card-text>
         <v-card-actions>
@@ -198,12 +203,17 @@
                 <td>
                 {{item.question}}
                 </td>
+
                 <td>
-                  <ul id="example-1">
-                  <li v-for="(item,index) in item.ans" :key="index">
-                    {{index+1}} ) {{ item.ans }}
-                  </li>
-                  </ul>
+                    {{item.ans_type}}
+                </td>
+
+                <td>
+                  <ul v-if="item.ans_type == 'Choice'">
+                    <li v-for="(item,index) in item.ans" :key="index">
+                      {{index+1}} ) {{ item.ans }}
+                    </li>
+                  </ul> <div v-else>-</div>
                 </td>
                 <td>
                   <v-btn color="error" @click="deleteQuiz(item.index)" fab x-small dark>
@@ -296,8 +306,9 @@ export default {
       quiz_sequence :null,
       quiz_time: null,
     },
-    question_array: [],
-    ans_array: [],
+    question_array: [],  
+    ans_array: [],  
+    ans_type:"",
     defaultFunds: [
       {
         img: null,
@@ -311,6 +322,7 @@ export default {
           { text: 'Index', value: 'index' },
           { text: 'Images', value: 'index' },
           { text: 'Question', value: 'question' },
+          { text: 'Ans Type', value: '' },
           { text: 'Ans' , value: ''},
           { text: 'Action',value:'index'}
     ],
@@ -330,7 +342,6 @@ export default {
     },
   }),
   methods: {
-  
     onFileSelected(event) {
       const reader = new FileReader();
       reader.onload = event => {
@@ -350,6 +361,9 @@ export default {
          this.quiz.quiz_sequence = '4'
       }
     },
+    select_Type(){
+        //
+    },
     addAns: function() {
       this.newEntries.push({});
       this.defaultFunds.push({ question: null, correct: "" });
@@ -363,7 +377,7 @@ export default {
         ansArray.push(tarndata)
       }
 
-      var json_data = {question : this.question_insert, ans:ansArray}
+      var json_data = {question : this.question_insert, ans:ansArray , ans_type : this.ans_type}
       this.question_array.push(json_data)
       this.array_img.push(this.image)
       this.array_imageURL.push(this.imageURL)
