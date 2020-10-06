@@ -18,9 +18,9 @@ const getRole = () => {
 };
 
 const logoff = async () => {
-  await httpClient.post(server.LOGOUT_URL);
   localStorage.removeItem(server.TOKEN_KEY);
   localStorage.removeItem(server.ROLE);
+  await httpClient.post(server.LOGOUT_URL);
   router.push("/login");
 };
 

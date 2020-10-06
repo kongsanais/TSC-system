@@ -6,7 +6,8 @@
         <v-alert  class="mt-1" v-if="length_quiz == 0"  type="success" max-width="260px">
           Complete All Quiz
         </v-alert> 
-
+        <!-- {{item_quiz}}
+       {{length_quiz}} -->
       <v-data-iterator
       v-if="length_quiz != 0"
       :items="items"

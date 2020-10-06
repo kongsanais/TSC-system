@@ -495,8 +495,8 @@ export default {
     date_menu: false, //for date
     imageURL: null,
     CountryList: ["Thailand"],
-    message_filename_pic: "Upload New Profile Picture",
-    message_filename_resume: " Upload New Resume / CV",
+    message_filename_pic: "Upload  Profile Picture",
+    message_filename_resume: " Upload  Resume / CV",
     tab: "tab-1",
     tabs: [
       {

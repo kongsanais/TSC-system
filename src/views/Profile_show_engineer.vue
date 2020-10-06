@@ -221,9 +221,12 @@
                 <v-icon large left color="black">
                  mdi-format-float-right
                 </v-icon>Scores Quiz
+                
                 <ul class="mt-2">
                      <h6><li v-for="(item,index) in applicant.score_quiz" :key="index">
-                    {{ item.quiz_id.quiz_name | capitalize}} : {{ item.score_data }}
+                    {{ item.quiz_id.quiz_name | capitalize}} : {{ item.score_data }} 
+                    <!-- {{item.quiz_id._id}} -->
+                    <v-btn class="ma-2" @click="show_ans_history(item.quiz_id._id)" small>result quiz</v-btn>
                     </li></h6>
                 </ul>
                 </div>
@@ -233,10 +236,6 @@
           </v-col>
         </v-row>
       </v-card-title>
-
-      <!-- <v-card-actions>
-        <v-btn text>Listen Now</v-btn>
-      </v-card-actions> -->
     </v-card>
   </v-container>
 </template>
@@ -345,7 +344,6 @@ export default {
     
     },
     check_color_status() {
-
       if (this.applicant.reg_status == "Waitting") {
         this.color_status = "#f39c12";
       } else if (this.applicant.reg_status == "HR Consider") {
@@ -360,6 +358,9 @@ export default {
 
       this.text_status = this.applicant.reg_status;
     },
+    show_ans_history(id){
+      alert(id)
+    }
   },
 };
 </script>

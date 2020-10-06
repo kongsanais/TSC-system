@@ -132,7 +132,6 @@ router.put("/users/update_reg_status", async (req, res)=>{
   }
 })
 
-
   
 router.post('/users/login', async (req, res) => {
   try {
@@ -145,17 +144,15 @@ router.post('/users/login', async (req, res) => {
 })
 
 
-
-
 router.post('/users/logout', auth, async (req, res) => {
     try {
         req.user.tokens = req.user.tokens.filter((token) => {
             return token.token !== req.token
         })
-        await req.user.save()
-        res.send()
+        let data = await req.user.save()
+        res.send(data)
     } catch (e) {
-        res.status(500).send()
+        res.status(e).send()
     }
 })
 
@@ -171,11 +168,11 @@ router.get('/users/get_appProfile/:_id', async (req, res) => {
   let one_user = await User.findOne({_id:req.params._id}).populate('job_position').populate({ 
     path: 'score_quiz',
     populate: { path: 'quiz_id' , 
-    select  : 'quiz_name quiz_type' }
+    select  : 'quiz_name quiz_type _id'}
   })
   console.log(one_user)
   res.send({one_user})
-})
+  })
 
 
 

@@ -12,9 +12,14 @@ const { update } = require('../models/M_user')
 
 //get all user list 
 router.get('/report/alluser' ,async (req, res) => {
-  let all_user = await User.find({})
-                      .sort({createdAt: -1})
+ try {
+  let all_user = 
+  await User.find({})
+  .sort({createdAt: -1})
   res.send({all_user})
+ } catch (e) {
+    res.send({result:false})
+ }
 })
 
 
@@ -28,8 +33,6 @@ router.get('/report/alluser/engineer' ,async (req, res) => {
                       })
                       .where('role').equals('Engineer')
                       .sort({createdAt: -1})
-
-                      
   res.send({all_user})
 })
 
@@ -108,7 +111,6 @@ router.get('/report/count_reg_year/engineer', async (req, res) => {
   res.json(count_status)
  })
 
-
 //get register count this year in 12 month production 
 router.get('/report/count_reg_year/production', async (req, res) => {
   var date = new Date()
@@ -122,28 +124,38 @@ router.get('/report/count_reg_year/production', async (req, res) => {
   res.json(count_status)
  })
 
-
 //get count all user  
 router.get('/report/count_all_user', async (req, res) => {
-  let count = await User.aggregate(
-  [
-   { $count: "userCount" },
-  ]
-)
-  var value =  count[0].userCount
-  res.json(value)
+  try {
+    let count = await User.aggregate(
+    [{ $count: "userCount" },])
+      var value =  count[0].userCount
+      res.json(value)
+   } catch (e) {
+    var userCount = 0 
+    res.json(userCount)
+   }
 })
 
 
 //get count all user  by role 
 router.get('/report/count_all_user_by_role', async (req, res) => {
-  let count = await User.aggregate(
-  [
-    { $group : {_id:"$role", count:{$sum:1}}},
-    { $sort :{"_id": 1 }}
-  ]
-)
-  res.json(count)
+  try {
+    let count = await User.aggregate(
+      [
+        { $group : {_id:"$role", count:{$sum:1}}},
+        { $sort :{"_id": 1 }}
+      ]
+    )
+    if(count.length == 0){
+      count = [ { _id: 'Engineer', count: 0 }, { _id: 'Production', count: 0 } ]
+    }
+    res.json(count)
+   } catch (e) 
+   {
+    console.log(e)
+    res.json([ { _id: 'Engineer', count: 0 }, { _id: 'Production', count: 0 } ])
+   }
 })
 
 

@@ -13,10 +13,8 @@
       border="left"
       prominent
     >
-
-    {{userResponses}}
-
-    {{questionIndex}}
+    <!-- My Score : {{score_data}}
+    {{userResponses}} -->
 
        <Counter :time="title_quiz.quiz_time"/>
             <div class="ma-2">
@@ -57,7 +55,6 @@
         </header>
         <!-- questionTitle -->
 
-        {{quiz.questions[questionIndex]._id}}
         <v-alert class="ma-1" border="right" color="blue-grey" dark>
           <h2 class="titleContainer title">
             {{ questionIndex + 1 }})  {{ quiz.questions[questionIndex].question }}
@@ -74,35 +71,33 @@
                 max-width="200"
                 max-height="200"
               ></v-img>
-
-        <div v-if="quiz.questions[questionIndex].ans_type != 'Choice'"  class="optionContainer">
+      
+        <div v-if="quiz.questions[questionIndex].ans_type == 'Choice'"  class="optionContainer">       
            <div
             class="ma-2 font"
             v-for="(ans, index) in quiz.questions[questionIndex].ans"
             @click="selectOption(index)"
             :key="index"
-           >  
-            <v-btn  :class="{'green': userResponses[questionIndex] == index}"   small>{{ index | charIndex }}. {{ ans.ans }}  </v-btn>
-            <!-- <v-icon v-if="ans.correct == true">mdi-check </v-icon> -->
+           >      
+
+        <v-btn  :class="{'green': userResponses[questionIndex].ans_data == index}" small>{{ index | charIndex }}.{{ ans.ans}}</v-btn>
+        <!-- <v-icon v-if="ans.correct == true">mdi-check </v-icon> -->
+         
           </div>
         </div>
 
-        <div v-else>
+         
+        <div  v-if="quiz.questions[questionIndex].ans_type == 'Text'">
               <v-textarea
-                @keyup="with_text()"
-                v-model="userResponses[questionIndex]"
+               @keyup="with_text()"
+                v-model="userResponses[questionIndex].ans_data"
                 outlined
                 name="input-7-4"
                 label="Outlined textarea"
               ></v-textarea>
         </div>
 
-        <!-- quizOptions -->
-        <!-- <div class="optionContainer">
-					<div class="option" v-for="(response, index) in quiz.questions[questionIndex].responses"  :class="{ 'is-selected': userResponses[questionIndex] == index}" :key="index">
-                  <v-btn  :class="{ 'is-selected': userResponses[questionIndex] == index}" class="ma-1" @click="selectOption(index)" >{{ index | charIndex }} ) {{ question.text }}</v-btn>
-					</div>
-				</div> -->
+
 
         <v-btn class="ma-2" v-on:click="prev()" :disabled="questionIndex < 1" small>
           Back</v-btn
@@ -129,7 +124,8 @@ export default {
     Counter
   },
   async mounted() {
-    var temp_id = this.quiz_id; 
+    var temp_id = this.quiz_id;
+     
     if (temp_id  === undefined || temp_id == null) {
       let q_id = localStorage.getItem("quiz_id");
       this.main_id  = q_id
@@ -151,9 +147,14 @@ export default {
     .map((a) => a.value)
 
     this.quiz = {
-      questions: this.shuffled,
+      questions: this.quizdata.quiz_question,
     }
-    this.userResponses = Array(this.quiz.questions.length).fill(null);
+    //this.userResponses = Array(this.quiz.questions.length).fill(null);
+    
+    for(var i = 0 ; i < this.quiz.questions.length;i++){
+      this.userResponses.push({ans_data:null})
+    }
+    
 
   },
   props: ["quiz_id"],
@@ -171,11 +172,12 @@ export default {
       quiz: null,
       questionIndex: 0,
       questionArrayIndex : [],
-      userResponses: "",
+      userResponses: [],
       isActive: false,
       quizdata: null,
       start_quiz: true,
-      ans_text : ""
+      ans_text : "",
+      temp_text : ""
     };
   },
   filters: {
@@ -192,18 +194,21 @@ export default {
       this.userResponses = Array(this.quiz.questions.length).fill(null);
     },
     selectOption: function(index) {
-      alert(index)
-      this.$set(this.userResponses, this.questionIndex, index);
+      var  question_id = this.quiz.questions[this.questionIndex]._id
+      var  ans_data  =  index
+      var  build_data = {question_id,ans_data}
+      this.$set(this.userResponses, this.questionIndex, build_data);
     },
     with_text: function() {
-      this.$set(this.userResponses, this.questionIndex,userResponses[questionIndex]);
+      let  question_id = this.quiz.questions[this.questionIndex]._id
+      let  ans_data =   this.userResponses[this.questionIndex].ans_data
+      var  build_data = {question_id,ans_data}
+      this.$set(this.userResponses, this.questionIndex,build_data);
     },
-    next: function() {
-
+    next: function(){
       if (this.questionIndex < this.quiz.questions.length) this.questionIndex++;
-
     },
-    prev: function() {
+    prev: function(){
       if (this.quiz.questions.length > 0) this.questionIndex--;
     },
     review: function() {
@@ -213,23 +218,21 @@ export default {
       let score = this.score_data
       let score_full = this.quiz.questions.length
       let quiz_id = this.main_id
-      var result = await api.saveScore({score,score_full,quiz_id})
+      let ans_history  = this.userResponses 
+      var result = await api.saveScore({score,score_full,quiz_id,ans_history})
       this.$router.back();
     },
     score: function() {
       var score = 0;
       for (let i = 0; i < this.userResponses.length; i++) {
-        if (
-          typeof this.quiz.questions[i].ans[this.userResponses[i]] !==
-            "undefined" &&
-          this.quiz.questions[i].ans[this.userResponses[i]].correct
-        ) {
+        if (typeof this.quiz.questions[i].ans[this.userResponses[i].ans_data] !=="undefined" &&
+           this.quiz.questions[i].ans[this.userResponses[i].ans_data].correct) 
+        {
           score = score + 1;
         }
       }
       this.score_data = score 
       return score;
-      //return this.userResponses.filter(function(val) { return val }).length;
     },
   },
 };

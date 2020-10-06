@@ -20,6 +20,7 @@ import quiz_add from "@/views/admin/quiz_add.vue"
 import quiz_list  from "@/views/admin/quiz_list.vue"
 import quiz_show  from "@/views/admin/quiz_show.vue"
 import quiz_edit  from "@/views/admin/quiz_edit.vue" 
+import quiz_ans_history  from "@/views/admin/quiz_ans_history.vue"
 import depart_list from "@/views/admin/depart_list.vue"
 import user_doing_list from "@/views/user_quiz/user_doing_list.vue"
 import user_start_quiz from "@/views/user_quiz/user_start_quiz.vue"
@@ -138,6 +139,12 @@ const routes = [
     path : "/quiz_edit",
     name : "quiz_edit",
     component : quiz_edit,
+    props :true 
+  },
+  {
+    path : "/quiz_ans_history",
+    name : "quiz_ans_history",
+    component : quiz_ans_history,
     props :true 
   },
   {

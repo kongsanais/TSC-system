@@ -2,6 +2,7 @@ const express = require('express')
 const Quiz = require('../models/M_quiz.js')
 const Question = require('../models/M_question.js')
 const Score = require('../models/M_score.js')
+const History = require('../models/M_history_ans.js')
 const User = require('../models/M_user')
 const auth = require('../middleware/auth.js')
 const router = new express.Router()
@@ -13,7 +14,7 @@ const multer = require('multer')
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.resolve("./uploaded/quiz/"));
+        cb(null, path.resolve("./uploaded/quiz/"));
   },
   filename: (req, file, cb) => {
     var  timestamp =  + new Date()
@@ -23,24 +24,16 @@ const storage = multer.diskStorage({
     var  fileExtention = fileName.split(".")[1];
     var  temp  = `${onlyname}${timestamp}.${fileExtention}`;
     cb(null, temp)
-  }
+  } 
 });
 
 
 var upload = multer({
-  storage: storage,
-  fileFilter: (req, file, cb) => {
-    if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
-      cb(null, true);
-    } else {
-      cb(null, false);
-      return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
-    }
-  }
+  storage: storage
 });
 
 
-router.post('/quiz/add', upload.array('files',10), async (req,res)=>{
+router.post('/quiz/add', upload.array('files',50), async (req,res)=>{
     try {
 
     const obj = JSON.parse(JSON.stringify(req.body));
@@ -50,19 +43,20 @@ router.post('/quiz/add', upload.array('files',10), async (req,res)=>{
     var result_q =  await quiz.save();
     let my_quiz_id = result_q._id;
 
-
-    // only record quiz//
+    // only record quiz //
     const reqFiles = []
     for (var i = 0; i < req.files.length; i++) {
-      reqFiles.push(req.files[i].filename)
+      if(req.files[i].size != 0){
+        reqFiles.push(req.files[i].filename) 
+      }else{
+        reqFiles.push(null)
+      }
     }
 
     // insert question //
     const ques_obj  =  JSON.parse(obj.ques);//convert to obj
-
     for(var i = 0 ; i < ques_obj.length ; i++)
     {
-      
       const ques  = new Question({...ques_obj[i],Idquiz:my_quiz_id,img:reqFiles[i]})
       var result_qes =  await ques.save();
       let my_ques_id = result_qes._id
@@ -70,19 +64,15 @@ router.post('/quiz/add', upload.array('files',10), async (req,res)=>{
       Quiz.findOneAndUpdate(
         { _id: my_quiz_id }, 
         { $push: {quiz_question:my_ques_id }},
-       function (error, success) {
-          if (error) {
-             console.log(error);
-          } else {
-            console.log(success);
-          }
+        function (error, success) {
+        // console.log(error)
       });
 
     }
+
     res.send({ result: true, message: JSON.stringify(result_qes)}) 
   }
   catch(error){
-    console.log(error)
     res.json({ result: false, message: JSON.stringify(error)});
   }
 })
@@ -127,14 +117,10 @@ router.post('/quiz/edit_question', upload.single('file'), async (req,res) => {
     let temp_file
     temp_file = req.file == undefined || req.file == null ? temp_file = null : temp_file = req.file.filename
     
-    console.log(req.body)
-    
     const obj = JSON.parse(JSON.stringify(req.body));
     const ans_array = JSON.parse(obj.ans)
-
     const filter = { _id: req.body.question_id};
-
-    var update; 
+    var update;
 
     if(temp_file == null){
       update = { question: req.body.ques,ans_type: obj.ans_type ,ans:ans_array}
@@ -152,7 +138,6 @@ router.post('/quiz/edit_question', upload.single('file'), async (req,res) => {
     res.json({ result: false, message: JSON.stringify(error)});
   }
 })
-
 
 router.post('/quiz/add_question', upload.single('file'), async (req, res) => {
   try {
@@ -185,7 +170,6 @@ router.post('/quiz/add_question', upload.single('file'), async (req, res) => {
 })
 
 
-
 router.post('/quiz/remove_question', async (req, res) => {
   try {
       let quiz_id = req.body.quiz_id
@@ -203,21 +187,26 @@ router.post('/quiz/remove_question', async (req, res) => {
 
 
 router.post('/quiz/save_score',  auth , async (req, res) => {
-  try{
-    const  data = new Score({score_data: req.body.score ,score_full: req.body.score_full , user_id : req.user._id , quiz_id : req.body.quiz_id})
-    const  value = await data.save(); 
-      
+  try{   
+    const  c_data = new Score({score_data: req.body.score ,score_full: req.body.score_full , user_id : req.user._id , quiz_id : req.body.quiz_id})
+    const  c_value = await c_data.save(); 
+
+    const  h_data = new History({h_quiz_id: req.body.quiz_id,h_user_id:req.user._id , h_ans_array:req.body.ans_history })
+    const  h_value = await h_data.save(); 
+    
     User.findOneAndUpdate(
       { _id: req.user._id },
-      { $push: {score_quiz :value._id }},
+      { $push: {score_quiz :c_value._id }},
      function (error, success) {
         if (error) {
            console.log(error);
         } else {
           console.log(success);
         }
-    });  
+      }
+    );  
     res.json({result: true , message: JSON.stringify(value)})
+
   }catch(error)
   {
    res.json({ result: false, message: JSON.stringify(error) });
@@ -241,7 +230,23 @@ router.post('/quiz/get_all_score', async (req, res) => {
   .sort({createdAt: -1})
    var res_data = Score_list;
    res.json({res_data})
+})
 
+
+router.post('/quiz/get_history_ans', async (req, res) => {
+  let Score_list  = await History.find({})
+  .populate({ 
+    path: 'h_ans_array.question_id',
+    select : 'question ans_type img ans',
+    })
+    .populate(
+    {
+      path: 'h_quiz_id',
+      select : 'quiz_name quiz_type',   
+    }
+    )
+  var res_data = Score_list;
+  res.json({res_data})
 })
 
 

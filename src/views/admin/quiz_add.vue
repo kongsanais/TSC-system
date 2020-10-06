@@ -1,4 +1,5 @@
 <template>
+
   <v-card max-width="1000" class="mx-auto ma-7">
     <v-container class="pa-1">
       <v-row class="mt-1" dense>
@@ -183,11 +184,9 @@
       </v-card>
     </v-dialog>
     </v-card-title>
-        <!-- {{question_array}}<br>
-        {{array_img}}<br>
-        ---------------<br>
-        {{newEntries}}<br>
-        {{defaultFunds}} -->
+        <!-- array_img length : {{array_img.length}}<br>
+        array question : {{question_array}}<br>
+        img : {{array_img}}<br> -->
           <v-data-table  :headers="headers" :items="itemsWithIndex" >
             <template v-slot:item="{ item }">
               <tr class="mb-2">
@@ -298,7 +297,8 @@
 import api from "@/services/api";
 
 export default {
-  async mounted() {},
+  async mounted() {
+  },
   data: () => ({
     quiz: {
       quiz_name: null,
@@ -370,7 +370,8 @@ export default {
     },    
     submitQues: function() {
       var ansArray = []    
-      var tarndata;
+      var tarndata
+
       for(var i = 0 ; i < this.newEntries.length ; i++)
       {
         tarndata = { ans:this.newEntries[i].ans , correct:this.newEntries[i].correct }
@@ -379,15 +380,23 @@ export default {
 
       var json_data = {question : this.question_insert, ans:ansArray , ans_type : this.ans_type}
       this.question_array.push(json_data)
-      this.array_img.push(this.image)
-      this.array_imageURL.push(this.imageURL)
+
+      if(this.image != null) {
+        this.array_img.push(this.image)
+      }else {
+        var f = new File([],"index")
+        this.array_img.push(f)
+      }
       
+      this.array_imageURL.push(this.imageURL)
       this.question_insert = null
       this.defaultFunds = [ { "img": null, "ans": null, "correct": "" } ]
       this.newEntries = [ {} ]
       this.$refs.fileupload.value=null;
       this.imageURL = null
+      this.image = null 
       this.dialog = false
+
     },
      async saveQuiz(){
        

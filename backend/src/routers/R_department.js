@@ -7,7 +7,8 @@ const router = new express.Router()
 
 router.get('/department/department_list_withquiz/:_id', auth,async (req, res) => {
 
-    var data_check =  await User.findOne({_id:req.user._id}).select('score_quiz')
+    var data_check =  await User.findOne({_id:req.user._id})
+    .select('score_quiz')
     .populate({ 
         path: 'score_quiz',
         select : 'score_data -_id',
@@ -15,8 +16,6 @@ router.get('/department/department_list_withquiz/:_id', auth,async (req, res) =>
         path: 'quiz_id', 
         select  : 'quiz_name quiz_type' }
     }) 
-    
-    // console.log(data_check)
 
     var  check_quiz_arrayId = []
     for(var i = 0 ; i < data_check.score_quiz.length ;i++)
@@ -36,9 +35,7 @@ router.get('/department/department_list_withquiz/:_id', auth,async (req, res) =>
                    .where('_id').equals(id)
                    .sort({createdAt: 1})
     var res_data = Dep_list.dep_quiz;
-
     res.send({res_data})
-
 })
 
 
@@ -71,6 +68,7 @@ router.post('/department/add', async (req, res) => {
 router.post('/department/remove' , async (req, res) => {
     try {
         const data = await Dep.findOneAndDelete({ _id: req.body.depart_id})
+        console.log(data)
         if (!data) {
             res.status(404).send()
         }

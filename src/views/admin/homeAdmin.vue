@@ -94,12 +94,17 @@
 
   export default {
 	async  mounted () {
+
 	  var data = [];
 	  this.count_all_app =  await api.getReportCountAll()
-	  data = await api.getReportCountRole();	  
-	  for(var i = 0 ; i < this.items.length ; i++){ 
-		  this.items[i].count   = data[i].count;
-	  }
+    data = await api.getReportCountRole();
+    
+    if(data.length > 0 )
+    {
+    for(var i = 0 ; i < this.items.length ; i++){ 
+      this.items[i].count   = data[i].count;
+    }
+    }
 
   	},
     data: () => ({
