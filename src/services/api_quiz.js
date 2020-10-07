@@ -51,3 +51,8 @@ export const removeScore = async values => {
     let result  =  await  httpClient.post(quiz.QUIZ_REMOVE_SCORE,values);
     return result.data;
 }
+
+export const getHisAns = async values => {
+    let result  =  await  httpClient.post(quiz.QUIZ_ANS_HISTORY,values);
+    return result.data;
+}

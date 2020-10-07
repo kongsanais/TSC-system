@@ -27,7 +27,6 @@ uploadImage = async (files, doc) => {
   }
 };
 
-
 uploadResume = async (files, doc) => {
   if (files.resumeURL != null) {
     var fileExtention = files.resumeURL.name.split(".")[1];
@@ -42,7 +41,6 @@ uploadResume = async (files, doc) => {
     return result;
   }
 };
-
 
 router.post('/users', async (req, res) => {
     try{
@@ -119,7 +117,6 @@ router.put("/users/update", auth , (req, res)=>{
 })
 
 
-
 router.put("/users/update_reg_status", async (req, res)=>{
   try {
     let update_status = await User.findOneAndUpdate({ "_id": req.body.update_id}, 
@@ -132,7 +129,6 @@ router.put("/users/update_reg_status", async (req, res)=>{
   }
 })
 
-  
 router.post('/users/login', async (req, res) => {
   try {
       const user = await User.findByCredentials(req.body.email, req.body.password)
@@ -156,13 +152,10 @@ router.post('/users/logout', auth, async (req, res) => {
     }
 })
 
-
-
 router.get('/users/profile', auth, async (req, res) => {
     let profile  = req.user;
     res.send({profile})
 })
-
 
 router.get('/users/get_appProfile/:_id', async (req, res) => {
   let one_user = await User.findOne({_id:req.params._id}).populate('job_position').populate({ 
@@ -173,8 +166,6 @@ router.get('/users/get_appProfile/:_id', async (req, res) => {
   console.log(one_user)
   res.send({one_user})
   })
-
-
 
 router.get('/users/count_status', async (req, res) => {
   let count_status = await User.aggregate([
@@ -200,8 +191,7 @@ router.get('/users/count_reg_year', async (req, res) => {
   res.json(count_status)
  })
 
-
-
+ 
 router.post('/users/delete_user' , async (req, res) => {
   try {
     const user = await User.findOneAndDelete({ _id: req.body.id})

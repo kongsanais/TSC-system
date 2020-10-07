@@ -80,7 +80,7 @@
             :key="index"
            >      
 
-        <v-btn  :class="{'green': userResponses[questionIndex].ans_data == index}" small>{{ index | charIndex }}.{{ ans.ans}}</v-btn>
+        <v-btn  :class="{'green': userResponses[questionIndex].ans_data == index}" small>{{ index +1 }}.{{ ans.ans}}</v-btn>
         <!-- <v-icon v-if="ans.correct == true">mdi-check </v-icon> -->
          
           </div>

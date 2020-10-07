@@ -7,7 +7,8 @@ const historySchema = new mongoose.Schema({
         ref: 'Quiz'
     },
     h_user_id : {
-        type: Schema.Types.ObjectId
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     },
     h_ans_array: [{
         question_id: {

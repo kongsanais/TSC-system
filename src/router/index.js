@@ -142,7 +142,7 @@ const routes = [
     props :true 
   },
   {
-    path : "/quiz_ans_history",
+    path : "/quiz_ans_history/:quiz_id/:user_id",
     name : "quiz_ans_history",
     component : quiz_ans_history,
     props :true 

@@ -224,9 +224,9 @@
                 
                 <ul class="mt-2">
                      <h6><li v-for="(item,index) in applicant.score_quiz" :key="index">
-                    {{ item.quiz_id.quiz_name | capitalize}} : {{ item.score_data }} 
+                    {{ item.quiz_id.quiz_name | capitalize}} : {{ item.score_data }} / {{item.score_full}} 
                     <!-- {{item.quiz_id._id}} -->
-                    <v-btn class="ma-2" @click="show_ans_history(item.quiz_id._id)" small>result quiz</v-btn>
+                    <v-btn class="ma-2" color="green" @click="show_ans_history(item.quiz_id._id,$route.params._id)" small>result quiz</v-btn>
                     </li></h6>
                 </ul>
                 </div>
@@ -341,7 +341,6 @@ export default {
            this.applicant.reg_status = update_status
            this.check_color_status()
        }
-    
     },
     check_color_status() {
       if (this.applicant.reg_status == "Waitting") {
@@ -358,8 +357,8 @@ export default {
 
       this.text_status = this.applicant.reg_status;
     },
-    show_ans_history(id){
-      alert(id)
+    show_ans_history(quiz_id ,user_id){
+      this.$router.push(`/quiz_ans_history/${quiz_id}/${user_id}`);
     }
   },
 };

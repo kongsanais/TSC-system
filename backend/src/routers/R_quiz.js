@@ -103,7 +103,7 @@ router.post('/quiz/show', async (req,res)=>{
   let q_id = req.body.q_id;
   Quiz.findOne()
   .populate('quiz_question')
-  .where('_id').equals(q_id)
+    
   .exec(function (err, show_quiz) {
     if (err) return handleError(err);
     res.json({show_quiz})
@@ -234,7 +234,9 @@ router.post('/quiz/get_all_score', async (req, res) => {
 
 
 router.post('/quiz/get_history_ans', async (req, res) => {
-  let Score_list  = await History.find({})
+
+  console.log(req.body)
+  let ans_his  = await History.findOne({$and: [{h_quiz_id: req.body.quiz_id}, {h_user_id: req.body.q_id_user}]})
   .populate({ 
     path: 'h_ans_array.question_id',
     select : 'question ans_type img ans',
@@ -245,8 +247,17 @@ router.post('/quiz/get_history_ans', async (req, res) => {
       select : 'quiz_name quiz_type',   
     }
     )
-  var res_data = Score_list;
-  res.json({res_data})
+    .populate(
+    {
+    path: 'h_user_id',
+    select : 'eng_prefix eng_firstname eng_lastname'
+    })
+    // .where('h_user_id._id').equals(req.body.q_id_user)
+    // {h_quiz_id:req.body.quiz_id}
+    //match: {_id:req.body.quiz_id},
+    console.log(ans_his)
+    var res_data = ans_his;
+    res.json({res_data})
 })
 
 
