@@ -12,7 +12,8 @@ const fs  = require("fs-extra")
 const { update } = require('../models/M_user')
 
 
-uploadImage = async (files, doc) => {
+uploadImage = async (files, doc) => 
+{
   if (files.imageURL != null) {
     var fileExtention = files.imageURL.name.split(".")[1];
     doc.imageURL = `${doc._id}.${fileExtention}`;
@@ -26,6 +27,7 @@ uploadImage = async (files, doc) => {
     return result;
   }
 };
+
 
 uploadResume = async (files, doc) => {
   if (files.resumeURL != null) {
@@ -41,6 +43,7 @@ uploadResume = async (files, doc) => {
     return result;
   }
 };
+
 
 router.post('/users', async (req, res) => {
     try{

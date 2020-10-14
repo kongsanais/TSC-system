@@ -158,7 +158,7 @@
                   </v-col> -->
 
                   <!-- Phone number -->
-                  <v-col class="d-flex" xl="3" lg="6" md="6" sm="3" cols="12">
+                  <v-col class="d-flex" xl="3" lg="6" md="6" sm="4" cols="12">
                     <v-text-field
                       v-model="applicant.phone_number"
                       label="Your Phone Number"
@@ -170,7 +170,7 @@
                   </v-col>
 
                   <!-- Phone number  family-->
-                  <v-col class="d-flex" xl="3" lg="6" md="6" sm="3" cols="12">
+                  <v-col class="d-flex" xl="3" lg="6" md="6" sm="4" cols="12">
                     <v-text-field
                       v-model="applicant.phone_number_famaily"
                       label="Phone Number Family"
@@ -182,7 +182,7 @@
                   </v-col>
 
                   <!-- Relationship -->
-                  <v-col class="d-flex" xl="3" lg="6" md="6" sm="3" cols="12">
+                  <v-col class="d-flex" xl="3" lg="6" md="6" sm="4" cols="12">
                     <v-text-field
                       v-model="applicant.person_relationship"
                       label="Relationship Ex. ( Father, Mother, Etc.)"
@@ -372,7 +372,7 @@
                   <v-col class="d-flex" xl="3" lg="4" md="6" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.education"
-                      label="Education Name (Ex. Burapha University )"
+                      label="Education Name (Ex. XXX University )"
                       :rules="[(v1) => !!v1 || 'Please Enter Education']"
                     >
                     </v-text-field>

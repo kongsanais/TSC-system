@@ -33,6 +33,7 @@
               ]"
             />
 
+
             <!-- Password -->
             <v-text-field
               name="password"
@@ -47,16 +48,25 @@
               counter
             />
 
+
             <v-row class="justify-space-between px-3 pt-4">
-              <v-btn
+
+                <v-btn
                 class="mt-2"
                 @click.prevent="$router.push('/register_engineer')"
                 color="indigo"
                 dark
-                >Register</v-btn
-              >
-              <v-btn type="submit" color="success" class="mt-2">Login</v-btn>
+                >Register
+                </v-btn>
+                <v-btn 
+                  type="submit" 
+                  color="success" 
+                  class="mt-2">
+                  Login</v-btn>
+
             </v-row>
+
+
           </v-form>
         </v-card-text>
       </v-card>

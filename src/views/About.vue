@@ -29,23 +29,23 @@
                   Thai Samsung Electronics Co.,Ltd. (Chonburi)</div> -->
                 </v-col>
               </v-row>
-              <v-row>
+              <!-- <v-row>
                 <v-col xl="2" lg="2" md="3" sm="2" cols="2">
-                  <v-btn class="mr-2">
+                  <v-btn class="mr-1">
                     <v-icon>mdi-facebook</v-icon>
                   </v-btn>
                 </v-col>
                 <v-col xl="2" lg="2" md="3" sm="2" cols="2">
-                  <v-btn class="mr-2">
+                  <v-btn class="mr-1">
                     <v-icon> mdi-facebook-messenger</v-icon>
                   </v-btn>
                 </v-col>
                 <v-col xl="2" lg="2" md="3" sm="2" cols="2">
-                  <v-btn class="mr-2">
+                  <v-btn class="mr-1">
                     <v-icon>mdi-google-maps</v-icon>
                   </v-btn>
                 </v-col>
-              </v-row>
+              </v-row> -->
             </div>
           </v-card-text>
 

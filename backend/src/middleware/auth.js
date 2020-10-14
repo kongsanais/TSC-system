@@ -4,7 +4,7 @@ const User = require('../models/M_user')
 const auth = async (req, res, next) => {
     try {
         const token = req.header('Authorization').replace('Bearer ', '')
-        const decoded = jwt.verify(token, 'thisismynewcourse')
+        const decoded = jwt.verify(token, 'hr_project')
         const user = await User.findOne({ _id: decoded._id, 'tokens.token': token }).populate('job_position')
         
         if (!user) {
