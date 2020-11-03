@@ -111,8 +111,11 @@ export default {
   },
   methods: {
     async submit() {
+
       var check = this.$refs.form.validate();
+
       if (check == true) {
+        
         await this.$store.dispatch({
           type: "doLoginAdmin",
           email: this.account.email,

@@ -26,11 +26,13 @@
        <v-btn v-if="$store.state.isLogged && ($store.state.role != 'Admin')"  class="ma-2" @click="onGoProfile()">Profile</v-btn>
       <v-icon v-if="$store.state.isLogged" class="mr-2">mdi-account-circle</v-icon>
       <span v-if="$store.state.isLogged" ><b>{{ $store.getters["username"]  | capitalize }}</b></span>
-      <v-btn v-if="$store.state.isLogged && ($store.state.role != 'Admin')" icon @click="onClickLogOff">
-        <v-icon>mdi-export</v-icon>
+     
+      <v-btn v-if="$store.state.role != 'Admin'" icon @click="onClickLogOff">
+        user <v-icon>mdi-export</v-icon>
       </v-btn>
-    <v-btn v-if="$store.state.isLogged && ($store.state.role == 'Admin')" icon @click="onClickLogOffAdmin">
-        <v-icon>mdi-export</v-icon>
+
+    <v-btn v-if="$store.state.role == 'Admin'" icon @click="onClickLogOffAdmin">
+        admin <v-icon>mdi-export</v-icon>
       </v-btn>
 
       <v-btn icon>

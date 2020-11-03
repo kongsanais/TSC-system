@@ -78,9 +78,9 @@ export default new Vuex.Store({
 
     },
     async doLogoutAdmin({ commit }) {
-      await api.logoffAdmin();
       commit("SET_LOGGED_OUT");
       commit("SET_USERNAME","");
+      await api.logoffAdmin();
     },    
     restoreLoginAdmin({ commit }) {
       if (api.isLoggedIn() == true) {

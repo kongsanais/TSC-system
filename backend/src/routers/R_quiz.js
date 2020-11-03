@@ -101,9 +101,8 @@ router.get('/quiz/quiz_list', async (req,res)=>{
 
 router.post('/quiz/show', async (req,res)=>{
   let q_id = req.body.q_id;
-  Quiz.findOne()
+  Quiz.findOne({_id : q_id})
   .populate('quiz_question')
-    
   .exec(function (err, show_quiz) {
     if (err) return handleError(err);
     res.json({show_quiz})
